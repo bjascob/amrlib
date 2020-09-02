@@ -31,7 +31,7 @@ achieves a BLEU score of 43 with LDC2020T02.
 ## Requirements and Installation
 The project was built and tested under Python 3 and Ubuntu but should run on any Linux, Windows, Mac, etc.. system.
 
-To install do..
+**To install the code**
 
 `pip3 install -r requirements.txt`
 
@@ -40,19 +40,29 @@ To install do..
 Note that installing amrlib will automatically install a minimal set of requirements but for the QT based amr_view
 or to test/train a model, you'll need to also install from the requirements.txt file.
 
+**To install the models**
 
-To install the pretrained models do..
+Download the pre-trained models from the pcloud links for
+[model_parse_gsii-v0_1_0.tar.gz](https://u.pcloud.link/publink/show?code=XZD2z0XZOqRtS2mNMHhMG4UhXOCNO4yzeaLk)
+and
+[model_generate_t5-v0_1_0.tar.gz](https://u.pcloud.link/publink/show?code=XZF2z0XZwTDm0pVFIAYjdAbsqUJ83SYoQSdV)
+and select "Direct Download".
+
+These files need to reside in the install directory under `amrlib/data` and should be named
+`model_stog` (for the parse model) and `model_gtos` (for the generate model).  If you're unsure what directory
+amrlib is installed in you can do
 ```
-import amrlib
-amrlib.download('model_stog', stog_url)    <-- stog_url below
-amrlib.download('model_gtos', gtos_url)    <-- gtos_url below
-
-stog_url =
-'https://p-def8.pcloud.com/cBZLUUPPBZBfnwosZZZT4y137Z2ZZe3VZkZYRHagZC7ZVpZBHZyFZ9pZI0ZhXZU7ZYZdkZh7ZrFZCFZIpZD2z0XZTS00VM2QHM4XvD8cvftRmB8ghiTk/model_parse_gsii-v0_1_0.tar.gz'
-
-gtos_url =
-'https://p-def5.pcloud.com/cBZ9VvYPBZ56xFosZZZCLy137Z2ZZe3VZkZ2LOTcZzVZ40ZlkZVHZBFZu0ZaJZnJZEpZP5Z4pZokZcJZuJZF2z0XZtjveznPmwmm9KNc7cg0rRurX0Lnk/model_generate_t5-v0_1_0.tar.gz'
+>>> import amrlib
+>>> amrlib.__file__
 ```
+It is probably easiest to set a link to these files.  To do this, do something like..
+```
+cd <xx>/amrlib/data
+ln -snf model_parse_gsii-v0_1_0.tar.gz    model_stog
+ln -snf model_generate_t5-v0_1_0.tar.gz   model_gtos
+```
+
+**For training**
 
 The code base also includes library functions and scripts to train and test the parsing and generation nets.
 The scripts to do this are included in the scripts directory which is not part of the pip installation.
