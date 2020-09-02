@@ -48,7 +48,7 @@ and
 [model_generate_t5-v0_1_0.tar.gz](https://u.pcloud.link/publink/show?code=XZF2z0XZwTDm0pVFIAYjdAbsqUJ83SYoQSdV)
 and select "Direct Download".
 
-These files need to reside in the install directory under `amrlib/data` and should be named
+These files need to be extracted and reside in the install directory under `amrlib/data` and should be named
 `model_stog` (for the parse model) and `model_gtos` (for the generate model).  If you're unsure what directory
 amrlib is installed in you can do
 ```
@@ -58,8 +58,12 @@ amrlib is installed in you can do
 It is probably easiest to set a link to these files.  To do this, do something like..
 ```
 cd <xx>/amrlib/data
-ln -snf model_parse_gsii-v0_1_0.tar.gz    model_stog
-ln -snf model_generate_t5-v0_1_0.tar.gz   model_gtos
+
+tar xzf model_parse_gsii-v0_1_0.tar.gz
+ln -snf model_parse_gsii-v0_1_0    model_stog
+
+tar xzf model_generate_t5-v0_1_0.tar.gz
+ln -snf model_generate_t5-v0_1_0   model_gtos
 ```
 
 **For training**
