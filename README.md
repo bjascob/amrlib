@@ -4,8 +4,8 @@
 
 
 ## About
-amrlib is a python module designed to make processing for Abstract Meaning Representation (AMR) simple
-by providing the following functions
+amrlib is a python module designed to make processing for [Abstract Meaning Representation](https://amr.isi.edu/)
+ (AMR) simple by providing the following functions
 * Sentence to Graph (StoG) parsing to create AMR graphs from English sentences.
 * Graph to Sentence (GtoS) generation for turning AMR graphs into English sentences.
 * A QT based GUI to facilitate conversion of sentences to graphs and back to sentences
@@ -35,7 +35,8 @@ For the latest documentation, see **[ReadTheDocs](https://amrlib.readthedocs.io/
 ## AMR View
 The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 
-![AMRView](docs/images/AMRView01.png)
+![AMRView](https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png)
+<!--- docs/images/AMRView01.png --->
 <!--- https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png --->
 
 ## Requirements and Installation
@@ -63,7 +64,7 @@ stog_url =
 gtos_url =
 'https://p-def5.pcloud.com/cBZ9VvYPBZ56xFosZZZCLy137Z2ZZe3VZkZ2LOTcZzVZ40ZlkZVHZBFZu0ZaJZnJZEpZP5Z4pZokZcJZuJZF2z0XZtjveznPmwmm9KNc7cg0rRurX0Lnk/model_generate_t5-v0_1_0.tar.gz'
 ```
-!! If you're get errors trying to download the models, email me and I'll email back a link from pcloud that you can use to download them manually.
+!! If you're get errors trying to download the models, email me at bjascob@msn.com and I'll email back a link from pcloud that you can use to download them manually.
 
 
 The code base also includes library functions and scripts to train and test the parsing and generation nets.

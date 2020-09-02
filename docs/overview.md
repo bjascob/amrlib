@@ -4,8 +4,8 @@
 
 
 ## About
-amrlib is a python module designed to make processing for Abstract Meaning Representation (AMR) simple
-by providing the following functions
+amrlib is a python module designed to make processing for [Abstract Meaning Representation](https://amr.isi.edu/)
+ (AMR) simple by providing the following functions
 * Sentence to Graph (StoG) parsing to create AMR graphs from English sentences.
 * Graph to Sentence (GtoS) generation for turning AMR graphs into English sentences.
 * A QT based GUI to facilitate conversion of sentences to graphs and back to sentences

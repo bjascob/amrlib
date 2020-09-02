@@ -1,7 +1,8 @@
 # AMR View
 The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 
-![AMRView](images/AMRView01.png)
+![AMRView](https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png)
+<!--- docs/images/AMRView01.png --->
 <!--- https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png --->
 
 
