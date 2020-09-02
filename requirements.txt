@@ -1,0 +1,20 @@
+
+# Basic/minimal requirements
+penman>=1.1.0
+torch>=1.3
+numpy
+spacy
+tqdm
+transformers
+
+# Used for amr_view / PlotAMR
+PyQt5
+graphviz
+
+# Used for testing/scoring trained models
+nltk
+smatch
+
+# Other
+unidecode   # LDC2020T02 pre-processing and adding wiki tags
+requests    # Adding wiki tags

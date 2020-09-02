@@ -1,0 +1,10 @@
+docs/build/
+build/
+dist/
+amrlib/data
+*.egg-info/
+.private/
+__pycache__
+*.pyc
+*.swp
+*.log

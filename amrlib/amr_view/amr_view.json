@@ -1,0 +1,10 @@
+{
+    "stog_model_dir":       "amrlib/data/model_stog",
+    "stog_model_fn":        "model.pt",
+    "stog_device":          "cpu",
+    "gtos_model_dir":       "amrlib/data/model_gtos",
+    "gtos_num_ret_seq":     8,
+    "gtos_num_beams":       8,
+    "gtos_batch_size":      1,
+    "gtos_device":          "cpu"
+}

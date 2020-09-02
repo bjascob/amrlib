@@ -1,0 +1,10 @@
+site_name: AMRLib
+nav:
+- Overview:     overview.md
+- 'AMR View':   amr_view.md
+- 'Model API':  api_model.md
+- 'SpaCy API':  api_spacy.md
+- 'Misc API':   api_misc.md
+- 'Wiki Tags':  wiki.md
+- Training:     training.md
+theme: readthedocs
