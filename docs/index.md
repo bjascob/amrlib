@@ -6,11 +6,18 @@
 ## About
 amrlib is a python module designed to make processing for [Abstract Meaning Representation](https://amr.isi.edu/)
  (AMR) simple by providing the following functions
+
 * Sentence to Graph (StoG) parsing to create AMR graphs from English sentences.
+
 * Graph to Sentence (GtoS) generation for turning AMR graphs into English sentences.
+
 * A QT based GUI to facilitate conversion of sentences to graphs and back to sentences
+
 * Methods to plot AMR graphs in both the GUI and as library functions
+
 * Training and test code for both the StoG and GtoS models.
+
+
 * A [SpaCy](https://github.com/explosion/spaCy) extension that allows direct conversion of
 SpaCy `Docs` and `Spans` to AMR graphs.
 
