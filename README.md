@@ -102,7 +102,7 @@ sents, _ = gtos.generate(graphs, disable_progress=True)
 for sent in sents:
     print(sent)
 ```
-For a detailed description see the [User API](https://amrlib.readthedocs.io/en/latest/api/).
+For a detailed description see the [Model API](https://amrlib.readthedocs.io/en/latest/api_model/).
 
 
 ## Usage as a Spacy Extension
@@ -117,6 +117,7 @@ graphs = doc._.to_amr()
 for graph in graphs:
     print(graph)
 ```
+For a detailed description see the [Spacy API](https://amrlib.readthedocs.io/en/latest/api_spacy/).
 
 ## Issues
 If you find a bug, please report it on the [GitHub issues list](https://github.com/bjascob/amrlib/issues).
