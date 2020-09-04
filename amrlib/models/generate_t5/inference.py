@@ -19,8 +19,8 @@ class Inference(object):
         self.tokenizer     = T5Tokenizer.from_pretrained(tokenizer_name)
         self.seq_ends      = set([self.tokenizer.eos_token_id, self.tokenizer.pad_token_id])
         self.batch_size    = kwargs.get('batch_size', 32)
-        self.num_beams     = kwargs.get('num_beams',   8)  # 1 => greedy
-        self.num_ret_seq   = kwargs.get('num_ret_seq', 8)
+        self.num_beams     = kwargs.get('num_beams',   1)  # 1 => greedy
+        self.num_ret_seq   = kwargs.get('num_ret_seq', 1)
         if self.num_ret_seq > self.num_beams:
             logger.warn('Need at least as many beams as returned sequences - increasing beam count')
             self.num_beams = self.num_ret_seq
