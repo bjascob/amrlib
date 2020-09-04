@@ -177,7 +177,7 @@ class Inference(object):
     def _load_model(self):
         model_fpath = os.path.join(self.model_dir, self.model_fn)
         print('Loading model', model_fpath)
-        model_dict = torch.load(model_fpath)
+        model_dict = torch.load(model_fpath, map_location='cpu')    # always load initially to RAM
         model_args = Config(model_dict['args'])
         vocabs = get_vocabs(os.path.join(self.model_dir, model_args.vocab_dir))
         # Create the post-processor
