@@ -15,7 +15,7 @@ these objects.
 import amrlib
 import spacy
 amrlib.setup_spacy_extension()
-nlp = spacy.load('en')
+nlp = spacy.load('en_core_web_sm')
 doc = nlp('This is a test of the SpaCy extension. The test has multiple sentences.')
 
 # The following are roughly equivalent but demonstrate the different objects.
