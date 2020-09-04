@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import traceback
 import logging
 from   PyQt5.QtGui import QFontDatabase
@@ -79,9 +80,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def show_graph_slot(self):
         text = self.amrTE.toPlainText().strip()
+        # Generate first
         if not text:
-            logger.warning('No AMR Graph ready.  Generate first')
-            return
+            self.parse_slot()            
+            text = self.amrTE.toPlainText().strip()
+            if not text:
+                logger.warning('No graph to plot')
+                return
         try:
             plot = AMRPlot()
             plot.build_from_graph(text)
