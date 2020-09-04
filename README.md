@@ -45,7 +45,15 @@ The project was built and tested under Python 3 and Ubuntu but should run on any
 
 **To install the code**
 
+Install pytorch using the [instructions](https://pytorch.org/) specific to your machine setup.  
+A GPU/cuda is not required for run-time use but is highly recommeded for training models.
+
+If you want to plot graphs, follow the graphviz installation instructions on the [pypi page](https://pypi.org/project/graphviz/).
+This requires both the pip graphviz install and the installation of the Graphviz non-python library.
+
 `pip3 install -r requirements.txt`
+
+`python3 -m spacy download en_core_web_sm`
 
 `pip3 install amrlib`
 
@@ -67,7 +75,7 @@ amrlib is installed in you can do
 >>> import amrlib
 >>> amrlib.__file__
 ```
-It is probably easiest to set a link to these files.  To do this, do something like..
+On a Linux system it is probably easiest to set a link to these files.  To do this, do something like..
 ```
 cd <xx>/amrlib/data
 
@@ -77,6 +85,7 @@ ln -snf model_parse_gsii-v0_1_0    model_stog
 tar xzf model_generate_t5-v0_1_0.tar.gz
 ln -snf model_generate_t5-v0_1_0   model_gtos
 ```
+If you are on a Windows system, simply rename the directories, instead of setting links.
 
 **For training**
 
