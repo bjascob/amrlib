@@ -3,17 +3,17 @@
 penman>=1.1.0
 torch>=1.6
 numpy
-spacy
+spacy       # also requires model download `python -m spacy download en_core_web_sm`
 tqdm
 transformers
+smatch
 
 # Used for amr_view / PlotAMR
 PyQt5
-graphviz
+graphviz    # this requires the Graphviz non-python library to be installed too (see pypi page)
 
 # Used for testing/scoring trained models
 nltk
-smatch
 
 # Other
 unidecode   # LDC2020T02 pre-processing and adding wiki tags
