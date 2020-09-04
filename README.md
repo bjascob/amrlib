@@ -60,6 +60,7 @@ This requires both the pip graphviz install and the installation of the Graphviz
 Note that installing amrlib will automatically install a minimal set of requirements but for the QT based amr_view
 or to test/train a model, you'll need to also install from the requirements.txt file.
 
+
 **To install the models**
 
 Download the pre-trained models from the pcloud links for
@@ -87,6 +88,11 @@ ln -snf model_generate_t5-v0_1_0   model_gtos
 ```
 If you are on a Windows system you can simply rename the directories if this is easier than linking.
 The [7-zip](https://www.7-zip.org/) utility is a popular program for extracting tar.gz files under Windows.
+
+Note that the first time a model is used (`stog.parse_sents()` or `gtos.generate()`) the Huggingface pretrained 
+base models and tokenizers will automatically download. These will be cached and will not be re-downloaded 
+after that.
+
 
 **For training**
 
