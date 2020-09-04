@@ -43,6 +43,9 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 ## Requirements and Installation
 The project was built and tested under Python 3 and Ubuntu but should run on any Linux, Windows, Mac, etc.. system.
 
+NOTE: v0.1.0 currenly has a minor bug that prohibits the parser model from working under Windows.  This will be fixed
+shortly in v0.1.1
+
 **To install the code**
 
 * Install pytorch using the [instructions](https://pytorch.org/) specific to your machine setup. A GPU/cuda is not required 
