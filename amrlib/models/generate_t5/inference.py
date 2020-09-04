@@ -2,6 +2,7 @@ import logging
 import torch
 from   tqdm import tqdm
 from   transformers import T5ForConditionalGeneration, T5Tokenizer
+from   ...graph_processing.amr_loading import split_amr_meta
 
 logger = logging.getLogger(__name__)
 
@@ -18,19 +19,25 @@ class Inference(object):
         self.tokenizer     = T5Tokenizer.from_pretrained(tokenizer_name)
         self.seq_ends      = set([self.tokenizer.eos_token_id, self.tokenizer.pad_token_id])
         self.batch_size    = kwargs.get('batch_size', 32)
-        self.num_beams     = kwargs.get('num_beams',   1)  # 1 => greedy
-        self.num_ret_seq   = kwargs.get('num_ret_seq', 1)
+        self.num_beams     = kwargs.get('num_beams',   8)  # 1 => greedy
+        self.num_ret_seq   = kwargs.get('num_ret_seq', 8)
         if self.num_ret_seq > self.num_beams:
             logger.warn('Need at least as many beams as returned sequences - increasing beam count')
             self.num_beams = self.num_ret_seq
 
-    # generate sentences from a list of AMR text graphs
+    # Generate sentences from a list of AMR text graphs
     # For generate params see https://huggingface.co/transformers/master/main_classes/model.html
     def generate(self, graphs, disable_progress=False):
         assert isinstance(graphs, list)
+        # Make sure the user isn't passing in meta-data, only the graph strings
+        stripped_graphs = []
+        for graph in graphs:
+            meta_lines, graph_lines = split_amr_meta(graph)
+            stripped_graphs.append( '\n'.join(graph_lines) )
+        # Loop though batches
         sents = []
         clips = []
-        dataloader = torch.utils.data.DataLoader(graphs, batch_size=self.batch_size)
+        dataloader = torch.utils.data.DataLoader(stripped_graphs, batch_size=self.batch_size)
         for batch in tqdm(dataloader, disable=disable_progress):
             # Form encodings and tokenize
             input_text = ['%s %s' % (graph, self.tokenizer.eos_token) for graph in batch]
