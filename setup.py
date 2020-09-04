@@ -35,7 +35,7 @@ setuptools.setup(
     package_data={'amrlib':['amr_view/*']},
     packages=setuptools.find_packages(),
     # Minimal requirements here.  More extensive list in requirements.txt
-    install_requires=['penman', 'torch', 'numpy', 'spacy', 'tqdm', 'transformers'],
+    install_requires=['penman', 'torch', 'numpy', 'spacy', 'tqdm', 'transformers', 'smatch'],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
