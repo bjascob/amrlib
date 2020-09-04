@@ -31,7 +31,6 @@ def get_concepts(lem, vocab):
 
 def ListsToTensor(xs, vocab=None, local_vocabs=None, unk_rate=0.):
     pad = vocab.padding_idx if vocab else 0
-
     def toIdx(w, i):
         if vocab is None:
             return w
@@ -50,7 +49,7 @@ def ListsToTensor(xs, vocab=None, local_vocabs=None, unk_rate=0.):
     for i, x in enumerate(xs):
         y = toIdx(x, i) + [pad]*(max_len-len(x))
         ys.append(y)
-    data = np.transpose(np.array(ys))
+    data = np.transpose(np.array(ys, dtype=np.int64))
     return data
 
 
@@ -64,16 +63,15 @@ def ListsofStringToTensor(xs, vocab, max_string_len=20):
             z = list(z[:max_string_len])
             zs.append(vocab.token2idx([CLS]+z+[END]) + [vocab.padding_idx]*(max_string_len - len(z)))
         ys.append(zs)
-
-    data = np.transpose(np.array(ys), (1, 0, 2))
+    data = np.transpose(np.array(ys, dtype=np.int64), (1, 0, 2))
     return data
 
 
 def ArraysToTensor(xs):
     "list of numpy array, each has the same demonsionality"
-    x = np.array([ list(x.shape) for x in xs])
+    x = np.array([ list(x.shape) for x in xs], dtype=np.int64)
     shape = [len(xs)] + list(x.max(axis = 0))
-    data = np.zeros(shape, dtype=np.int)
+    data = np.zeros(shape, dtype=np.int64)
     for i, x in enumerate(xs):
         slicing_shape = list(x.shape)
         slices = tuple([slice(i, i+1)]+[slice(0, x) for x in slicing_shape])
@@ -107,7 +105,7 @@ def batchify(data, vocabs, unk_rate=0.):
     _concept_out     = ListsToTensor(augmented_concept, vocabs['predictable_concept'], local_token2idx)[1:]
 
     out_conc_len, bsz = _concept_out.shape
-    _rel = np.full((1+out_conc_len, bsz, out_conc_len), vocabs['rel'].token2idx(PAD))
+    _rel = np.full((1+out_conc_len, bsz, out_conc_len), vocabs['rel'].token2idx(PAD), dtype=np.int64)
     # v: [<dummy>, concept_0, ..., concept_l, ..., concept_{n-1}, <end>] u: [<dummy>, concept_0, ..., concept_l, ..., concept_{n-1}]
 
     for bidx, (x, y) in enumerate(zip(edge, concept)):
