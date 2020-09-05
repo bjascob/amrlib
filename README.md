@@ -18,14 +18,14 @@ SpaCy `Docs` and `Spans` to AMR graphs.
 ## AMR Models
 The system uses two different Neural Network models for parsing and generation.
 
-The parsing (StoG) model comes from [AMR-gs](https://github.com/jcyk/AMR-gs), the details of which
+The parsing (StoG) model comes from [jcyk/AMR-gs](https://github.com/jcyk/AMR-gs), the details of which
 can be found in this [paper](https://arxiv.org/abs/2004.05572).  The version of the model used here eliminates
 much of the data abstraction (aka anonymization) used in the original code.  During testing, this model
-achieves a 77 SMATCH score with LDC2020T02.
+achieves a **77 SMATCH score** with LDC2020T02.
 
 The generation (GtoS) model takes advantage of the pretrained [HuggingFace](https://github.com/huggingface/transformers)
 T5 transformer.  The model is fine-tuned to translate AMR graphs to English sentences.  The retrained model
-achieves a BLEU score of 43 with LDC2020T02.
+achieves a **BLEU score of 43** with LDC2020T02.
 
 
 ## Documentation
@@ -46,7 +46,7 @@ The project was built and tested under Python 3 and Ubuntu but should run on any
 See [Installation Instructions](docs/install.md) for details on setup.
 
 ## Library Usage
-To convert sentences to grahs
+To convert sentences to graphs
 ```
 import amrlib
 stog = amrlib.load_stog_model()
