@@ -43,7 +43,7 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 ## Requirements and Installation
 The project was built and tested under Python 3 and Ubuntu but should run on any Linux, Windows, Mac, etc.. system.
 
-See [Installation Instructions](docs/install.md) for details on setup.
+See [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install/) for details on setup.
 
 ## Library Usage
 To convert sentences to graphs
