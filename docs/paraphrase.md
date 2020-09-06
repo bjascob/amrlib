@@ -23,12 +23,14 @@ print('tops:', pgraph.variables())    # candidates for 'top'
 for triple in pgraph.instances():
     print('top=%s  concept=%s' % (triple.source, triple.target))
 ```
-When you try this, you ca see that the choice of top variables impacts the sentence generation.
-Some sentences will no longer be well formed but others will be paraphrased.
+When you try this, you can see that the choice of the top variable impacts sentence generation.
+Some sentences will no longer be well formed but others will have re-ordered wordings that paraphrase
+the original sentence.
 
-In addition to changing the `top` variable, it might be useful to experiment with 'deinverting' the X-of relationships
-during decoding of the graph.  You can do this with...
+In addition to changing the `top` variable, it might be useful to experiment with removing penman's 'de-inversion'
+of "X-of" relationships during decoding/encoding of the graph.  You can try this by adding..
 ```
+from penman.models.noop import NoOpModel
 pgraph = penman.decode(graph_string, model=NoOpModel())
 ```
 See [penman issue #84](https://github.com/goodmami/penman/issues/84) for a discussion on the de-inversion process.
