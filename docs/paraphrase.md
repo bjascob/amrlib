@@ -35,4 +35,4 @@ pgraph = penman.decode(graph_string, model=NoOpModel())
 ```
 See [penman issue #84](https://github.com/goodmami/penman/issues/84) for a discussion on the de-inversion process.
 
-A more complete example that loops through all possible top variables in a graph is available in the scripts directory as [20_Test_Paraphrasing](https://github.com/bjascob/amrlib/blob/master/scripts/20_Test_Paraphrasing.py).
+A more complete example that loops through all possible top variables in a graph is available in the scripts directory as [20_Test_Paraphrasing](https://github.com/bjascob/amrlib/blob/master/scripts/40_Model_Generate_T5/20_Test_Paraphrasing.py).
