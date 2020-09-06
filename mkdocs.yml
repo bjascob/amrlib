@@ -8,4 +8,5 @@ nav:
 - 'Misc API':   api_misc.md
 - 'Wiki Tags':  wiki.md
 - Training:     training.md
+- Paraphrasing: paraphrase.md
 theme: readthedocs

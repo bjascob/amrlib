@@ -13,6 +13,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
 * Training and test code for both the StoG and GtoS models.
 * A [SpaCy](https://github.com/explosion/spaCy) extension that allows direct conversion of
 SpaCy `Docs` and `Spans` to AMR graphs.
+* Sentence paraphrasing - experimental
 
 
 ## AMR Models
@@ -78,6 +79,12 @@ for graph in graphs:
     print(graph)
 ```
 For a detailed description see the [Spacy API](https://amrlib.readthedocs.io/en/latest/api_spacy/).
+
+
+## Paraphrasing
+For an explanation of how to use the library to do paraphrasing, see the
+[Paraphrasing](https://amrlib.readthedocs.io/en/latest/paraphrase/) section in the docs.
+
 
 ## Issues
 If you find a bug, please report it on the [GitHub issues list](https://github.com/bjascob/amrlib/issues).

@@ -14,7 +14,7 @@ if __name__ == '__main__':
     gen_fn     = 'test.txt.generated'
     ref_fn     = 'test.txt.ref_sents'
     # Works using GTX TitanX (12GB)
-    # greedy (num_beams=1, batch_size=32) run-time = 10min
+    # greedy (num_beams=1, batch_size=32) run-time =  3min
     #        (num_beams=8,  batch_size=8) run-time = 15min
     #        (num_beams=16, batch_size=4) run-time = 20min
     batch_size = 4
