@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import setup_run_dir    # this import tricks script to run from 2 levels up
 import penman
-from   penman.models.noop import NoOpModel  # non-deiverting model
 import os
 from   amrlib.models.generate_t5.inference import Inference
 from   amrlib.graph_processing.amr_loading import load_amr_graph_sent
@@ -37,14 +36,12 @@ if __name__ == '__main__':
         print(sents[gnum])
         print()
         # Get the original graph as a penman object and zero-out the metadata
-        #pgraph = penman.decode(graphs[gnum], model=NoOpModel())    # disable deinvert
         pgraph = penman.decode(graphs[gnum])
         pgraph.metadata = {}
         # Loop through all variables, keeping the original top first
         tops = sorted(pgraph.variables())
         tops.remove( pgraph.top )
         tops.insert(0, pgraph.top)
-        #new_graphs = [penman.encode(pgraph, top=t, model=NoOpModel()) for t in tops]   # disable invert
         new_graphs = [penman.encode(pgraph, top=t) for t in tops]
         # Get the mapping from top variables to the concept for debug
         var2concept = {t.source:t.target for t in pgraph.instances()}

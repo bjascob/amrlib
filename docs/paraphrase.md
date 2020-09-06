@@ -27,12 +27,4 @@ When you try this, you can see that the choice of the top variable impacts sente
 Some sentences will no longer be well formed but others will have re-ordered wordings that paraphrase
 the original sentence.
 
-In addition to changing the `top` variable, it might be useful to experiment with removing penman's 'de-inversion'
-of "X-of" relationships during decoding/encoding of the graph.  You can try this by adding..
-```
-from penman.models.noop import NoOpModel
-pgraph = penman.decode(graph_string, model=NoOpModel())
-```
-See [penman issue #84](https://github.com/goodmami/penman/issues/84) for a discussion on the de-inversion process.
-
 A more complete example that loops through all possible top variables in a graph is available in the scripts directory as [20_Test_Paraphrasing](https://github.com/bjascob/amrlib/blob/master/scripts/40_Model_Generate_T5/20_Test_Paraphrasing.py).
