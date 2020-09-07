@@ -8,6 +8,8 @@ sentence generator to "translate" the graph to a sentence.
 The graphs themselves have a specified root or `top`.  Changing the graph's `top` variable will change the
 order of how it is serialized into a string and that re-ordering will impact the generated sentence.
 
+The AMR spec refers to the graph's root as its [focus](https://github.com/amrisi/amr-guidelines/blob/master/amr.md#focus).
+
 The `penman` library allows an easy method to change the graph's `top`. The following is a simple example
 of how to do this...
 ```
