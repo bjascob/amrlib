@@ -82,13 +82,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         text = self.amrTE.toPlainText().strip()
         # Generate first
         if not text:
-            self.parse_slot()            
+            self.parse_slot()
             text = self.amrTE.toPlainText().strip()
             if not text:
                 logger.warning('No graph to plot')
                 return
         try:
-            plot = AMRPlot()
+            render_fn = self.config.get('render_fn', None)
+            plot = AMRPlot(render_fn)
             plot.build_from_graph(text)
             plot.view()
         except:

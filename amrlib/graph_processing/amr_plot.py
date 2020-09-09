@@ -1,12 +1,18 @@
+import os
+import tempfile
 import penman
 from   penman.models.noop import NoOpModel
 from   graphviz import Digraph    # sudo apt install graphviz; pip3 install graphviz
 
 
 class AMRPlot(object):
-    def __init__(self, render_fn='/tmp/amr_graph.gv'):
+    def __init__(self, render_fn=None):
+        if render_fn is None:
+            render_fn = os.path.join(tempfile.gettempdir(), 'amr_graph.gv')
         self.graph = Digraph('amr_graph', filename=render_fn, format='png')
         self.graph.attr(rankdir='LR', size='12,8') # rankdir=left-to-right, size=width,height in inches
+
+
     # Build the AMR graph from a text entry
     # debug prints tuples to the scrieen
     # allow-deinvert enables the default penman decode behavior of de-inverting
