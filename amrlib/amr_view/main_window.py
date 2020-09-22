@@ -89,7 +89,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return
         try:
             render_fn = self.config.get('render_fn', None)
-            plot = AMRPlot(render_fn)
+            format    = self.config.get('render_format', 'pdf')
+            plot = AMRPlot(render_fn, format)
             plot.build_from_graph(text)
             plot.view()
         except:

@@ -6,5 +6,6 @@
     "gtos_num_ret_seq":     8,
     "gtos_num_beams":       8,
     "gtos_batch_size":      1,
-    "gtos_device":          "cpu"
+    "gtos_device":          "cpu",
+    "render_format":        "pdf"
 }

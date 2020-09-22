@@ -5,13 +5,14 @@ from   penman.models.noop import NoOpModel
 from   graphviz import Digraph    # sudo apt install graphviz; pip3 install graphviz
 
 
+# render_fn is the temp file used for rendering
+# format is pdf, png, ... (see graphviz supported formats)
 class AMRPlot(object):
-    def __init__(self, render_fn=None):
+    def __init__(self, render_fn=None, format='pdf'):
         if render_fn is None:
             render_fn = os.path.join(tempfile.gettempdir(), 'amr_graph.gv')
-        self.graph = Digraph('amr_graph', filename=render_fn, format='png')
+        self.graph = Digraph('amr_graph', filename=render_fn, format=format)
         self.graph.attr(rankdir='LR', size='12,8') # rankdir=left-to-right, size=width,height in inches
-
 
     # Build the AMR graph from a text entry
     # debug prints tuples to the scrieen
