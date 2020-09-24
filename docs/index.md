@@ -7,6 +7,8 @@
 amrlib is a python module designed to make processing for [Abstract Meaning Representation](https://amr.isi.edu/)
  (AMR) simple by providing the following functions
 
+<!--- For Readthedocs, bulleted items must have a space and  --->
+
 * Sentence to Graph (StoG) parsing to create AMR graphs from English sentences.
 
 * Graph to Sentence (GtoS) generation for turning AMR graphs into English sentences.
@@ -23,13 +25,9 @@ SpaCy `Docs` and `Spans` to AMR graphs.
 * Rule Based Word Alignment of tokens to graph nodes
 
 * A simple evaluation API with metrics including...
-
-    - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
-
-    - BLEU for sentence generation
-    
-    - Alignment scoring metrics detailing precision/recall
-
+    + Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
+    + BLEU for sentence generation
+    + Alignment scoring metrics detailing precision/recall
 * Sentence paraphrasing - experimental
 
 
