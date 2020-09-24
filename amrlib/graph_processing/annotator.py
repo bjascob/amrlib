@@ -76,15 +76,16 @@ def _process_entry(entry, tokens=None):
     return pen
 
 
-# Take a graph string entry and a ::tok field that is space tokenized and add json style metadata
-# for 'lemmas' and 'tokens'
-# This was assed for alignments but with a little work, could be harmonized with above
-def add_lemmas(entry, tok_key='tok'):
+# Take a graph string entry and process it through spacy to create metadata fields for
+# tokens and lemmas using the snt_key.  If a 'verify_tok_key' is provided, compare the
+# tokenization length for spacy tokenization to the space-tokenized ":tok" field and
+# only return a graph is they match.
+# This was added speficially for alignments but with a little work, could be harmonized with above
+def add_lemmas(entry, snt_key, verify_tok_key=None):
     global spacy_nlp
     load_spacy()
     graph  = penman.decode(entry, model=NoOpModel())    # do not de-invert graphs
-    isi_tokens = graph.metadata[tok_key].split()
-    doc        = spacy_nlp(graph.metadata[tok_key])
+    doc        = spacy_nlp(graph.metadata[snt_key])
     nlp_tokens = [t.text for t in doc]
     graph.metadata['tokens'] = json.dumps(nlp_tokens)
     # Create lemmas
@@ -100,11 +101,16 @@ def add_lemmas(entry, tok_key='tok'):
             lemma = t.lemma_.lower()
         lemmas.append(lemma)
     graph.metadata['lemmas'] = json.dumps(lemmas)
-    # Only return the graph is the tokenized length is the same
-    if len(isi_tokens) == len(lemmas) == len(nlp_tokens):
-        return graph
+    # If verify_tok_key is not None, verify that the new tokenization is the same as the existing
+    # and only return the graph if the tokenized length is the same
+    if verify_tok_key is not None:
+        isi_tokens = graph.metadata[verify_tok_key].split()
+        if len(isi_tokens) == len(lemmas) == len(nlp_tokens):
+            return graph
+        else:
+            return None
     else:
-        return None
+        return graph
 
 
 # Spacy NLP - lazy loader
