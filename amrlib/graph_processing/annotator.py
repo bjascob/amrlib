@@ -4,6 +4,7 @@ import logging
 import multiprocessing
 from   tqdm import tqdm
 import penman
+from   penman.models.noop import NoOpModel
 from   .amr_loading import load_amr_entries
 from   .. import defaults
 
@@ -44,7 +45,7 @@ def annotate_graph(entry, tokens=None):
 # plus a few other fields for future pre/postprocessing work that may be needed.
 # Keep only tags in "keep_tags"
 def _process_entry(entry, tokens=None):
-    pen = penman.decode(entry)
+    pen = penman.decode(entry)      # standard de-inverting penman loading process
     # Filter out old tags and add the tags from SpaCy parse
     global keep_tags
     if keep_tags is not None:
@@ -75,14 +76,48 @@ def _process_entry(entry, tokens=None):
     return pen
 
 
+# Take a graph string entry and a ::tok field that is space tokenized and add json style metadata
+# for 'lemmas' and 'tokens'
+# This was assed for alignments but with a little work, could be harmonized with above
+def add_lemmas(entry, tok_key='tok'):
+    global spacy_nlp
+    load_spacy()
+    graph  = penman.decode(entry, model=NoOpModel())    # do not de-invert graphs
+    isi_tokens = graph.metadata[tok_key].split()
+    doc        = spacy_nlp(graph.metadata[tok_key])
+    nlp_tokens = [t.text for t in doc]
+    graph.metadata['tokens'] = json.dumps(nlp_tokens)
+    # Create lemmas
+    # SpaCy's lemmatizer returns -PRON- for pronouns so strip these
+    # Don't try to lemmatize any named-entities or proper nouns.  Lower-case any other words.
+    lemmas = []
+    for t in doc:
+        if t.lemma_ == '-PRON-':
+            lemma = t.text.lower()
+        elif t.tag_.startswith('NNP') or t.ent_type_ not in ('', 'O'):
+            lemma = t.text
+        else:
+            lemma = t.lemma_.lower()
+        lemmas.append(lemma)
+    graph.metadata['lemmas'] = json.dumps(lemmas)
+    # Only return the graph is the tokenized length is the same
+    if len(isi_tokens) == len(lemmas) == len(nlp_tokens):
+        return graph
+    else:
+        return None
+
+
 # Spacy NLP - lazy loader
 # This will only load the model onece, even if called again with a different model name.
+# Note that when multiprocessing, call this once from the main process (before using pool)
+# to load it into the main processes, then when pool forks, it will be copied, otherwise it
+# will be loaded multiple times.
 spacy_nlp = None
 def load_spacy(model_name=None):
     global spacy_nlp
     if spacy_nlp is not None:   # will return if a thread is already loading
         return
     model_name = model_name if model_name is not None else defaults.spacy_model_name
-    print('Loading SpaCy NLP Model:', model_name)
+    #print('Loading SpaCy NLP Model:', model_name)
     import spacy
     spacy_nlp = spacy.load(model_name)
