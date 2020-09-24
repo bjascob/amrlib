@@ -28,6 +28,10 @@ aligner = RBWAligner.from_string_w_json(graph_string)  # use this with a graph s
 penman_graph = aligner.get_penman_graph()              # get the aligned penman graph object
 ```
 
+See the [RBW_Aligner scripts directory](https://github.com/bjascob/amrlib/tree/master/scripts/60_RBW_Aligner)
+for a number of scripts related using and testing the aligner.
+
+
 
 ## Performance
 Score of RBW Aligner alignments against ISI machine alignments in LDC2020T02 <sup>**1</sup>
