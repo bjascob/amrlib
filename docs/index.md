@@ -17,9 +17,21 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
 
 * Training and test code for both the StoG and GtoS models.
 
-
 * A [SpaCy](https://github.com/explosion/spaCy) extension that allows direct conversion of
 SpaCy `Docs` and `Spans` to AMR graphs.
+
+* Rule Based Word Alignment of tokens to graph nodes
+
+* A simple evaluation API with metrics including...
+
+  - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
+
+  - BLEU for sentence generation
+
+  - Alignment scoring metrics detailing precision/recall
+
+* Sentence paraphrasing - experimental
+
 
 
 ## AMR Models

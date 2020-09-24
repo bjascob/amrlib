@@ -8,6 +8,7 @@ nav:
 - 'Misc API':   api_misc.md
 - 'Wiki Tags':  wiki.md
 - Aligner:      rbw_aligner.md
+- Evaluation:   evaluation.md
 - Training:     training.md
 - Paraphrasing: paraphrase.md
 theme: readthedocs
