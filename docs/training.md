@@ -89,7 +89,7 @@ a good job of training these large models but it can be used for experimenting; 
 scores during test.
 
 If you want to try training but don't want to buy the LDC data, it's reasonable to use the pre-trained parser
-(or another existing one such as [JAMR](https://github.com/jflanigan/jamr) to create a synthetic corpus
+(or another existing one such as [JAMR](https://github.com/jflanigan/jamr)) to create a synthetic corpus
 by parsing a large number of sentences from a free corpus and then using the output AMR graphs as input for training.
 This technique has shown to be an effective pre-training method in some papers, however with the larger
 LDC2020T02 corpus, pre-training is not generally required.
