@@ -33,8 +33,9 @@ if __name__ == '__main__':
     print('Converting to graphs and annotating with lemmas')
     load_spacy()    # do this in the main process to prevent doing it multiple times
     graphs = []
+    annotate = partial(add_lemmas, snt_key='tok', verify_tok_key='tok')    # verify matching tokenizations
     with Pool() as pool:
-        for graph in pool.imap(add_lemmas, entries):
+        for graph in pool.imap(annotate, entries):
             if graph is not None:
                 graphs.append(graph)
     print('%d graphs left with the same tokenization length' % len(graphs))
