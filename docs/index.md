@@ -24,11 +24,11 @@ SpaCy `Docs` and `Spans` to AMR graphs.
 
 * A simple evaluation API with metrics including...
 
-  - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
+    - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
 
-  - BLEU for sentence generation
-
-  - Alignment scoring metrics detailing precision/recall
+    - BLEU for sentence generation
+    
+    - Alignment scoring metrics detailing precision/recall
 
 * Sentence paraphrasing - experimental
 
