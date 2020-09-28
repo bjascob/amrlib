@@ -9,7 +9,7 @@ from   tqdm import tqdm
 from   .modules.parser import Parser
 from   .data_loader import DataLoader
 from   .vocabs import get_vocabs
-from   .postprocess import PostProcessor
+from   .graph_builder import GraphBuilder
 from   .utils import move_to_device
 from   .bert_utils import BertEncoderTokenizer, BertEncoder
 from   ...graph_processing.amr_loading import load_amr_entries, split_amr_meta
@@ -33,16 +33,16 @@ class Inference(object):
         self.alpha           = kwargs.get('alpha',         0.6)
         self.max_time_step   = kwargs.get('max_time_step', 100)
         if model_fn:
-            self._load_model()  # sets self.model, post_proc, vocabs
+            self._load_model()  # sets self.model, graph_builder, vocabs
 
     # When training use the existing model and vocabs
     @classmethod
     def build_from_model(cls, model, vocabs, **kwargs):
         self = cls(None, None, **kwargs)
-        self.model     = model
-        self.device    = model.device
-        self.vocabs    = vocabs
-        self.post_proc = PostProcessor(vocabs['rel'])
+        self.model         = model
+        self.device        = model.device
+        self.vocabs        = vocabs
+        self.graph_builder = GraphBuilder(vocabs['rel'])
         return self
 
     # parse a list of sentences (strings)
@@ -92,7 +92,7 @@ class Inference(object):
             batch = move_to_device(batch, self.model.device)
             res = self._parse_batch(batch)
             for concept, relation in zip(res['concept'], res['relation']):
-                graph_lines = self.post_proc.postprocess(concept, relation)
+                graph_lines = self.graph_builder.build(concept, relation)
                 output_entries.append( graph_lines )
         # Add the metadata from the annotations and 'snt' if requested
         if add_metadata:
@@ -128,10 +128,7 @@ class Inference(object):
                     for line in meta_lines:
                         fo.write(line + '\n')
                     # Write some new metadata   - for test
-                    #fo.write('# ::conc ' + ' '.join(concept)  + '\n')
-                    #fo.write('# ::score %.6f\n'%score)
-                    # Write the graph
-                    graph_lines = self.post_proc.postprocess(concept, relation)
+                    graph_lines = self.graph_builder.build(concept, relation)
                     test_entries.append(' '.join(graph_lines.splitlines()))
                     fo.write(graph_lines + '\n\n')
                     ctr += 1
@@ -181,7 +178,7 @@ class Inference(object):
         model_args = Config(model_dict['args'])
         vocabs = get_vocabs(os.path.join(self.model_dir, model_args.vocab_dir))
         # Create the post-processor
-        post_proc = PostProcessor(vocabs['rel'])
+        graph_builder = GraphBuilder(vocabs['rel'])
         # Load bert of specified
         bert_encoder = None
         if model_args.with_bert:
@@ -209,6 +206,6 @@ class Inference(object):
         model = model.to(self.device)
         model.eval()
         # Set instance variables
-        self.vocabs    = vocabs
-        self.post_proc = post_proc
-        self.model     = model
+        self.vocabs        = vocabs
+        self.graph_builder = graph_builder
+        self.model         = model
