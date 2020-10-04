@@ -203,7 +203,11 @@ class RBWAligner(object):
             match = cls.align_re.match(result.name)
             if match:
                 is_role = True if result.type == 'role' else False
-                tnums = [int(n) for n in match[2].split(',')]    # alignments are a comma separated list
+                try:
+                    tnums = [int(n) for n in match[2].split(',')]    # alignments are a comma separated list
+                except:
+                    logger.error('Failed to convert to tnums: %s' % result.name)
+                    tnums = []
                 for tnum in tnums:
                     sort_key  = cls.form_single_alignment(tnum, result.addr, is_role, True)
                     align_str = cls.form_single_alignment(tnum, result.addr, is_role, False)
