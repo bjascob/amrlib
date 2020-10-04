@@ -36,7 +36,7 @@ class RBWAligner(object):
     def from_string_w_json(cls, graph, token_key='tokens', lemma_key='lemmas', **kwargs):
         assert isinstance(graph, str)
         graph  = penman.decode(graph, model=NoOpModel())
-        return cls.from_penman_w_json(graph, token_key, lemma_key)
+        return cls.from_penman_w_json(graph, token_key, lemma_key, **kwargs)
 
     # Same as above but with the penman graph object instead of a string
     @classmethod
@@ -52,7 +52,7 @@ class RBWAligner(object):
 
     # Get the graph string (and metadata)
     def get_graph_string(self):
-        return penman.encode(self.graph, indent=6)
+        return penman.encode(self.graph, model=NoOpModel(), indent=6)
 
     ###########################################################################
     #### Rule Base Word Alignments added to Graph as Surface Aligments
