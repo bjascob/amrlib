@@ -18,3 +18,4 @@ nltk
 # Other
 unidecode   # LDC2020T02 pre-processing and adding wiki tags
 requests    # Adding wiki tags
+word2number # used in alignments code
