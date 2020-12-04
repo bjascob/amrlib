@@ -5,7 +5,7 @@ torch>=1.6
 numpy
 spacy       # also requires model download `python -m spacy download en_core_web_sm`
 tqdm
-transformers
+transformers==3.5.1     # looks like v4.0.0 has breaking changes
 smatch
 
 # Used for amr_view / PlotAMR
