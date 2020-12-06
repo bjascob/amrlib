@@ -53,7 +53,7 @@ class BertEncoder(BertModel):
         attention_mask = input_ids.ne(0)
 
         encoded_layers, pooled_output = super(BertEncoder, self).forward(
-            input_ids, attention_mask, token_type_ids)
+            input_ids, attention_mask, token_type_ids, return_dict=False)
         if token_subword_index is None:
             return encoded_layers[:, 1:-1], pooled_output
         else:

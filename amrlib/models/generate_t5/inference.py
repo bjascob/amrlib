@@ -50,7 +50,7 @@ class Inference(object):
                                        max_length=self.max_sent_len, early_stopping=True,
                                        num_beams=self.num_beams,
                                        num_return_sequences=self.num_ret_seq)
-            outs = [self.tokenizer.decode(ids) for ids in outs]
+            outs = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in outs]
             sents.extend(outs)
             # Check if tokenized input_ids end with a pad or an eos token </s>.
             # If not, it was clipped
