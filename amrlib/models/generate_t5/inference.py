@@ -12,7 +12,13 @@ class Inference(object):
         default_device     = 'cuda:0' if torch.cuda.is_available() else 'cpu'
         device             = kwargs.get('device', default_device)
         self.device        = torch.device(device)
+        # The following produces a logger warning that we can ignore so eliminate temporarily set the level higher
+        xfm_logger         = logging.getLogger('transformers.modeling_utils')
+        original_level     = xfm_logger.getEffectiveLevel()
+        xfm_logger.setLevel(logging.ERROR)
         self.model         = T5ForConditionalGeneration.from_pretrained(model_dir).to(self.device)
+        xfm_logger.setLevel(original_level)
+        # End logger ignore warning
         self.max_graph_len = self.model.config.task_specific_params['translation_amr_to_text']['max_in_len']
         self.max_sent_len  = self.model.config.task_specific_params['translation_amr_to_text']['max_out_len']
         tokenizer_name     = kwargs.get('tokenizer_name', 't5-base')    # name or path
