@@ -1,6 +1,7 @@
 docs/build/
 build/
 dist/
+runs/
 amrlib/data
 *.egg-info/
 .private/

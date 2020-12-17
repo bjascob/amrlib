@@ -65,7 +65,7 @@ To convert graphs to sentences
 ```
 import amrlib
 gtos = amrlib.load_gtos_model()
-sents, _ = gtos.generate(graphs, disable_progress=True)
+sents, _ = gtos.generate(graphs)
 for sent in sents:
     print(sent)
 ```

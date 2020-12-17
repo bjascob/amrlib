@@ -30,7 +30,7 @@ if __name__ == '__main__':
     inference = Inference(model_dir, batch_size=batch_size, num_beams=num_beams, device=device)
 
     print('Generating')
-    answers, clips = inference.generate(graphs)
+    answers, clips = inference.generate(graphs, disable_progress=False)
     print('%d graphs were clipped during tokenization' % sum(clips))
 
     # Filter out any clipped graphs as invalid tests

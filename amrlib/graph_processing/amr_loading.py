@@ -1,3 +1,4 @@
+import re
 import gzip
 
 
@@ -38,6 +39,7 @@ def split_amr_meta(entry):
             graph_lines.append(line)
     return meta_lines, graph_lines
 
+
 # Load the AMR file and return a dict "entries" with 2 keys, sent and graph
 # sent and graph are both a list, string for each entry in the file
 def load_amr_graph_sent(fpath):
@@ -57,3 +59,21 @@ def load_amr_graph_sent(fpath):
             entries['sent'].append(sent)
             entries['graph'].append(' '.join(gstrings))
     return entries
+
+
+# Strip all the metadata from the graph
+# if one_line is True, return a single line with all extra spaces stripped
+def get_graph_only(entry, one_line=False):
+    graph_lines = []
+    for line in entry.splitlines():
+        if not line or line.startswith('#'):
+            continue
+        else:
+            graph_lines.append(line)
+    if one_line:
+        graph_lines = [l.strip() for l in graph_lines]
+        gstring     = ' '.join(graph_lines)
+        gstring     = re.sub(' +', ' ', gstring) # squeeze multiple spaces into a single
+        return gstring
+    else:
+        return '\n'.join(graph_lines)

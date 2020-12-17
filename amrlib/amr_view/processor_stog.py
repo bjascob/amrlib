@@ -2,7 +2,7 @@ import warnings
 warnings.simplefilter('ignore')
 import logging
 from   threading import Thread
-from   ..models.parse_gsii.inference import Inference
+from   ..models.model_factory import load_inference_model
 from   ..graph_processing.annotator import load_spacy
 
 logger = logging.getLogger(__name__)
@@ -32,6 +32,6 @@ class ProcessorSTOG(object):
 
     def load_model(self):
         load_spacy()    # pre-load this for the annotator
-        self.inference = Inference(self.model_dir, self.model_fn, device=self.device)
+        self.inference = load_inference_model(self.model_dir, device=self.device)
         logger.info('Sequence to graph model ready')
         print('Sequence to graph model ready')

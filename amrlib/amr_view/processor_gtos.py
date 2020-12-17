@@ -1,6 +1,6 @@
 import logging
 from   threading import Thread
-from   ..models.generate_t5.inference import Inference
+from   ..models.model_factory import load_inference_model
 from   ..graph_processing.amr_loading import split_amr_meta
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,8 @@ class ProcessorGTOS(object):
         return string[:-1]  # strip final line-feed
 
     def load_model(self):
-        self.inference = Inference(self.model_dir, num_beams=self.num_beams, device=self.device,
-                                   num_ret_seq=self.num_ret_seq, batch_size=self.batch_size)
+        self.inference = load_inference_model(self.model_dir, num_beams=self.num_beams,
+                            device=self.device, num_ret_seq=self.num_ret_seq,
+                            batch_size=self.batch_size)
         logger.info('Graph to sequence model ready')
         print('Graph to sequence model ready')

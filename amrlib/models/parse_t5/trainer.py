@@ -4,10 +4,10 @@ import os
 import logging
 import torch
 from   torch.utils.data import Dataset
-from   ...graph_processing.amr_loading import load_amr_graph_sent
 from   transformers import T5ForConditionalGeneration, T5Tokenizer, set_seed
 from   transformers import TrainingArguments
 from   transformers import Trainer as T5Trainer
+from   .penman_serializer import load_and_serialize
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +31,6 @@ class AMRDataset(Dataset):
 # prepares lm_labels from target_ids, returns examples with keys as expected by the forward method
 # this is necessacry because the trainer directly passes this dict as arguments to the model
 # so make sure the keys match the parameter names of the forward method
-# Note*1: The original code (with transformers v3.4.0) returned dict with "lm_labels".
-# Support for this was removed in transformers v4.0.0 and replaced it with "labels"
 class T2TDataCollator:
     def __call__(self, batch):
         input_ids = torch.stack([example['input_ids']  for example in batch])
@@ -41,7 +39,7 @@ class T2TDataCollator:
         attention_mask = torch.stack([example['attention_mask'] for example in batch])
         decoder_attention_mask = torch.stack([example['target_attention_mask'] for example in batch])
         return {'input_ids': input_ids, 'attention_mask': attention_mask,
-                'labels': lm_labels, 'decoder_attention_mask': decoder_attention_mask }     # Note*1
+                'labels': lm_labels, 'decoder_attention_mask': decoder_attention_mask }
 
 
 # Note that for save_steps, steps means gradient updates (not batch) so if
@@ -82,9 +80,6 @@ class Trainer(object):
             len(valid_dataset), len(valid_dataset.bad_indexes)))
         # Train the model
         print('Training')
-        # trainer = T5Trainer(model=self.model, args=self.training_args, train_dataset=train_dataset,
-        #         eval_dataset=valid_dataset, data_collator=T2TDataCollator(), prediction_loss_only=True)
-        # prediction_loss_only=True moved to training_args for compatibility with transformers v4.0.0
         trainer = T5Trainer(model=self.model, args=self.training_args, train_dataset=train_dataset,
                 eval_dataset=valid_dataset, data_collator=T2TDataCollator())
         trainer.train()
@@ -96,12 +91,13 @@ class Trainer(object):
     # Convert the AMR graphs into tokenized sentences
     def build_dataset(self, fpath):
         # Load the raw data
-        entries = load_amr_graph_sent(fpath)
+        entries = load_and_serialize(fpath)
         # Convert to input and target sentences
-        entries['input_text']  = ['%s </s>' % graph for graph in entries['graph']]
-        entries['target_text'] = ['%s </s>' % sent  for sent  in entries['sent']]
+        entries['input_text']  = ['%s </s>' % sent  for sent  in entries['sents']]
+        entries['target_text'] = ['%s </s>' % graph for graph in entries['serials']]
         # Form the input encodings
-        sents = entries['sent']
+        sents = entries['sents']
+        print('Batch encoding')
         input_encodings  = self.tokenizer.batch_encode_plus(entries['input_text'],
                             padding=True, truncation=True, max_length=self.max_in_len)
         target_encodings = self.tokenizer.batch_encode_plus(entries['target_text'],
@@ -113,8 +109,8 @@ class Trainer(object):
             if ie[-1] != self.tokenizer.pad_token_id or te[-1] != self.tokenizer.pad_token_id:
                 bi.add( i )
         # Remove them
-        input_encodings['input_ids']  = [ie for i, ie in enumerate(input_encodings['input_ids'])  if i not in bi]
-        target_encodings['input_ids'] = [te for i, te in enumerate(target_encodings['input_ids']) if i not in bi]
+        input_encodings['input_ids']       = [ie for i, ie in enumerate(input_encodings['input_ids'])       if i not in bi]
+        target_encodings['input_ids']      = [te for i, te in enumerate(target_encodings['input_ids'])      if i not in bi]
         input_encodings['attention_mask']  = [ie for i, ie in enumerate(input_encodings['attention_mask'])  if i not in bi]
         target_encodings['attention_mask'] = [te for i, te in enumerate(target_encodings['attention_mask']) if i not in bi]
         sents = [s  for i, s  in enumerate(sents) if i not in bi]

@@ -1,0 +1,27 @@
+{   "gen_args" :
+    {
+        "model_name_or_path"            : "t5-base",
+        "corpus_dir"                    : "amrlib/data/tdata_gsii/",
+        "train_fn"                      : "train.txt.features.nowiki",
+        "valid_fn"                      : "dev.txt.features.nowiki",
+        "max_in_len"                    : 100,
+        "max_out_len"                   : 512
+
+    },
+    "hf_args" :
+    {
+        "output_dir"                    : "amrlib/data/model_parse_t5",
+        "do_train"                      : true,
+        "do_eval"                       : false,
+        "overwrite_output_dir"          : false,
+        "prediction_loss_only"          : true,
+        "num_train_epochs"              : 8,
+        "save_steps"                    : 1000,
+        "save_total_limit"              : 2,
+        "per_device_train_batch_size"   : 4,
+        "per_device_eval_batch_size"    : 4,
+        "gradient_accumulation_steps"   : 4,
+        "learning_rate"                 : 1e-4,
+        "seed"                          : 42
+    }
+}

@@ -2,13 +2,14 @@ import logging
 import torch
 from   tqdm import tqdm
 from   transformers import T5ForConditionalGeneration, T5Tokenizer
+from   ..inference_bases import GTOSInferenceBase
 from   ...graph_processing.amr_loading import split_amr_meta
 
 logger = logging.getLogger(__name__)
 
 
-class Inference(object):
-    def __init__(self, model_dir, **kwargs):
+class Inference(GTOSInferenceBase):
+    def __init__(self, model_dir, model_fn=None, **kwargs):
         default_device     = 'cuda:0' if torch.cuda.is_available() else 'cpu'
         device             = kwargs.get('device', default_device)
         self.device        = torch.device(device)
@@ -33,7 +34,7 @@ class Inference(object):
 
     # Generate sentences from a list of AMR text graphs
     # For generate params see https://huggingface.co/transformers/master/main_classes/model.html
-    def generate(self, graphs, disable_progress=False):
+    def generate(self, graphs, disable_progress=True):
         assert isinstance(graphs, list)
         # Make sure the user isn't passing in meta-data, only the graph strings
         stripped_graphs = []
@@ -47,7 +48,7 @@ class Inference(object):
         for batch in tqdm(dataloader, disable=disable_progress):
             # Form encodings and tokenize
             input_text = ['%s %s' % (graph, self.tokenizer.eos_token) for graph in batch]
-            input_encodings = self.tokenizer.batch_encode_plus(input_text, pad_to_max_length=True,
+            input_encodings = self.tokenizer.batch_encode_plus(input_text, padding=True,
                                                                truncation=True,
                                                                max_length=self.max_graph_len)
             input_ids      = torch.LongTensor(input_encodings['input_ids']).to(self.device)

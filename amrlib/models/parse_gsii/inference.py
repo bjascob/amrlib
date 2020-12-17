@@ -12,6 +12,7 @@ from   .vocabs import get_vocabs
 from   .graph_builder import GraphBuilder
 from   .utils import move_to_device
 from   .bert_utils import BertEncoderTokenizer, BertEncoder
+from   ..inference_bases import STOGInferenceBase
 from   ...graph_processing.amr_loading import load_amr_entries, split_amr_meta
 from   ...graph_processing.annotator import annotate_graph
 from   ...evaluate.smatch_enhanced import compute_smatch
@@ -21,7 +22,7 @@ from   ...utils.config import Config
 logger = logging.getLogger(__name__)
 
 
-class Inference(object):
+class Inference(STOGInferenceBase):
     def __init__(self, model_dir, model_fn, **kwargs):
         self.model_dir       = model_dir
         self.model_fn        = model_fn

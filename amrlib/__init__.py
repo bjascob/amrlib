@@ -2,8 +2,7 @@ import os
 import logging
 from   . import defaults
 from   .utils.downloader import download_model, set_symlink
-from   .models.parse_gsii.inference import Inference as Inference_stog
-from   .models.generate_t5.inference import Inference as Inference_gtos
+from   .models.model_factory import load_inference_model
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +29,10 @@ def download(model_name, url, mdata_dir=None, rm_tar=True, set_links=True):
 
 # Load the sentence to graph model
 stog_model = None   # cache model once loaded
-def load_stog_model(model_dir=None, model_fn=None, **kwargs):
+def load_stog_model(model_dir=None, **kwargs):
     model_dir = model_dir if model_dir is not None else os.path.join(defaults.data_dir, 'model_stog')
-    model_fn  = model_fn  if model_fn  is not None else 'model.pt'
     global stog_model
-    stog_model = Inference_stog(model_dir, model_fn, **kwargs)
+    stog_model = load_inference_model(model_dir, **kwargs)
     return stog_model
 
 # Load the graph to sentence model
@@ -42,7 +40,7 @@ gtos_model = None   # cache model once loaded
 def load_gtos_model(model_dir=None, **kwargs):
     global gtos_model
     model_dir = model_dir if model_dir is not None else os.path.join(defaults.data_dir, 'model_gtos')
-    gtos_model = Inference_gtos(model_dir, **kwargs)
+    gtos_model = load_inference_model(model_dir, **kwargs)
     return gtos_model
 
 
