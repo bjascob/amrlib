@@ -13,6 +13,7 @@ class AMRPlot(object):
             render_fn = os.path.join(tempfile.gettempdir(), 'amr_graph.gv')
         self.graph = Digraph('amr_graph', filename=render_fn, format=format)
         self.graph.attr(rankdir='LR', size='12,8') # rankdir=left-to-right, size=width,height in inches
+        self.counter = 0
 
     # Build the AMR graph from a text entry
     # debug prints tuples to the scrieen
@@ -60,5 +61,12 @@ class AMRPlot(object):
 
     # Attributes are relations (edge) connecting to a constant
     def _add_attribute(self, t):
-        self.graph.node(t.target, label=t.target, shape='rectangle')
-        self.graph.edge(t.source, t.target,  label=t.role)
+        node_id = self.get_uid()
+        self.graph.node(node_id, label=t.target, shape='rectangle')
+        self.graph.edge(t.source, node_id,  label=t.role)
+
+    # Get a unique ID for naming nodes
+    def get_uid(self):
+        uid = 'node_%d' % self.counter
+        self.counter += 1
+        return uid

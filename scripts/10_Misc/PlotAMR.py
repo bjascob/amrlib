@@ -6,7 +6,7 @@ from   amrlib.graph_processing.amr_loading import load_amr_entries
 
 if __name__ == '__main__':
     input_file = 'amrlib/data/LDC2020T02/test.txt'
-    snum = 1       # id numbers start at 1 so they are 1 more than snum
+    snum = 4       # id numbers start at 1 so they are 1 more than snum
 
     # Load the file
     entries = load_amr_entries(input_file)
