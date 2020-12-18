@@ -28,6 +28,9 @@ def find_imports(fpath):
         # Make sure it's not a comment line
         if line.startswith('#'):
             continue
+        # Skip anything dymatic with importlib
+        if 'importlib' in line:
+            continue
         # Split words on the line into a list
         parts = line.split()
         # Look for "from X import Y" and add X to the set
@@ -36,7 +39,7 @@ def find_imports(fpath):
             lib = parts[index+1]
             # Skip relative imports since these are always local
             if not lib.startswith('.'):
-                # only keep the top level module
+                # only keep the top level module/home/bjascob/.local/lib/python3.8/site-packages
                 modules = lib.split('.')
                 imset.add(modules[0])
             continue
@@ -65,11 +68,38 @@ def get_module_info():
         minfo[x.name] = x
     return minfo
 
+# Get the 3rd party packages
+def get_3rd_party(packages):
+    plist = [p for p in packages if ('site-packages' in p[1] or 'dist-packages' in p[1])]
+    return plist
+
+# Get the package version
+def get_package_version(package):
+    pkgname = package[0]
+    dirname = package[1]
+    # Try to version the version from the directory name
+    dirs = [d.lower() for d in os.listdir(dirname) if os.path.isdir(os.path.join(dirname, d))]
+    ver_name = pkgname.lower() + '-'
+    dirs = [d for d in dirs if d.startswith(ver_name)]
+    if len(dirs) > 1:
+        logger.warning('Found multiple versions: %s' % dirs)
+    if len(dirs) == 0:
+        logger.warning('No version directory found for %s %s' % (dirname, pkgname))
+    # Extract the version
+    vstring = dirs[0][len(ver_name):]
+    if vstring.endswith('.dist-info'):
+        vstring = vstring[:-len('.dist-info')]
+    elif vstring.endswith('.egg-info'):
+        vstring = vstring[:-len('.egg-info')]
+    return vstring
+
+
 
 if __name__ == '__main__':
     root_directory = 'amrlib'
-    print_all       = True
-    print_site_dist = True
+    print_all       = False
+    print_3rd_party = True
+    skips           = set(['amr'])    # amr is part of the smatch package
 
     # Get all the imports
     imset = set()
@@ -94,9 +124,11 @@ if __name__ == '__main__':
         for package in packages:
             print('%-16s %s' % package)
         print()
-    if print_site_dist:
-        print('Only site-packages and dist-packages')
-        for package in packages:
-            if 'site-packages' in package[1] or 'dist-packages' in package[1]:
-                print('%s' % package[0])
+    if print_3rd_party:
+        print('3rd party installed packages')
+        for package in sorted(get_3rd_party(packages)):
+            pkg_name = package[0]
+            if pkg_name not in skips:
+                version  = get_package_version(package)
+                print('%-12s version:  %s' % (pkg_name, version))
         print()
