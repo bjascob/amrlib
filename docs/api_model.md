@@ -12,22 +12,21 @@ For additional examples, see the `scripts/xx` directories or the `tests/xx` dire
 ## Sequence to Graph Functions (Parsing)
 **load_stog_model()**
 ```
-stog = load_stog_model(model_dir=None, model_fn=None, **kwargs)
+stog = load_stog_model(model_dir=None, **kwargs)
 ```
 This method loads the sequence to graph model (aka parser).
-If no `model_dir` or `model_fn` is not supplied the default of `amrlib/data/model_stog` and
-`model.pt` are used, respectively.
+If no `model_dir` is not supplied the default of `amrlib/data/model_stog` is used.
 
 `kwargs` can be used to pass parameters such as `device`, `batch_size`, `beam_size`, `alpha`
 and `max_time_step` to the inference routine.
 
 `device` is automatically selected but you can pass `cpu` or `cuda:0` if needed.
 
-`beam_size` can be modified (default is 8) to increase or decrease performance.
+`beam_size` can be modified (default is model dependent) to increase or decrease performance.
 
-See `amrlib/models/parse_gsii/inference.py` for implementation details.
+See `amrlib/models/parse_gsii/inference.py` or `amrlib/models/parse_t5/inference.py` for implementation details.
 
-The function returns a `parse_gsii.Inference` object.
+The function returns a `STOGInferenceBase` type object which is a simple abstract base class for the underlying model.
 
 
 **Inference.parse_sents()**
@@ -71,7 +70,7 @@ extract groupings if needed.
 
 See `amrlib/models/generate_t5/inference.py` for implementation details.
 
-The function returns a `generate_t5.Inference` object.
+The function returns a `GTOSInferenceBase` type object which is a simple abstract base class for the underlying model.
 
 **Inference.generate()**
 ```
