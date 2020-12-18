@@ -23,6 +23,10 @@ or to test/train a model, you'll need to also install from the requirements.txt 
 
 If you want to use a different spaCy model for parsing, you can manually change the model in amrlib/defaults.py.
 
+Note that the goal is to keep amrlib compatible with the latest versions of 3rd party libraries, however if a problem occurs you can
+review the file [req_tested_versions.txt](https://github.com/bjascob/amrlib/blob/master/req_tested_versions.txt) to see
+what versions were tested when the library was last released.
+
 
 ## Install the models
 
