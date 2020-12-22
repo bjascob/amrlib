@@ -39,6 +39,10 @@ def annotate_graph(entry, tokens=None):
     load_spacy()
     return _process_entry(entry, tokens)
 
+# Annotate a single penman AMR Graph and return a penman graph
+def annotate_penman(pgraph, tokens=None):
+    load_spacy()
+    return _process_penman(pgraph, tokens)
 
 # Worker process that takes in an amr string and returns a penman graph object
 # Annotate the raw AMR entries with SpaCy to add the required ::tokens and ::lemmas fields
@@ -46,6 +50,10 @@ def annotate_graph(entry, tokens=None):
 # Keep only tags in "keep_tags"
 def _process_entry(entry, tokens=None):
     pen = penman.decode(entry)      # standard de-inverting penman loading process
+    return _process_penman(pen, tokens)
+
+# Split out the _process_entry for instances where the string is already converted to a penman graph
+def _process_penman(pen, tokens=None):
     # Filter out old tags and add the tags from SpaCy parse
     global keep_tags
     if keep_tags is not None:
