@@ -39,7 +39,7 @@ class Inference(STOGInferenceBase):
         for batch in tqdm(dataloader, disable=disable_progress):
             # Form encodings and tokenize
             # input_text = ['%s %s' % (sent, self.tokenizer.eos_token) for sent in batch]
-            input_text = ['%s' % (sent, self.tokenizer.eos_token) for sent in batch]
+            input_text = ['%s' % sent for sent in batch]
             input_encodings = self.tokenizer.batch_encode_plus(input_text, padding=True,
                                                                truncation=True,
                                                                max_length=self.max_sent_len)
