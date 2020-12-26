@@ -38,7 +38,8 @@ class Inference(STOGInferenceBase):
         dataloader = torch.utils.data.DataLoader(sents, batch_size=self.batch_size)
         for batch in tqdm(dataloader, disable=disable_progress):
             # Form encodings and tokenize
-            input_text = ['%s %s' % (sent, self.tokenizer.eos_token) for sent in batch]
+            # input_text = ['%s %s' % (sent, self.tokenizer.eos_token) for sent in batch]
+            input_text = ['%s' % (sent, self.tokenizer.eos_token) for sent in batch]
             input_encodings = self.tokenizer.batch_encode_plus(input_text, padding=True,
                                                                truncation=True,
                                                                max_length=self.max_sent_len)

@@ -47,7 +47,8 @@ class Inference(GTOSInferenceBase):
         dataloader = torch.utils.data.DataLoader(stripped_graphs, batch_size=self.batch_size)
         for batch in tqdm(dataloader, disable=disable_progress):
             # Form encodings and tokenize
-            input_text = ['%s %s' % (graph, self.tokenizer.eos_token) for graph in batch]
+            input_text = ['%s' % (graph, self.tokenizer.eos_token) for graph in batch]
+            #input_text = ['%s %s' % (graph, self.tokenizer.eos_token) for graph in batch]
             input_encodings = self.tokenizer.batch_encode_plus(input_text, padding=True,
                                                                truncation=True,
                                                                max_length=self.max_graph_len)
