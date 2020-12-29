@@ -103,14 +103,16 @@ class Trainer(object):
         # Form the input encodings
         sents = entries['sent']
         input_encodings  = self.tokenizer.batch_encode_plus(entries['input_text'],
-                            padding=True, truncation=True, max_length=self.max_in_len)
+                            padding=True, truncation=True, max_length=self.max_in_len,
+                            return_overflowing_tokens=True)
         target_encodings = self.tokenizer.batch_encode_plus(entries['target_text'],
-                            padding=True, truncation=True, max_length=self.max_out_len)
-        # Remvoe any graphs that are greater than max length after tokenization
+                            padding=True, truncation=True, max_length=self.max_out_len,
+                            return_overflowing_tokens=True)
+        # Remove any graphs that are greater than max length after tokenization
         # Find the bad indexes
         bi = set()
-        for i, (ie, te) in enumerate(zip(input_encodings['input_ids'], target_encodings['input_ids'])):
-            if ie[-1] != self.tokenizer.pad_token_id or te[-1] != self.tokenizer.pad_token_id:
+        for i, (ie, te) in enumerate(zip(input_encodings['num_truncated_tokens'], target_encodings['num_truncated_tokens'])):
+            if ie > 0 or te > 0:
                 bi.add( i )
         # Remove them
         input_encodings['input_ids']  = [ie for i, ie in enumerate(input_encodings['input_ids'])  if i not in bi]
