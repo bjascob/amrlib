@@ -40,30 +40,29 @@ class Inference(GTOSInferenceBase):
         stripped_graphs = []
         for graph in graphs:
             meta_lines, graph_lines = split_amr_meta(graph)
-            stripped_graphs.append( '\n'.join(graph_lines) )
+            stripped_graphs.append(' '.join(graph_lines))
         # Loop though batches
         sents = []
         clips = []
         dataloader = torch.utils.data.DataLoader(stripped_graphs, batch_size=self.batch_size)
         for batch in tqdm(dataloader, disable=disable_progress):
             # Form encodings and tokenize
-            #input_text = ['%s %s' % (graph, self.tokenizer.eos_token) for graph in batch]
             input_text = ['%s' % graph for graph in batch]
             input_encodings = self.tokenizer.batch_encode_plus(input_text, padding=True,
-                                                               truncation=True,
-                                                               max_length=self.max_graph_len)
+                                    truncation=True, max_length=self.max_graph_len,
+                                    return_overflowing_tokens=True)
+            # Check if any graphs were truncated (requires return_overflowing_tokens=True)
+            clip = [l >= 0 for l in input_encodings['num_truncated_tokens']]
+            clips.extend(clip)
+            # Convert to tensors
             input_ids      = torch.LongTensor(input_encodings['input_ids']).to(self.device)
             attention_mask = torch.LongTensor(input_encodings['attention_mask']).to(self.device)
+            # Generate
             outs = self.model.generate(input_ids=input_ids, attention_mask=attention_mask,
-                                       max_length=self.max_sent_len, early_stopping=True,
-                                       num_beams=self.num_beams,
-                                       num_return_sequences=self.num_ret_seq)
+                        max_length=self.max_sent_len, early_stopping=True, num_beams=self.num_beams,
+                        num_return_sequences=self.num_ret_seq)
             outs = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in outs]
             sents.extend(outs)
-            # Check if tokenized input_ids end with a pad or an eos token </s>.
-            # If not, it was clipped
-            clip = [ie[-1] not in self.seq_ends for ie in input_encodings['input_ids']]
-            clips.extend(clip)
         return sents, clips
 
     # When num_ret_seq > 1, additional sentences are appended to the list, after the first
