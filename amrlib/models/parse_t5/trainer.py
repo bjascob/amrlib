@@ -93,10 +93,8 @@ class Trainer(object):
         # Load the raw data
         entries = load_and_serialize(fpath)
         # Convert to input and target sentences
-        # TODO : Note, that there is a warning that the eos token </s> is no longer needed,
-        #        remove it with next model release.        
-        entries['input_text']  = ['%s </s>' % sent  for sent  in entries['sents']]
-        entries['target_text'] = ['%s </s>' % graph for graph in entries['serials']]
+        entries['input_text']  = ['%s' % sent  for sent  in entries['sents']]
+        entries['target_text'] = ['%s' % graph for graph in entries['serials']]
         # Form the input encodings
         sents = entries['sents']
         print('Batch encoding')
