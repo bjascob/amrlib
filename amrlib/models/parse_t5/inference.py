@@ -41,19 +41,20 @@ class Inference(STOGInferenceBase):
             # input_text = ['%s %s' % (sent, self.tokenizer.eos_token) for sent in batch]
             input_text = ['%s' % sent for sent in batch]
             input_encodings = self.tokenizer.batch_encode_plus(input_text, padding=True,
-                                                               truncation=True,
-                                                               max_length=self.max_sent_len)
+                                truncation=True, max_length=self.max_sent_len,
+                                return_overflowing_tokens=True)
+            # Check if any graphs were truncated (requires return_overflowing_tokens=True)
+            clip = [l > 0 for l in input_encodings['num_truncated_tokens']]
+            clips.extend(clip)
+            # Convert to tensors
             input_ids      = torch.LongTensor(input_encodings['input_ids']).to(self.device)
             attention_mask = torch.LongTensor(input_encodings['attention_mask']).to(self.device)
+            # Generate
             outs = self.model.generate(input_ids=input_ids, attention_mask=attention_mask,
                                        max_length=self.max_graph_len, early_stopping=True,
                                        num_beams=self.num_beams, num_return_sequences=self.num_ret_seq)
             outs = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in outs]
             graphs_generated.extend(outs)
-            # Check if tokenized input_ids end with a pad or an eos token </s>.
-            # If not, it was clipped
-            clip = [ie[-1] not in self.seq_ends for ie in input_encodings['input_ids']]
-            clips.extend(clip)
         # For debugging only ...
         # Note: in this mode we're returning 2 lists of num_ret_seq * len(sents) instead of
         # one list of len(sents) as in the default run-time mode
@@ -64,7 +65,7 @@ class Inference(STOGInferenceBase):
         graphs_final = [None]*len(sents)
         for snum in range(len(sents)):
             if clips[snum]:
-                logger.warning('Sentence number %d was clipped for length' % snum)
+                logger.error('Sentence number %d was clipped for length' % snum)
             raw_graphs = graphs_generated[snum*self.num_ret_seq:(snum+1)*self.num_ret_seq]
             for bnum, g in enumerate(raw_graphs):
                 gstring = PenmanDeSerializer(g).get_graph_string()
@@ -72,10 +73,10 @@ class Inference(STOGInferenceBase):
                     graphs_final[snum] = gstring
                     break   # stop deserializing candidates when we find a good one
                 else:
-                    logger.warning('Failed to deserialize, snum=%d, beam=%d' % (snum, bnum))
+                    logger.error('Failed to deserialize, snum=%d, beam=%d' % (snum, bnum))
         # Add metadata
         if add_metadata:
-            graphs_final = ['# ::snt %s\n%s' % (s, g) for s, g in zip(sents, graphs_final) if g is not None]
+            graphs_final = ['# ::snt %s\n%s' % (s, g) if g is not None else None for s, g in zip(sents, graphs_final)]
         return graphs_final
 
     # parse a list of spacy spans (ie.. span has list of tokens)

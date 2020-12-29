@@ -13,10 +13,10 @@ from   amrlib.models.parse_t5.penman_serializer import load_and_serialize
 # wikidata should be removed since the model doesn't produce those tags and these graphs will be
 # copied as the reference data to be scored in the next step.
 if __name__ == '__main__':
-    setup_logging(logfname='logs/generate.log', level=ERROR)
+    setup_logging(logfname='logs/parse_t5_generate.log', level=ERROR)
     silence_penman()
     device     = 'cuda:0'
-    corpus_dir = 'amrlib/data/tdata_gsii/'      
+    corpus_dir = 'amrlib/data/tdata_gsii/'
     ref_in_fn  = 'test.txt.features.nowiki'     # 1898 amr entries
     model_dir  = 'amrlib/data/model_parse_t5'
     ref_out_fn = 'test.txt.reference'
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # greedy (num_beams=1, batch_size=32) run-time =  12m
     #        (num_beams=4, batch_size=12) run-time =  50m
     #        (num_beams=8,  batch_size=6) run-time = 1h20
-    #        (num_beams=16, batch_size=4) run-time = 2h30m
+    #        (num_beams=16, batch_size=3) run-time = 2h30m
     num_beams   = 4
     batch_size  = 12
     max_entries = None    # max test data to generate (use None for everything)

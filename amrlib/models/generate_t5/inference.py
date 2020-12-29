@@ -52,7 +52,7 @@ class Inference(GTOSInferenceBase):
                                     truncation=True, max_length=self.max_graph_len,
                                     return_overflowing_tokens=True)
             # Check if any graphs were truncated (requires return_overflowing_tokens=True)
-            clip = [l >= 0 for l in input_encodings['num_truncated_tokens']]
+            clip = [l > 0 for l in input_encodings['num_truncated_tokens']]
             clips.extend(clip)
             # Convert to tensors
             input_ids      = torch.LongTensor(input_encodings['input_ids']).to(self.device)
