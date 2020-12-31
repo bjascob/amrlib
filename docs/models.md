@@ -55,8 +55,9 @@ generated sentences that are closer to the original.
 The model is trained on data with and without the tags and will create sentences with or without
 tense information added.
 
-Note that that model limit is 512 tokens (not string characters) and roughly 2.5% of the LDC2020T02
-graphs need to be clipped.
+Note that that model limit is 512 tokens (not string characters) and roughly 5% of the tagged graphs
+and 2.5% of the original LDC2020T02 graphs are clipped.  Clipped graphs are removed during testing
+and not included in the scores.  If clipped graphs are included, scores drop 1-2 BLEU points.
 
 Additional inference parameters:
 
@@ -90,8 +91,8 @@ This model is based on the pretrained [HuggingFace](https://github.com/huggingfa
 T5 transformer to convert AMR Graphs to natural language sentences.
 
 Note that that model limit is 512 tokens (not string characters) and roughly 2.5% of the LDC2020T02
-graphs need to be clipped.
-
+graphs need get clipped.  Clipped graphs are removed during testing and not included in the scores.
+If clipped graphs are included scores drop ~1 BLEU point.
 
 Additional inference parameters:
 
