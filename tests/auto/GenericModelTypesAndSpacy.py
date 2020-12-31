@@ -29,7 +29,7 @@ graph01 = '''
 # To avoid loading things multiple times, load in globally and reference it in __init__
 # as needed.
 SPACY_NLP = spacy.load('en')
-class BasicAPITests(unittest.TestCase):
+class GenericModelTypesAndSpacy(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         amrlib.setup_spacy_extension()
