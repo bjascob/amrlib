@@ -4,9 +4,9 @@ from   copy import deepcopy
 import logging
 import penman
 from   penman.models.noop import NoOpModel
-from   ...graph_processing.annotator import annotate_penman   
-from   ...graph_processing.amr_loading import split_amr_meta   
-from   ...alignments.rbw_aligner import RBWAligner            
+from   ...graph_processing.annotator import annotate_penman
+from   ...graph_processing.amr_loading import split_amr_meta
+from   ...alignments.rbw_aligner import RBWAligner
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,9 @@ class ModelInputHelper(object):
         if not is_annotated or force_annotate:
             sentence = pgraph.metadata['snt']   # Sanity check required tag.  Throws KeyError if missing
             pgraph = annotate_penman(pgraph)
+            self.annotation_performed = True    # for unit-testing and debug
+        else:
+            self.annotation_performed = False
         # Align the graph.  For simplicity, always do this.
         # If there are existing alignments they need to be removed.
         # See https://penman.readthedocs.io/en/latest/api/penman.surface.html
@@ -88,6 +91,7 @@ class ModelInputHelper(object):
         gstring = re.sub(r'~[A-Z$]+', '', gstring)
         return gstring
 
+    # Take an AMR graph string (with metadata) and return the graph portion online on a single line
     @staticmethod
     def gstring_to_oneline(gstring):
         meta_lines, graph_lines = split_amr_meta(gstring)
