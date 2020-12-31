@@ -5,7 +5,7 @@ import torch
 from   tqdm import tqdm
 from   transformers import T5ForConditionalGeneration, T5Tokenizer
 from   .model_input_helper import ModelInputHelper
-from   ..inference_bases import GTOSInferenceBase  
+from   ..inference_bases import GTOSInferenceBase
 
 
 logger = logging.getLogger(__name__)
@@ -42,15 +42,16 @@ class Inference(GTOSInferenceBase):
         # Convert the incoming graphs to the format used for model input
         for graph in graphs:
             # If adding tense information, try to to tag the graph, which requires the sentence
-            # or annotations and then goes through an alignment.  If something goes wrong, log an error
+            # or annotations and then goes through an alignment.  If something goes wrong, log an
+            # error and fallback to just using a graph converted to a string.
             if use_tense:
                 try:
-                    gstring = ModelInputHelper(graph, **kwargs).get_tagged_oneline()
+                    gstring = ModelInputHelper(graph, **kwargs).get_tagged_oneline()                    
                 except:
                     logger.error('Unable to add tense information to graph')
                     #logger.error(traceback.format_exc())
                     gstring = ModelInputHelper.gstring_to_oneline(graph)
-            # Otherwise just strip the metadata and convert it to a single line
+            # If not adding tense info, just strip any metadata and convert to a single line
             else:
                 gstring = ModelInputHelper.gstring_to_oneline(graph)
             stripped_graphs.append(gstring)

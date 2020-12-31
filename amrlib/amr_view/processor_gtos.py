@@ -26,10 +26,7 @@ class ProcessorGTOS(object):
     def run(self, amr_text):
         if self.inference is None:
             return
-        _, graph_lines = split_amr_meta(amr_text)
-        graph_lines = [g.strip() for g in graph_lines]
-        graph_lines = ' '.join(graph_lines)
-        answers, clips = self.inference.generate([graph_lines], disable_progress=True)
+        answers, clips = self.inference.generate([amr_text], disable_progress=True)
         if clips[0]:
             logger.warning('Graph was clipped')
         # Concatenate multiple return sequences
