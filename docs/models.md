@@ -72,6 +72,7 @@ Note that a single list is returned, not a list of list. You can use `get_ans_gr
 groupings if needed.
 
 Additional generate parameters:
+
 * use_tense  : Whether or not to add tense tags to the graph, prior to generation (default is True).
 Note that the metadata tag `snt` for the original sentence, must be present for annotation.
 
@@ -83,7 +84,7 @@ See amrlib/models/generate_t5wtense/inference.py for implementation details.
 
 
 ## Generate T5
-**43 BLEU** for LDC2020T02 graphs.
+**43 BLEU** for LDC2020T02 graphs.  Model is deprecated in favor of the above model "with tense".
 
 This model is based on the pretrained [HuggingFace](https://github.com/huggingface/transformers)
 T5 transformer to convert AMR Graphs to natural language sentences.
