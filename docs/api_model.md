@@ -17,14 +17,11 @@ stog = load_stog_model(model_dir=None, **kwargs)
 This method loads the sequence to graph model (aka parser).
 If no `model_dir` is not supplied the default of `amrlib/data/model_stog` is used.
 
-`kwargs` can be used to pass parameters such as `device`, `batch_size`, `beam_size`, `alpha`
-and `max_time_step` to the inference routine.
+`kwargs` can be used to pass parameters such as `device`, `batch_size`, `beam_size`, etc to the
+inference routine.
 
-`device` is automatically selected but you can pass `cpu` or `cuda:0` if needed.
-
-`beam_size` can be modified (default is model dependent) to increase or decrease performance.
-
-See `amrlib/models/parse_gsii/inference.py` or `amrlib/models/parse_t5/inference.py` for implementation details.
+See specific [model descriptions]((https://amrlib.readthedocs.io/en/latest/models/) for additional
+parameters and their use.
 
 The function returns a `STOGInferenceBase` type object which is a simple abstract base class for the underlying model.
 
@@ -55,20 +52,12 @@ gtos = load_gtos_model(model_dir=None, **kwargs)
 This method loads the graph to sequence model (aka generator).
 If no `model_dir` is specified the default `amrlib/data/model_gtos` is used.
 
-`kwargs` can be used to pass parameters such as `device`, `batch_size`, `num_beams`, `num_ret_seq`.
+`kwargs` can be used to pass parameters such as `device`, `batch_size`, `num_beams`, `num_ret_seq`, etc.
+
+See specific [model descriptions]((https://amrlib.readthedocs.io/en/latest/models/) for additional
+parameters and their use.
 
 `device` is automatically selected but you can pass `cpu` or `cuda:0` if needed.
-
-`num_beams` (default is 1, aka greedy) can be increased as needed, to get a slightly higher BLUE
-score. However, large values will likely require setting `batch_size` (default 32) lower when running
-on the gpu.
-
-`num_ret_seq` controls the number of returned sentences.  `num_beams` must be >= `num_ret_seq`.
-Additional returned sentences will show up in order of score (high to low) on the returned list.
-Note that a single list is returned, not a list of list. You can use `get_ans_group` (below) to
-extract groupings if needed.
-
-See `amrlib/models/generate_t5/inference.py` for implementation details.
 
 The function returns a `GTOSInferenceBase` type object which is a simple abstract base class for the underlying model.
 
@@ -78,8 +67,7 @@ sents, clips = generate(graphs, disable_progress=False)
 ```
 This method takes a list of AMR graph strings and returns a list of sentence strings and a list of booleans.
 The boolean list `clips` tells if any of the returned sentences were clipped as a result of
-the tokenized graph being too long for the model. Note that that model limit is 512 tokens
-(not string characters) and roughly 2.5% of the LDC2020T02 graphs need to be clipped.
+the tokenized graph being too long for the model. 
 
 `disable_progress` can be used to turn off the default `tqdm` progress bar.
 

@@ -33,12 +33,13 @@ are then deserialized into an AMR graph.
 [paper](https://arxiv.org/abs/2004.05572).  The version of the model used here eliminates
 much of the data abstraction (aka anonymization) used in the original code
 
-* Generation (GtoS) **generate_t5 gives a BLEU score of 43** with LDC2020T02.  Similar to parse_t5,
-the model takes advantage of the pretrained [HuggingFace](https://github.com/huggingface/transformers)
+* Generation (GtoS) **generate_t5wtense gives a 54 BLEU** with tense tags or **44 BLEU** with un-tagged LDC2020T02.
+Similar to parse_t5, the model takes advantage of the pretrained [HuggingFace](https://github.com/huggingface/transformers)
 T5 transformer.  Details on using this type of model for generation can be found in this
 [paper](https://arxiv.org/abs/2007.08426). The model is fine-tuned to translate AMR graphs to English
 sentences.
 
+For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models.)**.
 
 
 ## Documentation

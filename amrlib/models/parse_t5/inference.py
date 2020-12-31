@@ -22,7 +22,6 @@ class Inference(STOGInferenceBase):
         self.max_graph_len = self.model.config.task_specific_params['translation_amr_to_text']['max_out_len']
         tokenizer_name     = kwargs.get('tokenizer_name', 't5-base')    # name or path
         self.tokenizer     = T5Tokenizer.from_pretrained(tokenizer_name)
-        self.seq_ends      = set([self.tokenizer.eos_token_id, self.tokenizer.pad_token_id])
         self.batch_size    = kwargs.get('batch_size', 12)
         self.num_beams     = kwargs.get('num_beams',   4)       # 1 => greedy
         self.num_ret_seq   = self.num_beams
