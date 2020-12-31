@@ -32,14 +32,5 @@ BLEU for sentence generation, Alignment scoring metrics detailing precision/reca
 
 
 ## AMR Models
-The system uses two different Neural Network models for parsing and generation.
 
-The parsing (StoG) model comes from [AMR-gs](https://github.com/jcyk/AMR-gs), the details of which
-can be found in this [paper](https://arxiv.org/abs/2004.05572).  The version of the model used here eliminates
-much of the data abstraction (aka anonymization) used in the original code.  During testing, this model
-achieves a 77 SMATCH score with LDC2020T02.
-
-The generation (GtoS) model takes advantage of the pretrained [HuggingFace](https://github.com/huggingface/transformers)
-T5 transformer.  Details on using this type of model for generation can be found in this [paper](https://arxiv.org/abs/2007.08426).
-The model is fine-tuned to translate AMR graphs to English sentences.  The retrained model
-achieves a **BLEU score of 43** with LDC2020T02.
+For details on available models see [models]((https://amrlib.readthedocs.io/en/latest/models/).
