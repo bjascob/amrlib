@@ -4,6 +4,7 @@ import logging
 from   types import SimpleNamespace
 import penman
 from   penman.models.noop import NoOpModel
+from   penman.surface import AlignmentMarker
 from   .match_candidates import get_match_candidates
 
 
@@ -53,6 +54,12 @@ class RBWAligner(object):
     # Get the graph string (and metadata)
     def get_graph_string(self):
         return penman.encode(self.graph, model=NoOpModel(), indent=6)
+
+    # Remove the surface alignments from the penman graph
+    def remove_surface_alignments(self):
+        for key, values in self.graph.epidata.items():
+            self.graph.epidata[key] = [x for x in values if not isinstance(x, AlignmentMarker)]
+            
 
     ###########################################################################
     #### Rule Base Word Alignments added to Graph as Surface Aligments
