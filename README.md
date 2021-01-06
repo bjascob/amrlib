@@ -98,7 +98,7 @@ For a detailed description see the [Spacy API](https://amrlib.readthedocs.io/en/
 
 
 ## Paraphrasing
-For an explanation of how to use the library to do paraphrasing, see the
+For an example of how to use the library to do paraphrasing, see the
 [Paraphrasing](https://amrlib.readthedocs.io/en/latest/paraphrase/) section in the docs.
 
 
