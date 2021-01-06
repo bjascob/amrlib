@@ -59,7 +59,7 @@ class RBWAligner(object):
     def remove_surface_alignments(self):
         for key, values in self.graph.epidata.items():
             self.graph.epidata[key] = [x for x in values if not isinstance(x, AlignmentMarker)]
-            
+
 
     ###########################################################################
     #### Rule Base Word Alignments added to Graph as Surface Aligments
@@ -93,6 +93,9 @@ class RBWAligner(object):
     # triples are a tuple of (source, role, target)
     # Returns a list of TInfo objects
     def get_triple_info(self, t):
+        # fix issue where penman triple can have None in it
+        if None in t:
+            return []
         # Instance triples are the concept nodes
         if t[1] == penman.graph.CONCEPT_ROLE:       # CONCEPT_ROLE = ':instance'
             if t[2].lower() == 'multi-sentence':    # special case to skip
