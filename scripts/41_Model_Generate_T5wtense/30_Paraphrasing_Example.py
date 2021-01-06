@@ -47,7 +47,7 @@ if __name__ == '__main__':
         # Loop through all variables and select appropriate candidates for the new top variable
         candidate_tops = pgraph.variables()
         candidate_tops.remove( pgraph.top )
-        # (optional) Remove nodes with incoming edges (significantly reduces the number of candidates
+        # (optional) Remove nodes with incoming edges - significantly reduces the number of candidates
         candidate_tops = [v for v in candidate_tops if incoming_edge_count(v, pgraph) == 0]
         # Create the list to try, keeping the original top first
         new_tops = [pgraph.top] + candidate_tops

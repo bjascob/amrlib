@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 # Library version number
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 
 
 # Download the model to and un-tar it in the mdata_dir
