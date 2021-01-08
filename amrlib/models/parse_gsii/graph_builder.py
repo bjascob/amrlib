@@ -25,6 +25,7 @@ class GraphBuilder(object):
     def build(self, concepts, relations):
         self.concepts  = concepts
         self.relations = relations
+        self.used_arcs  = defaultdict(set) # keep track of edge names aready seen (key is source_id)
         triples  = self.build_instance_triples()       # add self.names
         triples += self.build_edge_attrib_triples()
         graph    = penman.graph.Graph(triples)
@@ -86,15 +87,18 @@ class GraphBuilder(object):
 
     # Create edge and attribute triples from concepts/names and relations
     def build_edge_attrib_triples(self):
-        # Put relations n a little more readble format and create a dictionary of them based on target_id
+        # Put relations n a little more readable format and create a dictionary of them based on target_id
         rel_dict = defaultdict(list)
         for rel in self.relations:
             target_id, source_id, arc_prob, rel_probs = rel
             entry = SimpleNamespace(target_id=target_id, source_id=source_id, arc_prob=arc_prob, rel_probs=rel_probs)
             rel_dict[target_id].append( entry )
         # Loop through an index for every concepts except the first, to find the best relation
+        # Note that this is iterating target id backwards, which is not the way the original code was.
+        # This produces much better results when combined with enforcing the rule that ARGx can not be
+        # repeated for any source node.  When iterating forward, smatch drops ~0.15 points
         triples = []
-        for target_id in range(1, len(self.concepts)):
+        for target_id in range(1, len(self.concepts))[::-1]:
             # Look at all relations attached to this target concept.
             # Add triples for any non-attribute relation with a probability greater than 50%.
             # If none are above 50%, add the best one.
@@ -144,8 +148,11 @@ class GraphBuilder(object):
         edge_name = edge_name_it.get_next()
         while edge_name_it.was_advanced:
             edge_name_it.was_advanced = False
+            # Rule: don't repeat ARGx egdes
+            if edge_name.startswith('ARG') and edge_name in self.used_arcs[entry.source_id]:               
+                edge_name = edge_name_it.get_next()
             # Rule: edges for attributes should not be reversed (X-of type)
-            if edge_name.endswith('_reverse_') and is_attrib:
+            elif edge_name.endswith('_reverse_') and is_attrib:
                 edge_name = edge_name_it.get_next()
             # Rule: domain is never an attribute, the target is always a node
             elif edge_name == 'domain' and is_attrib:
@@ -159,6 +166,8 @@ class GraphBuilder(object):
             # Rule: mode is always an attribute
             elif edge_name == 'mode' and not is_attrib:
                 edge_name = edge_name_it.get_next()
+        # Keep track of used arcs and don't repeat them for the node
+        self.used_arcs[entry.source_id].add(edge_name)
         return edge_name
 
 
