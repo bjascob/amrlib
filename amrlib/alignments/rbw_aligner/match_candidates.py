@@ -30,6 +30,8 @@ month2num = {'january':'1', 'february':'2', 'march':'3', 'april':'4', 'may':'5',
 word2words = {';':['and'], 'also':['include'], 'anti':['oppose','counter'], 'but':['contrast'],
               'because':['cause'], 'if':['cause'], 'no':['-'], 'not':['-'], 'of':['include'],
               'speech':['speak'], 'statement':['state']}
+# Additional special cases
+word2words['me'] = ['i']
 
 
 # Return a list of possible word candidates in the graph to match for a word/lemma in the sentence
