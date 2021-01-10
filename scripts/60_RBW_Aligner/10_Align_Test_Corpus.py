@@ -17,12 +17,15 @@ logger = logging.getLogger(__name__)
 
 
 # Run the aligner on the LDC files with existing alignments for comparison
+# The ISI hand alignments are for LDC2014T12 (AMR1) the test-concensus.txt and dev-concensus.txt files
 if __name__ == '__main__':
     setup_logging(level=WARN, logfname='logs/rbw_aligner.log')
     silence_penman()
 
-    in_fname  = 'amrlib/data/alignments/test_no_surface.txt'
-    out_fname = 'amrlib/data/alignments/test_realigned.txt'
+    in_fname  = 'amrlib/data/amr_annotation_1.0/data/split/test/amr-release-1.0-test-consensus.txt'
+    out_fname = 'amrlib/data/alignments/test-aligned.txt'
+    # in_fname  = 'amrlib/data/amr_annotation_1.0/data/split/dev/amr-release-1.0-dev-consensus.txt'
+    # out_fname = 'amrlib/data/alignments/dev-aligned.txt'
 
     # Load and convert to a penman graph
     print('Loading', in_fname)
@@ -30,10 +33,10 @@ if __name__ == '__main__':
     print('Loaded %d entries' % len(entries))
 
     # Convert to penman and add lemmas
-    print('Converting to graphs and annotating with lemmas')
+    print('Annotating')
     load_spacy()    # do this in the main process to prevent doing it multiple times
     graphs = []
-    annotate = partial(add_lemmas, snt_key='tok', verify_tok_key='tok')    # verify matching tokenizations
+    annotate = partial(add_lemmas, snt_key='snt', verify_tok_key=None)      # no existing tok key
     with Pool() as pool:
         for graph in pool.imap(annotate, entries):
             if graph is not None:
@@ -43,9 +46,12 @@ if __name__ == '__main__':
     # Run the aligner
     print('Aligning Graphs')
     new_graphs = []
+    keep_keys = ('id', 'snt', 'tokens', 'lemmas', 'rbw_alignments')
     for graph in graphs:
         aligner = RBWAligner.from_penman_w_json(graph, align_str_name='rbw_alignments')
-        new_graphs.append( aligner.get_penman_graph() )
+        pgraph = aligner.get_penman_graph()
+        pgraph.metadata = {k:v for k, v in pgraph.metadata.items() if k in keep_keys}
+        new_graphs.append( pgraph )
 
     # Save the graphs
     print('Saving to', out_fname)

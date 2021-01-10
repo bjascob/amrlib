@@ -34,16 +34,18 @@ for a number of scripts related using and testing the aligner.
 
 
 ## Performance
-Score of RBW Aligner alignments against ISI machine alignments in LDC2020T02 <sup>**1</sup>
+Score of RBW Aligner alignments against gold ISI hand alignments for LDC2014T12 <sup>**1</sup>
 ```
-* 18,974 matching alignments out of 20,143 predicted and 30,402 gold
-* Precision: 94.2   Recall: 62.4   F1: 75.1
+* dev set:    Precision: 88.82   Recall: 55.72   F1: 68.48
+* test set:   Precision: 90.36   Recall: 58.77   F1: 71.22
 ```
 
-The high precision, low recall score indicates that most of the alignments RBW produces match up to an
-alignment in the ISI set but that the ISI aligner is producing a fair number more alignments.  This is
-because the RBW aligner is attempting to match each word in the token list to a single node or edge in the graph. Its logic prevents it from matching a word to more than one item in the graph.  The ISI aligner attempts to match as many items in the graph to words in the token list.  It does not require
-a 1:1 relationship.  A token can, and often does, match to multiple graph items.
+The high precision, low recall score indicates that most of the alignments RBW produces match up to
+an alignment in the gold set but the gold set has a fair number more alignments.  This is because
+the RBW aligner is attempting to match each word in the token list to a single node or edge in
+the graph. Its logic prevents it from matching a word to more than one item in the graph.
+The gold alignments match multiple items in the graph to words in the token list.  This does not
+require a 1:1 relationship.  A token can, and often does, match to multiple graph items.
 
 As an example..
 
@@ -57,6 +59,6 @@ For the RBW aligner it has `:month 9~e.6` where only the literal is aligned.  Th
 and accounts for the low recall score with the RBW aligner.
 
 <sup>**1</sup>
-Unfortunately, there isn't a readily available set of gold alignments for LDC2020T02.  Using the machine alignments
-from that corpus is simply a way to get some insight into the performance of the RBW aligner.  These scores should not
-be considered absolute and should not be used to compare to other aligners.
+ISI hand alignments can be downloaded from http://www.isi.edu/natural-language/mt/dev-gold.txt and
+http://www.isi.edu/natural-language/mt/test-gold.txt.  These are each 100 alignments for the 100
+AMR entries in the "dev-consensus.txt" and "test-consensus.txt" files in the amr 1.0 split directories.
