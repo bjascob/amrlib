@@ -56,15 +56,13 @@ and the 2nd dimension is the list of tokens for the sentence.
 
 
 ## Alignment Scoring
-The alignment scorer allows you to get the precision, recall and F1 scores for two alignment strings of ISI format.
+The alignment scorer allows you to get the precision, recall and F1 scores for two lists of alignments.
 
-Example (here the test alignments and gold alignments are in the same graph under different metadata fields, but this is not required)
+Example:
+The gold_alignments and test_alignments are list of lists (or lists of sets) of the same length.
 ```
-import penman
-from   penman.models.noop import NoOpModel
-from   amrlib.evaluate.alignment_scorer import AlignmentScorer
-graphs = penman.load(test_fn, model=NoOpModel())
-scorer = AlignmentScorer(graphs, graphs, gold_alignment_key='isi_alignments', test_alignment_key='rbw_alignments')
+scorer = AlignmentScorer(gold_alignments, test_alignments)
 scores = scorer.score()
 print(scores)
 ```
+For a complete example see [Score_Alignments](https://github.com/bjascob/amrlib/blob/master/scripts/60_RBW_Aligner/12_Score_Alignments.py).
