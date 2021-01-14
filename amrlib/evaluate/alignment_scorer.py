@@ -31,13 +31,22 @@ class AlignmentScorer(object):
 
     def _add_score(self, y_true, y_pred):
         intersection = len(set(y_pred).intersection(set(y_true)))
-        self.precision_scores.append(intersection/len(y_pred))
-        self.recall_scores.append(intersection/len(y_true))
+        if len(y_pred) > 0:
+            self.precision_scores.append(intersection/len(y_pred))
+        else:
+            self.precision_scores.append(0)
+        if len(y_true) > 0:
+            self.recall_scores.append(intersection/len(y_true))
+        else:
+            self.recall_scores.append(0)
 
     def get_precision_recall_f1(self):
         precision = sum(self.precision_scores)/len(self.precision_scores)
         recall    = sum(self.recall_scores)/len(self.recall_scores)
-        f1        = (2 * precision * recall) / (precision + recall)
+        if precision + recall > 0:
+            f1 = (2 * precision * recall) / (precision + recall)
+        else:
+            f1 = 0
         return precision, recall, f1
 
     def __str__(self):
