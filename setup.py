@@ -34,6 +34,7 @@ setuptools.setup(
     include_package_data=True,
     package_data={'amrlib':['amr_view/*',
                             'alignments/faa_aligner/model_aligner_faa.tar.gz',
+                            'alignments/faa_aligner/resources/*.txt',
                             'alignments/isi_hand_alignments/*.txt']},
     packages=setuptools.find_packages(),
     # Minimal requirements here.  More extensive list in requirements.txt
