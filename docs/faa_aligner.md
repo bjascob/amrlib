@@ -31,6 +31,8 @@ print(alignment_strings)
 ```
 The code returns the original amr graphs with surface alignments added and a list of alignment strings in ISI (not JAMR) format.
 
+!! Note that the input `sents` need to be space tokenized strings.
+
 
 ## Performance
 Score of the FAA_Aligner against the gold ISI hand alignments for LDC2014T12 <sup>**1</sup>
