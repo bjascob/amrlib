@@ -32,7 +32,9 @@ setuptools.setup(
     # path doesn't work unless there's an __init__.py in the directory because setup
     # doesn't look in there without it.
     include_package_data=True,
-    package_data={'amrlib':['amr_view/*']},
+    package_data={'amrlib':['amr_view/*',
+                            'alignments/faa_aligner/model_aligner_faa.tar.gz',
+                            'alignments/isi_hand_alignments/*.txt']},
     packages=setuptools.find_packages(),
     # Minimal requirements here.  More extensive list in requirements.txt
     install_requires=['penman', 'torch', 'numpy', 'spacy', 'tqdm', 'transformers', 'smatch'],
