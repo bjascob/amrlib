@@ -10,7 +10,7 @@ from   .get_alignments import GetAlignments
 
 
 # if model_out_lines is None, read from the file
-def postprocess(wk_dir, model_out_lines=None, **kwargs):
+def postprocess(wk_dir, model_out_lines=None, eng_lines=None, amr_lines=None, **kwargs):
     # Input filenames
     eng_fn          = os.path.join(wk_dir, kwargs.get('eng_fn', 'sents.txt'))
     amr_fn          = os.path.join(wk_dir, kwargs.get('amr_fn', 'gstrings.txt'))
@@ -21,11 +21,12 @@ def postprocess(wk_dir, model_out_lines=None, **kwargs):
     align_to_str_fn = os.path.join(wk_dir, kwargs.get('align_to_str_fn', 'align_to_str.err'))
 
     # Read the input files and get the number of lines, which must be the same
-    with open(eng_fn) as f:
-        eng_lines = [l.strip() for l in f]
-    with open(amr_fn) as f:
-        amr_lines = [l.strip() for l in f]
-    assert len(eng_lines) == len(amr_lines)
+    if eng_lines is None or amr_lines is None:
+        with open(eng_fn) as f:
+            eng_lines = [l.strip() for l in f]
+        with open(amr_fn) as f:
+            amr_lines = [l.strip() for l in f]
+        assert len(eng_lines) == len(amr_lines)
     lines_number = len(eng_lines)
 
     # Read the output of the aligner or use the supplied input above

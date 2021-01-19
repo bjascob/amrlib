@@ -47,7 +47,7 @@ class FAA_Aligner(object):
         gstrings = [to_graph_line(g) for g in gstrings]
         eng_td_lines, amr_td_lines = preprocess_infer(self.working_dir, sents, gstrings)
         fa_out_lines = self.aligner.align(eng_td_lines, amr_td_lines)
-        amr_surface_aligns, alignment_strings = postprocess(self.working_dir, fa_out_lines)
+        amr_surface_aligns, alignment_strings = postprocess(self.working_dir, fa_out_lines, sents, gstrings)
         return amr_surface_aligns, alignment_strings
 
 
