@@ -17,12 +17,21 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 class FAA_Aligner(object):
     def __init__(self, **kwargs):
         self.model_dir    = kwargs.get('model_dir',    os.path.join(data_dir, 'model_aligner_faa'))
-        self.working_dir  = kwargs.get('working_dir',  os.path.join(data_dir, 'working_faa_aligner'))
         self.model_tar_fn = kwargs.get('model_tar_fn', os.path.join(this_dir, 'model_aligner_faa.tar.gz'))
-        os.makedirs(self.working_dir, exist_ok=True)
         self.setup_model_dir()
         self.aligner = TrainedAligner(self.model_dir, **kwargs)
         self.aligner.check_for_binaries()   # Will raise FileNotFoundError if binaries can't be found
+
+    # Input space_tok_sents is a list of space tokenized strings
+    # graph_strings is a list and amr graph strings, the same size.
+    def align_sents(self, space_tok_sents, graph_strings):
+        assert len(space_tok_sents) == len(graph_strings)
+        graph_strings = [to_graph_line(g) for g in graph_strings]
+        data = preprocess_infer(space_tok_sents, graph_strings)
+        data.model_out_lines = self.aligner.align(data.eng_preproc_lines, data.amr_preproc_lines)
+        amr_surface_aligns, alignment_strings = postprocess(data)
+        return amr_surface_aligns, alignment_strings
+
 
     # check the model directory, if it doesn't have the metadata file try to create
     # the directory from the tar.gz file
@@ -42,13 +51,6 @@ class FAA_Aligner(object):
         else:
             logger.critical('No model in model_dir and no local version available to extract')
             return False
-
-    def align_sents(self, sents, gstrings):
-        gstrings = [to_graph_line(g) for g in gstrings]
-        eng_td_lines, amr_td_lines = preprocess_infer(self.working_dir, sents, gstrings)
-        fa_out_lines = self.aligner.align(eng_td_lines, amr_td_lines)
-        amr_surface_aligns, alignment_strings = postprocess(self.working_dir, fa_out_lines, sents, gstrings)
-        return amr_surface_aligns, alignment_strings
 
 
 # Code adapted from from https://github.com/clab/fast_align/blob/master/src/force_align.py
