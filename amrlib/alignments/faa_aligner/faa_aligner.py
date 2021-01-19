@@ -35,6 +35,10 @@ class FAA_Aligner(object):
             tar = tarfile.open(self.model_tar_fn)
             tar.extractall(path=data_dir)
             logger.info('Extracting a local copy of model')
+            if os.path.isfile(os.path.join(self.model_dir, 'amrlib_meta.json')):
+                return True
+            else:
+                return False
         else:
             logger.critical('No model in model_dir and no local version available to extract')
             return False
