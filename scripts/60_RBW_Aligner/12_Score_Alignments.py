@@ -6,10 +6,12 @@ from   amrlib.evaluate.alignment_scorer import AlignmentScorer, load_gold_alignm
 
 
 if __name__ == '__main__':
-    gold_alignments_fn = 'amrlib/data/isi_hand_alignments/test-gold.txt'
-    test_amr_fn        = 'amrlib/data/alignments/test-aligned.txt'
-    # gold_alignments_fn = 'amrlib/data/isi_hand_alignments/dev-gold.txt'
-    # test_amr_fn        = 'amrlib/data/alignments/dev-aligned.txt'
+    if 1:   # dev dataset
+        gold_alignments_fn = 'amrlib/alignments/isi_hand_alignments/dev-gold.txt'
+        test_amr_fn        = 'amrlib/data/alignments/dev-aligned.txt'
+    else:   # test dataset
+        gold_alignments_fn = 'amrlib/alignments/isi_hand_alignments/test-gold.txt'
+        test_amr_fn        = 'amrlib/data/alignments/test-aligned.txt'
 
     # Print load alignments
     print('Loading alignments from', gold_alignments_fn)

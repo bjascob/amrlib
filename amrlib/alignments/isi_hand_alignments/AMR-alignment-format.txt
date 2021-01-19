@@ -1,0 +1,54 @@
+from https://catalog.ldc.upenn.edu/docs/LDC2020T02/AMR-alignment-format.txt
+This is the "isi" alignment format which is not the same as the JAMR alignment format.
+
+Example:
+
+# ::id nw.wsj_0003.5 ::amr-annotator ISI-AMR-01 ::preferred
+# ::tok A Lorillard spokewoman said , `` This is an old story .
+# ::alignments 1-1.1.1.1.2.1 2-1.1.1.2 3-1 6-1.2.1 7-1.2.1.r 9-1.2.2 10-1.2
+(s / say-01~e.3
+  :ARG0 (p / person
+          :ARG0-of (h / have-org-role-91
+                     :ARG1 (c / company :wiki "Lorillard_Tobacco_Company"
+                             :name (l / name :op1 "Lorillard"~e.1))
+                     :ARG2 (s2 / spokeswoman~e.2)))
+  :ARG1 (s3 / story~e.10
+           :domain~e.7 (t / this~e.6)
+           :mod (o2 / old~e.9)))
+
+Explanation:
+
+The alignment files show alignment in two (redundant) formats.
+(1) Alignment suffixes "~e.n" attached to concepts, strings, roles, or 
+    (reentrant) variables, where "n" is the nth token of the sentences 
+    (starting at 0).
+    Example: say-01~e.3 means that the concept say-01 aligns to token 3 ("said").
+(2) The line starting with "# ::alignments" is a list of alignments of
+    form n-1.x.y.z[.r] where "n" is the nth token of the sentences (starting at 0)
+    and where "1" designates the root node of the amr (say-01), "1.x" is
+    the x-th sub-amr of that root node (starting at 1), "1.x.y" is the y-th 
+    sub-amr of "1.x" etc.
+    The suffix ".r" designates the role of a sub-amr.
+    Example: 10-1.2 means that there is an alignment between token 10 ("story")
+	     and the second sub-tree of the amr root ("(s3 / story)").
+	     7-1.2.1.r means that there is an alignment between token 7 ("is")
+	     and the role of the first sub-tree of the second sub-tree of the
+	     root amr (":domain").
+	    
+Notes regarding XML tags in tokenized text
+(1) xml tags count as a single token, even if they contain spaces.
+    Example:
+       # ::tok A <a href="http://www.cnn.com"> CNN </a> report.
+       Token 0: A
+       Token 1: <a href="http://www.cnn.com">
+       Token 2: CNN
+       Token 3: </a>
+       Token 4: report
+(2) If the sentence starts with an xml tag, it does not count as a token.
+    This is admittedly somewhat odd. We plan to fix this in future releases.
+    Example:
+       # ::tok <a href="http://www.cnn.com"> CNN </a> report
+       Token 0: CNN
+       Token 1: </a>
+       Token 2: report
+

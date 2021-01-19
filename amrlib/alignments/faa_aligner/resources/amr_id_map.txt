@@ -1,0 +1,87 @@
+and
+and
+and
+1
+doctor
+government :arg0-of government
+government :arg0-of government
+government :arg0-of government
+rate-entity 2 1 year
+1 year
+dollar
+dollar
+dollar
+1
+doctor
+government :arg0-of government
+rate-entity 2 1 year
+1 year
+dollar
+1
+doctor
+government :arg0-of government
+rate-entity 2 1 year
+1 year
+dollar
+:time :month 1
+:month 1
+:time :month 2
+:month 2
+:time :month 3
+:month 3
+:time :month 4
+:month 4
+:time :month 5
+:month 5
+:time :month 6
+:month 6
+:time :month 7
+:month 7
+:time :month 8
+:month 8
+:time :month 9
+:month 9
+:time :month 10
+:month 10
+:time :month 11
+:month 11
+:time :month 12
+:month 12
+:time :month 1
+:month 1
+:time :month 2
+:month 2
+:time :month 3
+:month 3
+:time :month 4
+:month 4
+:time :month 5
+:month 5
+:time :month 6
+:month 6
+:time :month 7
+:month 7
+:time :month 8
+:month 8
+:time :month 9
+:month 9
+:time :month 10
+:month 10
+:time :month 11
+:month 11
+:time :month 12
+:month 12
+long :degree more
+high :degree more
+short :degree more
+strong :degree more
+late :degree more
+eraly :degree more
+hot :degree more
+long :degree most
+high :degree most
+short :degree most
+strong :degree most
+late :degree most
+eraly :degree most
+hot :degree most
