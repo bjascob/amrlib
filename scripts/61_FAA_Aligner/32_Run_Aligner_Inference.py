@@ -9,7 +9,7 @@ if __name__ == '__main__':
     # it w will it will look for the environment variable FABIN_DIR or use the path.
     # bin_dir     = 'xxx'   # change commented line below
     working_dir = 'amrlib/data/working_faa_aligner/'
-    model_dir   = 'amrlib/data/model_aligner_faa'
+    #model_dir   = 'amrlib/data/model_aligner_faa'
     eng_fn      = os.path.join(working_dir, 'sents.txt')
     amr_fn      = os.path.join(working_dir, 'gstrings.txt')
     astrings_fn = os.path.join(working_dir, 'amr_alignment_strings.txt')
@@ -23,8 +23,8 @@ if __name__ == '__main__':
         amr_lines = [l.strip().lower() for l in f]
 
     # Decleare the inference class and run it
-    #inference = FAA_Aligner(model_dir='data/model_aligner_faa', bin_dir=bin_dir)
-    inference = FAA_Aligner(model_dir=model_dir)
+    #inference = FAA_Aligner(model_dir=model_dir, bin_dir=bin_dir)
+    inference = FAA_Aligner()
     amr_surface_aligns, alignment_strings = inference.align_sents(eng_lines, amr_lines)
 
     # Save the final data

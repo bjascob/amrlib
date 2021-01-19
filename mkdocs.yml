@@ -1,15 +1,16 @@
 site_name: AMRLib
 nav:
-- Overview:     index.md
-- Install:      install.md
-- 'AMR View':   amr_view.md
-- 'Model API':  api_model.md
-- 'SpaCy API':  api_spacy.md
-- 'Misc API':   api_misc.md
-- 'Wiki Tags':  wiki.md
-- Models:       models.md
-- Aligner:      rbw_aligner.md
-- Evaluation:   evaluation.md
-- Training:     training.md
-- Paraphrasing: paraphrase.md
+- Overview:         index.md
+- Install:          install.md
+- 'AMR View':       amr_view.md
+- 'Model API':      api_model.md
+- 'SpaCy API':      api_spacy.md
+- 'Misc API':       api_misc.md
+- 'Wiki Tags':      wiki.md
+- Models:           models.md
+- 'FAA Aligner':    faa_aligner.md
+- 'RBW Aligner':    rbw_aligner.md
+- Evaluation:       evaluation.md
+- Training:         training.md
+- Paraphrasing:     paraphrase.md
 theme: readthedocs

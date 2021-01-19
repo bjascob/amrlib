@@ -12,8 +12,11 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
 * Methods to plot AMR graphs in both the GUI and as library functions
 * Training and test code for both the StoG and GtoS models.
 * A [SpaCy](https://github.com/explosion/spaCy) extension that allows direct conversion of
-SpaCy `Docs` and `Spans` to AMR graphs.
-* Rule Based Word Alignment of tokens to graph nodes
+  SpaCy `Docs` and `Spans` to AMR graphs.
+* Sentence to Graph alignment routines
+  - FAA_Aligner (Fast_Align Algorithm), based on the ISI aligner code detailed in this
+    [paper](https://www.isi.edu/natural-language/mt/amr_eng_align.pdf).
+  - RBW_Aligner (Rule Based Word) for simple, single token to single node alignment
 * An evaluation metric API including including...
   - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
   - BLEU for sentence generation
