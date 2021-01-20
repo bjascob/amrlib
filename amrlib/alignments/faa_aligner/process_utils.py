@@ -100,13 +100,12 @@ def map_ibmpos_to_origpos_amr_as_f(origpos_lines, real_lines):
                 index_errors.append(int(ibmpos_e))
         out_lines.append(' '.join(out_link_list))
         if index_errors:
-            # This issue happens in the original code
             # A single empty line in tmp.eng.tok.origpos.txt will cause a cascade of errors.  ie.. everything after that point
             # is screwed up.  I'm guessing that it causes something to shift in the aliger logic but I'm not sure where.
             # Check for a missing line in tmp.eng.tok.origpos.txt and for original sentences that are only a period or
             # graphs that are (a / amr-empty)
-            logger.error('Indexing error on line %d. Check for empty lines in eng_tok_origpos.txt' % lnum)
-            #logger.warning('Indexing error: on line=%d  %d long list, bad_indexes=%s' % (lnum, len(orig_pos_list), index_errors))
+            # Note that the run-time code (FAA_aligner.align_sents) will handle these correctly
+            logger.warning('Indexing error on line %d. Check for empty lines in eng_tok_origpos.txt' % lnum)
     return out_lines
 
 

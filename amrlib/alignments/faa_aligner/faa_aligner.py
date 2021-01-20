@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import subprocess
 import logging
@@ -27,8 +28,24 @@ class FAA_Aligner(object):
     def align_sents(self, space_tok_sents, graph_strings):
         assert len(space_tok_sents) == len(graph_strings)
         graph_strings = [to_graph_line(g) for g in graph_strings]
-        data = preprocess_infer(space_tok_sents, graph_strings)
-        data.model_out_lines = self.aligner.align(data.eng_preproc_lines, data.amr_preproc_lines)
+        data = preprocess_infer(space_tok_sents, graph_strings, skip_empty_check=True)
+        # Filter lines for empty strings.  The aligner doesn't return a value for blanks on either eng or amr
+        skips, eng_lines, amr_lines = set(), [], []
+        for i, (eng_l, amr_l) in enumerate(zip(data.eng_preproc_lines, data.amr_preproc_lines)):
+            eng_l, amr_l = eng_l.strip(), amr_l.strip()
+            if not eng_l or not amr_l:
+                skips.add(i)
+            else:
+                eng_lines.append(eng_l)
+                amr_lines.append(amr_l)
+        model_out_lines = self.aligner.align(eng_lines, amr_lines)
+        assert len(model_out_lines) == len(eng_lines)
+        # Add back in blanks for skipped lines
+        final_astrings = [''] * len(data.eng_preproc_lines)
+        for i in range(len(final_astrings)):
+            if i not in skips:
+                final_astrings[i] = model_out_lines.pop(0)
+        data.model_out_lines = final_astrings
         amr_surface_aligns, alignment_strings = postprocess(data)
         return amr_surface_aligns, alignment_strings
 
@@ -101,7 +118,8 @@ class TrainedAligner:
         fwd_lines = [l.split('|||')[2].strip() for l in fwd_out.splitlines() if l]
         rev_lines = [l.split('|||')[2].strip() for l in rev_out.splitlines() if l]
         # Input to atools
-        at_in = '\n'.join(['%s\n%s' % (fl, rl) for fl, rl in zip(fwd_lines, rev_lines)])
+        # be sure to put a line-feed at the end or you'll get a duplicate line in the output
+        at_in = '\n'.join(['%s\n%s' % (fl, rl) for fl, rl in zip(fwd_lines, rev_lines)]) + '\n'
         at_out, at_err = self.tools.communicate(at_in, timeout=self.timeout)
         at_lines = [l.strip() for l in at_out.splitlines()]
         return at_lines

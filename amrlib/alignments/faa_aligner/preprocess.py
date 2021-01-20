@@ -21,9 +21,10 @@ def preprocess_infer(eng_lines, amr_lines, **kwargs):
 
     # Filter out stopwords from sentences
     eng_tok_filtered_lines, eng_tok_origpos_lines = filter_eng_by_stopwords(eng_lines, eng_sw_fn)
-    for i, line in enumerate(eng_tok_origpos_lines):
-        if not line.strip():
-            raise ValueError('!!! ERROR Empty line# %d. This will cause issues and must be fixed !!!' % i)
+    if not kwargs.get('skip_empty_check', False):
+        for i, line in enumerate(eng_tok_origpos_lines):
+            if not line.strip():
+                raise ValueError('!!! ERROR Empty line# %d. This will cause issues and must be fixed !!!' % i)
 
     # Stem sentence tokens
     eng_preproc_lines = [stem_4_letters_line(l) for l in eng_tok_filtered_lines]
