@@ -19,7 +19,8 @@ def stem_4_letters_string(string):
 # #### stem-4-letters.py ####
 def filter_eng_by_stopwords(lines, f_stopwords):
     orig_ind_line_list, out_tok_line_list = [], []
-    STOP_SET = set(i.strip() for i in open(f_stopwords))
+    with open(f_stopwords) as f:
+        STOP_SET = set(i.strip() for i in f)
     for line in lines:
         orig_ind_list = []
         out_tok_list = []
@@ -58,7 +59,8 @@ def get_lineartok_with_rel(lines, f_stopwords):
                     ret.append((amr.val, f.edge))
                 ret.extend(getterminal_except_ne(f.node, nt_list))
         return (ret)
-    STOP_SET = set(i.strip() for i in open(f_stopwords))
+    with open(f_stopwords) as f:
+        STOP_SET = set(i.strip() for i in f)
     count = 0
     amr_linear_lines, amr_tuple_lines = [], []
     ds_string2 = ''
