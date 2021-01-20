@@ -1,9 +1,11 @@
 import re
 import sys
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 # global variables used in functions
-glog_fh = sys.stderr
 global_input_id = None
 global_input_node_id = None
 
@@ -115,9 +117,8 @@ class FeatGraph(object):
             for nt in all_nt:
                 if self.val == nt.val:
                     global global_input_id
-                    print('\namr', global_input_id, 'corefy', file=glog_fh)
-                    print('referent triple: (', self.pi.val, self.pi_edge, self.val, ')', file=glog_fh)
-
+                    logger.info('amr %d corefy.  referent triple: (%s %s %s)' % \
+                        (global_input_id, self.pi.val, self.pi_edge, self.val))
                     # return a non-recursive copy
                     return FeatGraph(None, self.val, None, [])
 
@@ -182,12 +183,12 @@ def input_amrparse(s, pos = 0, depth = 0):
                 rel = ''.join(rel_symbol.split())
                 pos, newnode = input_amrparse(s, pos, depth+1)
                 if not newnode:
-                    print('error, return pos', pos, file=glog_fh)
+                    logger.error('error, return pos %d' % pos)
                     return pos, None
                 node.feats.append(Feat(rel, newnode))
                 newnode.pi, newnode.pi_edge = node, rel
             else:
-                print('does not match ne or rel, pos', pos, file=glog_fh)
+                print('does not match ne or rel, pos %d' % pos)
                 return pos, None
     return pos, None
 
@@ -204,12 +205,8 @@ def get_alignment(amr, tuples):
         get_alignment(f.node, tuples)
 
 
-def align(amr_str_lines, align_str_lines, log_fn=None):
-    global glog_fh, global_input_id, global_input_node_id
-    if log_fn is not None:
-        glog_fh = open(log_fn, 'w')
-    else:
-        glog_fh = sys.stderr
+def align(amr_str_lines, align_str_lines):
+    global global_input_id, global_input_node_id
 
     global_input_id = -1
     lines_out = []
