@@ -55,6 +55,7 @@ class Inference(STOGInferenceBase):
         # and this method will create an in-memory file-type object in the AMR format.
         sio_f = io.StringIO()
         for i, sent in enumerate(sents):
+            sent = sent.replace('\n', ' ')  # errant line-feeds will confuse the parser
             entry  = '# ::snt %s\n' % sent
             entry += '(d / dummy)\n'        # not-used but required for proper AMR file format
             pen_graph = annotate_graph(entry)
