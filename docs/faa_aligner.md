@@ -1,7 +1,7 @@
 # Fast_Align Algorithm Aligner
 
 This is an algorithmic aligner based on the paper [Aligning English Strings with Abstract Meaning Representation Graphs](https://www.isi.edu/natural-language/mt/amr_eng_align.pdf).
-The code is based on the ISI aligner code.  A copy of that  that project can be found [here](https://github.com/melanietosik/string-to-amr-alignment).
+The code is based on the ISI aligner code.  A copy of that project can be found [here](https://github.com/melanietosik/string-to-amr-alignment).
 The project makes use of original pre/post-processing code but replaces the use of the [mgiza](https://github.com/moses-smt/mgiza/tree/master/mgizapp)
 app with [fast_align](https://github.com/clab/fast_align).  The bash scripts have been converted to python and a new
 "inference" step allows for pre-trained parameters to be used during run-time operation.

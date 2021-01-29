@@ -21,7 +21,6 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
   - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
   - BLEU for sentence generation
   - Alignment scoring metrics detailing precision/recall
-* Sentence paraphrasing - experimental
 
 
 ## AMR Models

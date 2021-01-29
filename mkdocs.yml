@@ -10,6 +10,7 @@ nav:
 - Models:           models.md
 - 'FAA Aligner':    faa_aligner.md
 - 'RBW Aligner':    rbw_aligner.md
+- 'ISI Aligner':    isi_aligner.md
 - Evaluation:       evaluation.md
 - Training:         training.md
 - Paraphrasing:     paraphrase.md

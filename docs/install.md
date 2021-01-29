@@ -12,6 +12,9 @@ for run-time use but is highly recommended for training models.
 This requires both the pip graphviz install and the installation of the non-python Graphviz library.  The separate installs
 are required because graphviz is a python wrapper for Graphviz which pip can't install by itself.
 
+* If you want to run the faa_aligner, you will need to install and compile [fast_align](https://github.com/clab/fast_align).
+Put this in your path or you can set the environment variable `FABIN_DIR` to its location.
+
 `pip3 install -r requirements.txt`
 
 `python3 -m spacy download en_core_web_sm`
