@@ -42,7 +42,7 @@ class ProcData(object):
     # Create default filenames as members
     def build_filenames(self, wk_dir, **kwargs):
         self.eng_fn         = os.path.join(wk_dir, kwargs.get('eng_fn',         'sents.txt'))
-        self.amr_fn         = os.path.join(wk_dir, kwargs.get('eng_fn',         'gstrings.txt'))
+        self.amr_fn         = os.path.join(wk_dir, kwargs.get('amr_fn',         'gstrings.txt'))
         self.eng_tok_pos_fn = os.path.join(wk_dir, kwargs.get('eng_tok_pos_fn', 'eng_tok_origpos.txt'))
         self.amr_tuple_fn   = os.path.join(wk_dir, kwargs.get('amr_tuple_fn',   'amr_tuple.txt'))
         self.fa_in_fn       = os.path.join(wk_dir, kwargs.get('fa_in_fn',       'fa_in.txt'))
