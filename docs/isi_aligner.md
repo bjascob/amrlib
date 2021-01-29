@@ -7,8 +7,8 @@ few c++ files. A copy of that project can be found [here](https://github.com/mel
 Due to the complexity of the alignment process and the underlying mgiza aligner, the code is not
 setup to be used as part of the library for inference.  If you are doing simple inference, it's
 recommended that you use the [faa aligner](https://amrlib.readthedocs.io/en/latest/faa_aligner/).
-If you want to use this code, expect do need to dig scripts a bit to customize it for your use
-case as this is not setup for ease of use.
+If you want to use this code, expect to need to modify the scripts a bit and customize it for
+your use case, as this is not setup for ease of use.
 
 The ISI alignment code is included here because this is the aligner that has been commonly used
 with AMR and, I believe, the aligner used to create alignments for LDC2020T02.  It also performs
@@ -25,11 +25,11 @@ There are no library calls associated with the aligner.  All of the code is in t
 directory under the [ISI Aligner](https://github.com/bjascob/amrlib/tree/master/scripts/62_ISI_Aligner).
 These scripts are simply run in order to conduct the alignment and scoring process.  You will
 need a copy of LDC2014T12 to run the code, although it could easily be modified to run on
-other versions, but for scoring the original AMR 1.0 corpus is required as the gold alignments are
+other versions.  For scoring, the original AMR 1.0 corpus is required as the gold alignments are
 tied to these graphs.
 
 Directories and file locations are generally setup in each script under the `__main__` statement.
-Note that you will need to set the location of the mgiza binaries at the top of the bash script
+Note that you will need to set the location of the `mgiza` binaries at the top of the bash script
 `Run_Aligner.sh`
 
 Unlike neural net models, the mgiza aligner doesn't natively separate training and inference into
@@ -45,12 +45,14 @@ created by the  script.  The alignments can then be extracted from the end of th
 
 
 ## Performance
-Score of the ISI_Aligner against the gold ISI hand alignments for LDC2014T12 <sup>**1</sup>
+Score of the ISI_Aligner against the gold ISI hand alignments for LDC2014T12
 ```
 Dev scores    Precision: 93.78   Recall: 80.30   F1: 86.52
 Test scores   Precision: 92.05   Recall: 76.64   F1: 83.64
 ```
 
-<sup>**1</sup>
-Note that these scores are obtained during training.  When scoring with only the test/dev sets and
+Scores here resemble the scores from the original paper within normal run-to-run variation
+of ~0.5 points.
+
+These scores are obtained during training.  When scoring with only the test/dev sets and
 using pre-trained parameters, the scores drop around 2-3 points.
