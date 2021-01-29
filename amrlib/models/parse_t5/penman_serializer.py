@@ -101,7 +101,11 @@ class PenmanDeSerializer(object):
         self.enumerator    = Counter()
         self.var_dict      = {}         # concepts (with enumeration if needed) mapped to variables
         self.triples       = []
-        self.deserialize(gstring)       # sets self.pgraph and self.gstring
+        try:
+            self.deserialize(gstring)       # sets self.pgraph and self.gstring
+        except:        
+            self.gstring = None
+            self.pgraph  = None
 
     def get_pen_graph(self):
         return self.pgraph
