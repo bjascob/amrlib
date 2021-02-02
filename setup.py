@@ -38,7 +38,7 @@ setuptools.setup(
                             'alignments/isi_hand_alignments/*.txt']},
     packages=setuptools.find_packages(),
     # Minimal requirements here.  More extensive list in requirements.txt
-    install_requires=['penman', 'torch', 'numpy', 'spacy', 'tqdm', 'transformers', 'smatch'],
+    install_requires=['penman>=1.1.0', 'torch>=1.6', 'numpy', 'spacy>=2.0,<3.0', 'tqdm', 'transformers>=3.0', 'smatch'],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
