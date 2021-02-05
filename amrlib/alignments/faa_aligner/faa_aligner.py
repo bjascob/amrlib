@@ -21,7 +21,12 @@ class FAA_Aligner(object):
         self.model_tar_fn = kwargs.get('model_tar_fn', os.path.join(this_dir, 'model_aligner_faa.tar.gz'))
         self.setup_model_dir()
         self.aligner = TrainedAligner(self.model_dir, **kwargs)
-        self.aligner.check_for_binaries()   # Will raise FileNotFoundError if binaries can't be found
+        try:
+            self.aligner.check_for_binaries()   # Will raise FileNotFoundError if binaries can't be found
+        except FileNotFoundError:
+            logger.critical('No binaries for fast_algin (https://github.com/clab/fast_align) found. ' \
+                'These must be installed to use the faa_aligner. See the amrlib docs for details.')
+            raise
 
     # Input space_tok_sents is a list of space tokenized strings
     # graph_strings is a list and amr graph strings, the same size.

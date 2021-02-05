@@ -24,6 +24,11 @@ Put this in your path or you can set the environment variable `FABIN_DIR` to its
 Note that installing amrlib will automatically install a minimal set of requirements but for the QT based amr_view
 or to test/train a model, you'll need to also install from the requirements.txt file.
 
+If you want to use the FAA_Aligner, you will need to will need to compile and install the C++ code for
+[fast_align](https://github.com/clab/fast_align).  The compile process will produce binaries for `fast_align`
+and `atools` in the same directory. These needs to be in your path or alternately you can set the environment
+variable `FABIN_DIR` to their directory.  The aligner/fast_align binaries work under both Windows and Linux.
+
 If you want to use a different spaCy model for parsing, you can manually change the model in amrlib/defaults.py.
 
 Note that the goal is to keep amrlib compatible with the latest versions of 3rd party libraries, however if a problem occurs you can

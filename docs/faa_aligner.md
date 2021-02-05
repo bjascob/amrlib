@@ -6,8 +6,10 @@ The project makes use of original pre/post-processing code but replaces the use 
 app with [fast_align](https://github.com/clab/fast_align).  The bash scripts have been converted to python and a new
 "inference" step allows for pre-trained parameters to be used during run-time operation.
 
-To use the code you will need to install and compile [fast_align](https://github.com/clab/fast_align).
-Put this in your path or you can set the environment variable `FABIN_DIR` to its location.
+To use the code you will need to install and compile the C++ code for [fast_align](https://github.com/clab/fast_align).
+The compile process will produce binaries for `fast_align` and `atools` in the same directory.
+Put these in your path or you can set the environment variable `FABIN_DIR` to their directory.
+The aligner/fast_align binaries work under both Windows and Linux.
 
 The aligner comes with pre-trained parameters that are included in a tar.gz file in the project.
 The first time the aligner is run, it will un-tar the files in `amrlib/data/model_aligner_faa/`.
