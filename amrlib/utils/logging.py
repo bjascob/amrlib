@@ -20,9 +20,10 @@ def setup_logging(logfname=None, level=None):
 
 # Penman spews a lot of messages
 def silence_penman():
-    logging.getLogger('penman.layout').setLevel(logging.ERROR)
-    logging.getLogger('penman._lexer').setLevel(logging.ERROR)
-    logging.getLogger('pe').setLevel(logging.ERROR)     # penman._parse.py
+    logging.getLogger('penman').setLevel(logging.ERROR)
+    #logging.getLogger('penman.layout').setLevel(logging.ERROR)
+    #logging.getLogger('penman._lexer').setLevel(logging.ERROR)
+    logging.getLogger('pe').setLevel(logging.ERROR)     # pre v1.1, penman._parse.py
 
 # Silense the request library
 def silence_requests():
