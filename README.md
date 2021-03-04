@@ -21,6 +21,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
   - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
   - BLEU for sentence generation
   - Alignment scoring metrics detailing precision/recall
+* There is also a related co-referencing project/model at [amr_coref](https://github.com/bjascob/amr_coref).
 
 
 ## AMR Models
@@ -43,6 +44,7 @@ sentences.
 
 * Generation (GtoS) generate_t5 gives a **43 BLEU**.  This model is deprecated in favor of the above model "with tense".
 
+* CoReference resolution at [amr_coref](https://github.com/bjascob/amr_coref) achieves a **0.548 CoNLL-2012 average** score.
 
 For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models.)**.
 
