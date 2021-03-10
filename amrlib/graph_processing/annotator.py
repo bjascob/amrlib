@@ -69,11 +69,11 @@ def _process_penman(pen, tokens=None):
     pen.metadata['ner_iob']  = json.dumps([t.ent_iob_  for t in tokens])
     pen.metadata['pos_tags'] = json.dumps([t.tag_      for t in tokens])
     # Create lemmas
-    # SpaCy's lemmatizer returns -PRON- for pronouns so strip these
+    # The spaCy 2.0 lemmatizer returns -PRON- for pronouns so strip these (spaCy 3.x does not do this)
     # Don't try to lemmatize any named-entities or proper nouns.  Lower-case any other words.
     lemmas = []
     for t in tokens:
-        if t.lemma_ == '-PRON-':
+        if t.lemma_ == '-PRON-':    # spaCy 2.x only
             lemma = t.text.lower()
         elif t.tag_.startswith('NNP') or t.ent_type_ not in ('', 'O'):
             lemma = t.text

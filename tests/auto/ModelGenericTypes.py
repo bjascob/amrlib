@@ -28,7 +28,7 @@ graph01 = '''
 # The init time doesn't seem to get counted towards the total testing time.
 # To avoid loading things multiple times, load in globally and reference it in __init__
 # as needed.
-SPACY_NLP = spacy.load('en')
+SPACY_NLP = spacy.load('en_core_web_sm')
 class ModelGenericTypes(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

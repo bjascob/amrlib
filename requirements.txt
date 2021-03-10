@@ -3,7 +3,7 @@
 penman>=1.1.0
 torch>=1.6
 numpy
-spacy>=2.0,<3.0     # also requires model download `python -m spacy download en_core_web_sm`
+spacy>=2.0          # also requires model download `python -m spacy download en_core_web_sm`
 tqdm
 transformers>=3.0   # Note that original models trained with v3.4.0
 smatch
