@@ -46,7 +46,7 @@ sentences.
 
 * CoReference resolution at [amr_coref](https://github.com/bjascob/amr_coref) achieves a **0.548 CoNLL-2012 average** score.
 
-For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models.)**.
+For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models)**.
 
 
 ## Documentation
