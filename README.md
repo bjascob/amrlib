@@ -2,6 +2,9 @@
 
 **A python library that makes AMR parsing, generation and visualization simple.**
 
+For the latest documentation, see **[ReadTheDocs](https://amrlib.readthedocs.io/en/latest/)**.
+
+**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install.html).
 
 ## About
 amrlib is a python module designed to make processing for [Abstract Meaning Representation](https://amr.isi.edu/)
@@ -48,10 +51,7 @@ sentences.
 
 For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models.html)**.
 
-
-## Documentation
-For the latest documentation, see **[ReadTheDocs](https://amrlib.readthedocs.io/en/latest/)**.
-
+**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install.html).
 
 ## AMR View
 The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
@@ -64,7 +64,7 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 ## Requirements and Installation
 The project was built and tested under Python 3 and Ubuntu but should run on any Linux, Windows, Mac, etc.. system.
 
-See [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install/) for details on setup.
+See [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install.html) for details on setup.
 
 ## Library Usage
 To convert sentences to graphs
