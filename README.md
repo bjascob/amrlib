@@ -4,7 +4,7 @@
 
 For the latest documentation, see **[ReadTheDocs](https://amrlib.readthedocs.io/en/latest/)**.
 
-**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install.html).
+**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install).
 
 ## About
 amrlib is a python module designed to make processing for [Abstract Meaning Representation](https://amr.isi.edu/)
@@ -49,9 +49,9 @@ sentences.
 
 * CoReference resolution at [amr_coref](https://github.com/bjascob/amr_coref) achieves a **0.548 CoNLL-2012 average** score.
 
-For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models.html)**.
+For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models)**.
 
-**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install.html).
+**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install).
 
 ## AMR View
 The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
@@ -64,7 +64,7 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 ## Requirements and Installation
 The project was built and tested under Python 3 and Ubuntu but should run on any Linux, Windows, Mac, etc.. system.
 
-See [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install.html) for details on setup.
+See [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install) for details on setup.
 
 ## Library Usage
 To convert sentences to graphs
