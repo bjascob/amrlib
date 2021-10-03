@@ -9,10 +9,11 @@ from  .amr_graph import _is_attr_form
 # seq: current generated sequence
 # score: accumlated score so far (include seq[-1])
 class Hypothesis(object):
-    def __init__(self, state_dict, seq, score):
+    def __init__(self, state_dict, seq, score, wixs):
         self.state_dict = state_dict
         self.seq = seq
         self.score = score
+        self.wixs = wixs
 
     def is_completed(self):
         if self.seq[-1] == END:
@@ -56,8 +57,9 @@ class Beam(object):
         for prev_hyp_idx, steps in enumerate(next_steps):
             for step in steps:
                 token = step[0]
-                score = self.merge_score(self.hypotheses[prev_hyp_idx], step)
-                candidates.append((prev_hyp_idx, token, score))
+                score = self.merge_score(self.hypotheses[prev_hyp_idx], step[0:2])
+                wix = step[2]
+                candidates.append((prev_hyp_idx, token, wix, score))
 
         candidates.sort(key=lambda x:x[-1], reverse=True)
         live_nyp_num = self.beam_size - len(self.completed_hypotheses)
@@ -72,12 +74,14 @@ class Beam(object):
 
         # pack new hypotheses
         new_hyps = []
-        for idx, (prev_hyp_idx, token, score) in enumerate(candidates):
+        for idx, (prev_hyp_idx, token, wix, score) in enumerate(candidates):
             state = dict()
             for k, v in _split_state.items():
                 state[k] = _split_state[k][idx]
-            seq = self.hypotheses[prev_hyp_idx].seq + [token]
-            new_hyps.append(Hypothesis(state, seq, score))
+            hyp = self.hypotheses[prev_hyp_idx]
+            seq = hyp.seq + [token]
+            wix = hyp.wixs + [wix]
+            new_hyps.append(Hypothesis(state, seq, score, wix))
 
         # send new hypotheses to self.completed_hypotheses or self.hypotheses accordingly
         self.hypotheses = []

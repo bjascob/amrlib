@@ -88,7 +88,7 @@ class Parser(nn.Module):
                         'local_idx2token':data['local_idx2token'],
                         'copy_seq':data['copy_seq']}
             init_state_dict = {}
-            init_hyp = Hypothesis(init_state_dict, [DUM], 0.)
+            init_hyp = Hypothesis(init_state_dict, [DUM], 0., [-1])
             bsz = word_repr.size(1)
             beams = [ Beam(beam_size, min_time_step, max_time_step, [init_hyp]) for i in range(bsz)]
             search_by_batch(self, beams, mem_dict)
@@ -160,7 +160,7 @@ class Parser(nn.Module):
         for s, t, local_vocab in zip(topk_scores.tolist(), topk_token.tolist(), local_vocabs):
             res = []
             for score, token in zip(s, t):
-                res.append((idx2token(token, local_vocab), score))
+                res.append((idx2token(token, local_vocab), score, token))
             results.append(res)
 
         return new_state_dict, results

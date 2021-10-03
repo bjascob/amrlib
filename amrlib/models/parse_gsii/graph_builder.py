@@ -1,38 +1,77 @@
 import penman
 import re
+import logging
 from   collections import Counter, defaultdict
 from   types import SimpleNamespace
 import numpy as np
 from   .amr_graph import _is_attr_form, need_an_instance
 
+logger = logging.getLogger(__name__)
+
 
 # Note that penman triples typically have a colon in front of the relationship but
 # it appears to add these automatically when creating the graph.
 class GraphBuilder(object):
-    def __init__(self, rel_vocab):
+    def __init__(self, rel_vocab, tok_idx_rel_name=None):
         self.enumerator = Counter()
         self.rel_vocab  = rel_vocab
         self.concepts   = []        # List of node names (concets and attributes)
         self.relations  = []        # list of (target_id, source_id, arc_prob, rel_prob:list(vocab))
+        self.tok_pos =    []        # token index offsets from the beginning of the document
         self.names      = []        # names for concepts (1:1) ie..  n1, n2, p1, Ohio@attr4@ , ..
         self.arc_thresh = 0.50      # Threshold of arc probability to add an edge  **1
         # **1: Experimentally 0.5 is about optimal, though increasing to 0.9 doesn't decrease the score
         #      and decreasing to 0.1 only drops the smatch score by 0.014 smatch
+        self.tok_idx_rel_name = tok_idx_rel_name
 
     # Convert a list of concepts and relations into a penman graph
     # concept is a list of concepts
     # relation is a list of (target_id, source_id, arc_prob, rel_prob:list(vocab))
-    def build(self, concepts, relations):
+    def build(self, concepts, relations, tok_pos):
         self.concepts  = concepts
         self.relations = relations
+        self.tok_pos =   tok_pos
         self.used_arcs  = defaultdict(set) # keep track of edge names aready seen (key is source_id)
+        self.concept_to_tok_pos = {}
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'building concepts: {concepts}')
         triples  = self.build_instance_triples()       # add self.names
         triples += self.build_edge_attrib_triples()
+        # optionally add token positions as document 0-index offsets
+        if self.tok_idx_rel_name is not None:
+            self._add_tok_pos(triples)
         graph    = penman.graph.Graph(triples)
         string   = penman.encode(graph, indent=6)
         # Strip the uniqueness post tag (ie.. 2007@attr1@ -> 2007)
         string = re.sub(r'@attr\d+@', '', string)
         return string
+
+    def _add_tok_pos(self, triples):
+        tok_pos_triples = []
+        tok_pos_insts = set()
+        src_tok_pos = defaultdict(list)
+        for s, p, t in triples:
+            pos = self.concept_to_tok_pos.get(s)
+            if p == 'instance':
+                pos = self.concept_to_tok_pos.get(s)
+                if pos is not None:
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f'adding instance triple: {s} {p} {t} -> {pos}')
+                    tok_pos_triples.append((s, f'{self.tok_idx_rel_name}1', str(pos)))
+                    tok_pos_insts.add(s)
+            else:
+                pos = self.concept_to_tok_pos.get(t)
+                if pos is not None and s not in tok_pos_insts and p.startswith('op'):
+                    if logger.isEnabledFor(logging.DEBUG):
+                        logger.debug(f'adding src tok: {s} {p} {t} -> {pos}')
+                    src_tok_pos[s].append(pos)
+        for s, pos in src_tok_pos.items():
+            pos.sort()
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f'adding tok pos triple: {s} -> {pos}')
+            for i, ti in enumerate(pos, 1):
+                tok_pos_triples.append((s, f'{self.tok_idx_rel_name}{i}', str(ti)))
+        triples.extend(tok_pos_triples)
 
     # Create instance triples from a list of concepts (nodes and attributes)
     # This must be the first call because self.names is set here
@@ -41,7 +80,7 @@ class GraphBuilder(object):
         self.names = []     # unique variable or attribute with tag
         triples = []
         # Loop through the concepts
-        for i, concept in enumerate(self.concepts):
+        for i, (concept, tok_pos) in enumerate(zip(self.concepts, self.tok_pos)):
             # strings patterns match concept forms and thus require and instance variable
             if need_an_instance(concept):
                 # The penman library has an issue parsing concepts with parens or tildes
@@ -70,6 +109,8 @@ class GraphBuilder(object):
                     name = concept
                 # Add a temporary tag to attribute names to gaurentee uniqueness. These will be stripped later.
                 name = name + '@attr%d@ ' % i
+            if tok_pos is not None:
+                self.concept_to_tok_pos[name] = tok_pos
             self.names.append(name)
         return triples
 

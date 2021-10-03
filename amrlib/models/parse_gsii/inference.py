@@ -23,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 class Inference(STOGInferenceBase):
+    TOKEN_INDEX_REL = None
+
     def __init__(self, model_dir, model_fn, **kwargs):
         self.model_dir       = model_dir
         self.model_fn        = model_fn
@@ -33,6 +35,7 @@ class Inference(STOGInferenceBase):
         self.beam_size       = kwargs.get('beam_size',       8)
         self.alpha           = kwargs.get('alpha',         0.6)
         self.max_time_step   = kwargs.get('max_time_step', 100)
+        self.tok_idx_rel_name = self.TOKEN_INDEX_REL
         if model_fn:
             self._load_model()  # sets self.model, graph_builder, vocabs
 
@@ -43,7 +46,7 @@ class Inference(STOGInferenceBase):
         self.model         = model
         self.device        = model.device
         self.vocabs        = vocabs
-        self.graph_builder = GraphBuilder(vocabs['rel'])
+        self.graph_builder = GraphBuilder(vocabs['rel'], tok_idx_rel_name=self.tok_idx_rel_name)
         return self
 
     # parse a list of sentences (strings)
@@ -93,9 +96,9 @@ class Inference(STOGInferenceBase):
         for batch in data_loader:
             batch = move_to_device(batch, self.model.device)
             res = self._parse_batch(batch)
-            for concept, relation in zip(res['concept'], res['relation']):
-                graph_lines = self.graph_builder.build(concept, relation)
-                output_entries.append( graph_lines )
+            for concept, relation, tok_pos in zip(res['concept'], res['relation'], res['tok_pos']):
+                graph_lines = self.graph_builder.build(concept, relation, tok_pos)
+                output_entries.append(graph_lines)
         # Add the metadata from the annotations and 'snt' if requested
         if add_metadata:
             sio_f.seek(0)
@@ -112,7 +115,8 @@ class Inference(STOGInferenceBase):
         # Load the test data and the model
         test_data_fn = os.path.join(indir, infn)
         output_fn    = os.path.join(outdir, outfn)
-        print('Loading test data from ', test_data_fn)
+        if logging.isEnabledFor(logging.INFO):
+            logging.info(f'Loading test data from {test_data_fn}')
         test_data = DataLoader(self.vocabs, test_data_fn, self.batch_size, for_train=False)
         # Load the reference amr file that contains all the metadata
         entries = load_amr_entries(test_data_fn)    # Note - already loaded above, but simplest for now.
@@ -148,14 +152,27 @@ class Inference(STOGInferenceBase):
 
     # Process a batch
     def _parse_batch(self, batch):
+        def map_idx_to_pos(tok, idx):
+            wix2pos = idx2pos[0 if tok.endswith('_') else 1]
+            return wix2pos.get(idx)
+
         res = dict()
         concept_batch = []
         relation_batch = []
+        tok_pos_batch = []
+        cp_map = dict(map(lambda x: (x[1][0][0].item(), x[0]),
+                          enumerate(batch['copy_seq'])))
+        mp_map = dict(map(lambda x: (x[1][0][1].item(), x[0]),
+                          enumerate(batch['copy_seq'])))
+        idx2pos = (cp_map, mp_map)
         beams = self.model.work(batch, self.beam_size, self.max_time_step)
         score_batch = []
         for beam in beams:
             best_hyp = beam.get_k_best(1, self.alpha)[0]
             predicted_concept = [token for token in best_hyp.seq[1:-1]]
+            predicted_wixs = best_hyp.wixs
+            tok_pos = tuple(map(lambda x: map_idx_to_pos(*x),
+                                zip(predicted_concept, predicted_wixs[1:-1])))
             predicted_rel = []
             for i in range(len(predicted_concept)):
                 if i == 0:
@@ -167,20 +184,23 @@ class Inference(STOGInferenceBase):
             concept_batch.append(predicted_concept)
             score_batch.append(best_hyp.score)
             relation_batch.append(predicted_rel)
+            tok_pos_batch.append(tok_pos)
         res['concept'] = concept_batch
         res['score'] = score_batch
         res['relation'] = relation_batch
+        res['tok_pos'] = tok_pos_batch
         return res
 
     # Load the model, post-proc and vocabs.
     def _load_model(self):
         model_fpath = os.path.join(self.model_dir, self.model_fn)
-        print('Loading model', model_fpath)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'Loading model {model_fpath}')
         model_dict = torch.load(model_fpath, map_location='cpu')    # always load initially to RAM
         model_args = Config(model_dict['args'])
         vocabs = get_vocabs(os.path.join(self.model_dir, model_args.vocab_dir))
         # Create the post-processor
-        graph_builder = GraphBuilder(vocabs['rel'])
+        graph_builder = GraphBuilder(vocabs['rel'], tok_idx_rel_name=self.tok_idx_rel_name)
         # Load bert of specified
         bert_encoder = None
         if model_args.with_bert:
