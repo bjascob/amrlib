@@ -45,7 +45,7 @@ class T2TDataCollator:
 # Note that for save_steps, steps means gradient updates (not batch) so if
 # gradient_accumulation_steps=4 and save_steps=1000, then checkpoint is saved every 4000 batches.
 class Trainer(object):
-    def __init__(self, args):
+    def __init__(self, args, model: T5ForConditionalGeneration = None):
         # General arguments
         self.gen_args           = args['gen_args']
         self.model_name_or_path = self.gen_args['model_name_or_path']
@@ -57,6 +57,7 @@ class Trainer(object):
         # HuggingFace trainer arguments
         # See https://github.com/huggingface/transformers/blob/master/src/transformers/training_args.py
         self.training_args = TrainingArguments(**args['hf_args'])
+        self.model = model
         set_seed(self.training_args.seed)
 
     def train(self):
@@ -65,7 +66,8 @@ class Trainer(object):
         # Load pretrained model and tokenizer
         print('Loading model and tokenizer')
         self.tokenizer = T5Tokenizer.from_pretrained(self.model_name_or_path)
-        self.model     = T5ForConditionalGeneration.from_pretrained(self.model_name_or_path)
+        if self.model is None:
+            self.model     = T5ForConditionalGeneration.from_pretrained(self.model_name_or_path)
         # Clear out the "task_specific_params" and add this one
         self.model.config.task_specific_params = {'translation_amr_to_text':self.gen_args}
         # Load the datasets
