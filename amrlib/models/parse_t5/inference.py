@@ -3,6 +3,7 @@ import torch
 from   tqdm import tqdm
 import penman
 from   penman.models.noop import NoOpModel
+import transformers
 from   transformers import T5ForConditionalGeneration, T5Tokenizer
 from   .penman_serializer import PenmanDeSerializer
 from   ..inference_bases import STOGInferenceBase
