@@ -49,6 +49,9 @@ sentences.
 
 * CoReference resolution at [amr_coref](https://github.com/bjascob/amr_coref) achieves a **0.548 CoNLL-2012 average** score.
 
+All models are trained and tested with AMR-3 (LDC2020T02). AMR-3 is a larger and more difficult test set than
+what AMR-2 used. Because of this, test scores tend to be a few points lower on AMR-3 than AMR-2, for equivalent models.
+
 For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models)**.
 
 **!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install).

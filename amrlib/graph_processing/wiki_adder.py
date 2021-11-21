@@ -44,7 +44,7 @@ class WikiAdder:
 
     # Print some status
     def get_stat_string(self):
-        string  = 'Attemted {:,} wiki lookups\n'.format(self.wiki_lookups)
+        string  = 'Attempted {:,} wiki lookups\n'.format(self.wiki_lookups)
         string += 'Initial cache size is {:,} entries\n'.format(self.cache_init_sz)
         string += 'There were {:,} cache hits and {:,} server queries\n'.format(\
                    self.cache_hits, self.server_queries)
