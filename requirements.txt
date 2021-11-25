@@ -8,6 +8,10 @@ tqdm
 transformers>=3.0   # Note that original models trained with v3.4.0
 smatch
 
+# Model specific
+cached_property     # parse_spring model only
+networkx            # parse_spring model only
+
 # Used for amr_view / PlotAMR
 PyQt5
 graphviz            # this requires the Graphviz non-python library to be installed too (see pypi page)

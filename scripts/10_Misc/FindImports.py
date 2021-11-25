@@ -130,5 +130,5 @@ if __name__ == '__main__':
             pkg_name = package[0]
             if pkg_name not in skips:
                 version  = get_package_version(package)
-                print('%-12s version:  %s' % (pkg_name, version))
+                print('%-16s version:  %s' % (pkg_name, version))
         print()
