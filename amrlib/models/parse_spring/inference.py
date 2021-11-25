@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 class Inference(STOGInferenceBase):
     invalid_graph = penman.decode('()')
     def __init__(self, model_dir=None, model_fn=None, model=None, tokenizer=None, config=None, **kwargs):
+        logging.getLogger('transformers.tokenization_utils_base').setLevel(logging.ERROR)   # skip tokenizer warning
         default_device     = 'cuda:0' if torch.cuda.is_available() else 'cpu'
         self.device        = torch.device(kwargs.get('device', default_device))
         self.batch_size    = kwargs.get('batch_size', 8)    # in number of sentences
@@ -77,7 +78,8 @@ class Inference(STOGInferenceBase):
         if return_penman:
             return gen_graphs
         # The required behavior across all parse_mdoels, is to return graphs as strings by default
-        return penman.dumps(graphs, indent=4, model=amr_model)
+        gstrings = [penman.encode(g, indent=4, model=amr_model) for g in gen_graphs]
+        return gstrings
 
     # parse a list of spacy spans (ie.. span has list of tokens)
     def parse_spans(self, spans, add_metadata=True):
