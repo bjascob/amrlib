@@ -30,7 +30,11 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
 ## AMR Models
 The system includes different neural-network models for parsing and for generation.
 
-* Parse (StoG) model parse_t5 gives **81 SMATCH score** with LDC2020T02.  This model uses the
+* Parse (StoG) model parse_spring gives an **83 SMATCH score** with LDC2020T02.  This code derived from the
+[SPRING model](https://github.com/SapienzaNLP/spring). The basic process is similar to the parse_t5 model except that
+the pretrained transformer used is the bart-large model which is larger than the t5-base model used in parse_t5.
+
+* Parse (StoG) model parse_t5 gives an **81 SMATCH score** with LDC2020T02.  This model uses the
 pretrained HuggingFace T5 transformer model to convert sentences to graph-encoded sequences which
 are then deserialized into an AMR graph.
 

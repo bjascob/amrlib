@@ -1,6 +1,23 @@
 # Models
 The following is a description of the various models and extra interface parameters they use.
 
+## Parse SPRING
+**83 SMATCH score** with LDC2020T02.
+
+This code derived from the [SPRING model](https://github.com/SapienzaNLP/spring).
+It convert sentences to graph-encoded sequences which are then deserialized into
+an AMR graph.
+
+Additional inference parameters:
+
+* device     : is automatically selected but you can pass `cpu` or `cuda:0` if needed.
+
+* batch_size : set the batch size to use for model generation
+
+* num_beams  : set the number of beams used during beam_search (1 == greedy search)
+
+See amrlib/models/parse_spring/inference.py for implementation details.
+
 ## Parse T5
 **81 SMATCH score** with LDC2020T02.
 

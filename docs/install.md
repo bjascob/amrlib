@@ -40,6 +40,8 @@ what versions were tested when the library was last released.
 
 Download the pretrained parse models from:
 
+* [model_parse_spring-v0_1_0.tar.gz](https://github.com/bjascob/amrlib-models/releases/download/model_parse_spring-v0_1_0/model_parse_spring-v0_1_0.tar.gz)
+(or see [GitHub/amrlib-models](https://github.com/bjascob/amrlib-models))
 
 * [model_parse_t5-v0_1_0.tar.gz](https://github.com/bjascob/amrlib-models/releases/download/model_parse_t5-v0_1_0/model_parse_t5-v0_1_0.tar.gz)
 (or see [GitHub/amrlib-models](https://github.com/bjascob/amrlib-models))
