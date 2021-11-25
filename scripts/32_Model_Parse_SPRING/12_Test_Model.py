@@ -7,17 +7,17 @@ import penman
 from   penman.models.amr import model as amr_model
 from   amrlib.utils.logging import silence_penman, setup_logging, WARN, ERROR
 from   amrlib.evaluate.smatch_enhanced import get_entries, compute_smatch
-from   devlib.inference import Inference
-from   devlib.amr_rw import read_raw_amr_data
+from   amrlib.models.parse_spring.inference import Inference
+from   amrlib.models.parse_spring.amr_rw import read_raw_amr_data
 
 
 if __name__ == '__main__':
     logging.getLogger('transformers.tokenization_utils_base').setLevel(logging.ERROR)   # skip tokenizer warning
-    setup_logging(logfname='logs/parse_t5_generate.log', level=ERROR)
+    setup_logging(logfname='logs/parse_spring_generate.log', level=ERROR)
     silence_penman()
     device     = torch.device('cuda:0')
-    model_dir   = 'data/model_parse_spring'
-    model_fn    = 'checkpoint_epoch_16_smatch_8428.pt'
+    model_dir   = 'amrlib/data/model_parse_spring'
+    model_fn    = 'checkpoint_epoch_11_smatch_8457.pt'
     test_fns    = 'amrlib/data/amr_annotation_3.0/data/amrs/split/test/*.txt'
     gold_path   = os.path.join(model_dir, 'test-gold.txt')
     pred_path   = os.path.join(model_dir, 'test-pred.txt')

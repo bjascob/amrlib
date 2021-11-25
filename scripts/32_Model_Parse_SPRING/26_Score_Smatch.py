@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#import setup_run_dir    # this import tricks script to run from 2 levels up
+import setup_run_dir    # this import tricks script to run from 2 levels up
 import sys
 #sys.stderr = open('logs/score_stderr.log', 'w')     # SMATCH AMR logs to stderr so redirect this to a file
 #print('!!stderr redirected to logs/score_stderr.log.  See that file for graphs that did not load (and thus are not scored).')

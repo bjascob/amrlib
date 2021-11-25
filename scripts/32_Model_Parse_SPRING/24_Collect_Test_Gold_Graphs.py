@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#import setup_run_dir    # Set the working directory and python sys.path to 2 levels above
+import setup_run_dir    # Set the working directory and python sys.path to 2 levels above
 import os
 from   glob import glob
 from   amrlib.graph_processing.amr_loading_raw import load_raw_amr
@@ -10,7 +10,7 @@ from   amrlib.graph_processing.amr_loading_raw import load_raw_amr
 # needs to be exactly the same as what's in generate so the output graph ordering is the same.
 if __name__ == '__main__':
     glob_pattern = 'amrlib/data/amr_annotation_3.0/data/amrs/split/test/*.txt'
-    out_fpath    = 'armlib/data/model_parse_spring/test-gold.txt.wiki'
+    out_fpath    = 'amrlib/data/model_parse_spring/test-gold.txt.wiki'
 
     # Load the data
     graphs = []

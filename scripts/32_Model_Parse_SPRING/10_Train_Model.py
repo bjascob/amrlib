@@ -5,7 +5,7 @@ import random
 import logging
 import torch
 import numpy
-from   devlib.trainer import Trainer
+from   amrlib.models.parse_spring.trainer import Trainer
 from   amrlib.utils.logging import setup_logging, silence_penman, WARN
 
 # See random generators for consistant results
@@ -16,8 +16,8 @@ numpy.random.seed(0)
 
 # For bart-large
 #   There are ~16068 batches in the training data for batch_size = 500
-#   On a Titan X (12GB, fp32=6.7 TFlops) training takes 85 minutes/epoch including about 10 minutes
-#   for prediction/smatch testing.
+#   On a Titan X (12GB, fp32=6.7 TFlops) training takes 80 minutes/epoch including
+#   about  6 minutes for prediction/smatch testing.
 if __name__ == '__main__':
     logging.getLogger('transformers.tokenization_utils_base').setLevel(logging.ERROR)   # skip tokenizer warning
     setup_logging(logfname='logs/train_parse_spring.log', level=WARN)
