@@ -83,7 +83,7 @@ class Trainer:
         print('Out of %d graphs, %d did not generate properly.' % (len(graphs_gen), num_bad))
         # Save the final graphs
         print('Generated graphs written to', self.dev_pred_path)
-        penman.dump(graphs_gen, self.dev_pred_path, indent=4, model=amr_model)
+        penman.dump(graphs_gen, self.dev_pred_path, indent=6, model=amr_model)
         # Run smatch
         try:
             gold_entries = get_entries(self.dev_gold_path)
@@ -171,7 +171,7 @@ class Trainer:
                             use_recategorization=self.config['use_recategorization'],
                             dereify=self.config['dereify'],
                             remove_wiki=self.config['remove_wiki'])
-        penman.dump(self.graphs_gold, self.dev_gold_path, indent=4, model=amr_model)
+        penman.dump(self.graphs_gold, self.dev_gold_path, indent=6, model=amr_model)
 
     # Function to update the model's parameters for accumulated loss
     def step_otimizer(self):

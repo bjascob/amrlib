@@ -78,7 +78,7 @@ class Inference(STOGInferenceBase):
         if return_penman:
             return gen_graphs
         # The required behavior across all parse_mdoels, is to return graphs as strings by default
-        gstrings = [penman.encode(g, indent=4, model=amr_model) for g in gen_graphs]
+        gstrings = [penman.encode(g, indent=6, model=amr_model) for g in gen_graphs]
         return gstrings
 
     # parse a list of spacy spans (ie.. span has list of tokens)
