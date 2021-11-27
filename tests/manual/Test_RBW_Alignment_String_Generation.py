@@ -8,9 +8,12 @@ from   amrlib.alignments.rbw_aligner import RBWAligner
 from   amrlib.alignments.penman_utils import test_for_decode_encode_issue
 
 
+# 11/27/2021: This test is currently broken
+
+
 # Manual test to see if amrlib can generate the alignment string from surface alignments correctly,
 # using the LDC data as the baseline
-# !! Note that you must first create the test corpus.  See the scripts directory for this
+# !! Note that you must first create the test corpus.  See the scripts directory/Build_Aligment_Test_Corpus.py
 if __name__ == '__main__':
     fname   = 'amrlib/data/alignments/test_w_surface.txt'
     entries = load_amr_entries(fname)
