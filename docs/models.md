@@ -19,7 +19,7 @@ Additional inference parameters:
 See amrlib/models/parse_spring/inference.py for implementation details.
 
 ## Parse T5
-**81 SMATCH score** with LDC2020T02.
+**82 SMATCH score** with LDC2020T02.
 
 This model is based on the pretrained [HuggingFace](https://github.com/huggingface/transformers)
 T5 transformer to convert sentences to graph-encoded sequences which are then deserialized into
