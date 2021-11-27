@@ -5,41 +5,11 @@ import logging
 import torch
 from   torch.utils.data import Dataset
 from   transformers import T5ForConditionalGeneration, T5Tokenizer, set_seed
-from   transformers import TrainingArguments
-from   transformers import Trainer as T5Trainer
+from   transformers import TrainingArguments, DataCollatorForSeq2Seq
+from   .amr_t5_trainer import AMRT5Trainer
 from   .penman_serializer import load_and_serialize
 
 logger = logging.getLogger(__name__)
-
-
-# Torch "DataSet" used for feeding data to the training routine
-# Keys are... input_ids, attention_mask, target_ids, target_attention_mask
-class AMRDataset(Dataset):
-    def __init__(self, encodings, sents, bad_indexes):
-        self.encodings   = encodings
-        self.sents       = sents
-        self.bad_indexes = bad_indexes  # in original file's index, not same as above
-
-    def __len__(self):
-        return len(self.encodings['input_ids'])
-
-    def __getitem__(self, idx):
-        return {k:v[idx] for k, v in self.encodings.items()}
-
-
-# Take a list of samples from a Dataset and collate them into a batch and returns a dict
-# prepares lm_labels from target_ids, returns examples with keys as expected by the forward method
-# this is necessacry because the trainer directly passes this dict as arguments to the model
-# so make sure the keys match the parameter names of the forward method
-class T2TDataCollator:
-    def __call__(self, batch):
-        input_ids = torch.stack([example['input_ids']  for example in batch])
-        lm_labels = torch.stack([example['target_ids'] for example in batch])
-        lm_labels[lm_labels[:, :] == 0] = -100
-        attention_mask = torch.stack([example['attention_mask'] for example in batch])
-        decoder_attention_mask = torch.stack([example['target_attention_mask'] for example in batch])
-        return {'input_ids': input_ids, 'attention_mask': attention_mask,
-                'labels': lm_labels, 'decoder_attention_mask': decoder_attention_mask }
 
 
 # Note that for save_steps, steps means gradient updates (not batch) so if
@@ -49,14 +19,13 @@ class Trainer(object):
         # General arguments
         self.gen_args           = args['gen_args']
         self.model_name_or_path = self.gen_args['model_name_or_path']
+        self.tok_name_or_path   = self.gen_args.get('tok_name_or_path', self.model_name_or_path)
         self.corpus_dir         = self.gen_args['corpus_dir']
         self.train_fn           = self.gen_args['train_fn']
-        self.valid_fn           = self.gen_args['valid_fn']
+        self.eval_fn            = self.gen_args.get('eval_fn')
         self.max_in_len         = self.gen_args['max_in_len']
         self.max_out_len        = self.gen_args['max_out_len']
-        # HuggingFace trainer arguments
-        # See https://github.com/huggingface/transformers/blob/master/src/transformers/training_args.py
-        self.training_args = TrainingArguments(**args['hf_args'])
+        self.training_args      = TrainingArguments(**args['hf_args'])
         set_seed(self.training_args.seed)
 
     def train(self):
@@ -64,62 +33,73 @@ class Trainer(object):
         os.makedirs(self.training_args.output_dir, exist_ok=True)
         # Load pretrained model and tokenizer
         print('Loading model and tokenizer')
-        self.tokenizer = T5Tokenizer.from_pretrained(self.model_name_or_path)
+        self.tokenizer = T5Tokenizer.from_pretrained(self.tok_name_or_path)
         self.model     = T5ForConditionalGeneration.from_pretrained(self.model_name_or_path)
         # Clear out the "task_specific_params" and add this one
-        self.model.config.task_specific_params = {'translation_amr_to_text':self.gen_args}
+        self.model.config.task_specific_params = {'parse_amr':self.gen_args}
+        # Save the tokenizer
+        if self.gen_args.get('save_tokenizer', False):
+            self.tokenizer.save_pretrained(self.training_args.output_dir)
         # Load the datasets
         print('Building datasets')
         train_file_path = os.path.join(self.corpus_dir, self.train_fn)
-        valid_file_path = os.path.join(self.corpus_dir, self.valid_fn)
-        train_dataset = self.build_dataset(train_file_path)
+        train_dataset   = self.build_dataset(train_file_path)
         print('Training data is {:,} after removing {:,} long entries'.format( \
             len(train_dataset), len(train_dataset.bad_indexes)))
-        valid_dataset = self.build_dataset(valid_file_path)
-        print('Validation data is {:,} after removing {:,} long entries'.format( \
-            len(valid_dataset), len(valid_dataset.bad_indexes)))
+        # Load the evaluation dataset
+        if self.eval_fn:
+            eval_file_path = os.path.join(self.corpus_dir, self.eval_fn)
+            eval_samples   = load_and_serialize(eval_file_path)
+            print('Evaluation data is {:,} samples'.format(len(eval_samples['graphs'])))
+        else:
+            eval_samples = None
         # Train the model
         print('Training')
-        trainer = T5Trainer(model=self.model, args=self.training_args, train_dataset=train_dataset,
-                eval_dataset=valid_dataset, data_collator=T2TDataCollator())
-        trainer.train()
+        collator = DataCollatorForSeq2Seq(self.tokenizer, self.model, padding=True, max_length=self.max_out_len)
+        trainer = AMRT5Trainer(model=self.model, args=self.training_args, train_dataset=train_dataset,
+                    data_collator=collator, eval_tokenizer=self.tokenizer, eval_samples=eval_samples)
+        # If resume_from_checkpoint is True it will look for the last checkpoint in the value of output_dir
+        # passed via TrainingArguments.  If it's a path to a specific checkpoint it will use that saved
+        # checkpoint folder to resume the training from.
+        trainer.train(resume_from_checkpoint=self.training_args.resume_from_checkpoint)
         # Save the results
-        print('Saving model')
-        trainer.save_model(self.training_args.output_dir)
-        #self.tokenizer.save_pretrained(self.training_args.output_dir)
+        if self.gen_args.get('save_at_end', False):
+            print('Saving model')
+            trainer.save_model(self.training_args.output_dir)
 
     # Convert the AMR graphs into tokenized sentences
     def build_dataset(self, fpath):
         # Load the raw data
-        entries = load_and_serialize(fpath)
-        # Convert to input and target sentences
-        entries['input_text']  = ['%s' % sent  for sent  in entries['sents']]
-        entries['target_text'] = ['%s' % graph for graph in entries['serials']]
-        # Form the input encodings
-        sents = entries['sents']
-        print('Batch encoding')
-        input_encodings  = self.tokenizer.batch_encode_plus(entries['input_text'],
-                            padding=True, truncation=True, max_length=self.max_in_len,
-                            return_overflowing_tokens=True)
-        target_encodings = self.tokenizer.batch_encode_plus(entries['target_text'],
-                            padding=True, truncation=True, max_length=self.max_out_len,
-                            return_overflowing_tokens=True)
-        # Remove any graphs that are greater than max length after tokenization
-        # Find the bad indexes
+        entries = load_and_serialize(fpath) # returns a dict of lists
+        # Tokenize the target in order to strip off any training samples that are too long.
+        # Set return_overflowing_tokens=True to return overflowing_tokens', 'num_truncated_tokens'
+        print('Tokenizing')
+        in_enc  = self.tokenizer(entries['sents'],   padding=False, truncation=True, max_length=self.max_in_len,
+                        return_overflowing_tokens=True)
+        tgt_enc = self.tokenizer(entries['serials'], padding=False, truncation=True, max_length=self.max_out_len,
+                        return_overflowing_tokens=True)
+        # Identify any truncated data
         bi = set()
-        for i, (ie, te) in enumerate(zip(input_encodings['num_truncated_tokens'], target_encodings['num_truncated_tokens'])):
+        for i, (ie, te) in enumerate(zip(in_enc['num_truncated_tokens'], tgt_enc['num_truncated_tokens'])):
             if ie > 0 or te > 0:
                 bi.add( i )
-        # Remove them
-        input_encodings['input_ids']       = [ie for i, ie in enumerate(input_encodings['input_ids'])       if i not in bi]
-        target_encodings['input_ids']      = [te for i, te in enumerate(target_encodings['input_ids'])      if i not in bi]
-        input_encodings['attention_mask']  = [ie for i, ie in enumerate(input_encodings['attention_mask'])  if i not in bi]
-        target_encodings['attention_mask'] = [te for i, te in enumerate(target_encodings['attention_mask']) if i not in bi]
-        sents = [s  for i, s  in enumerate(sents) if i not in bi]
-        # Create the encodings
-        encodings = {'input_ids':             torch.LongTensor(input_encodings['input_ids']),
-                     'attention_mask':        torch.LongTensor(input_encodings['attention_mask']),
-                     'target_ids':            torch.LongTensor(target_encodings['input_ids']),
-                     'target_attention_mask': torch.LongTensor(target_encodings['attention_mask']) }
-        # Encapsulate the data and return
-        return AMRDataset(encodings, sents, bi)
+        # Compile the output encodings, stripped of bad indexes
+        # These will be passed directly to the model so make sure all the keys are correct, with no extras
+        encodings = {}
+        encodings['input_ids']      = [ie for i, ie in enumerate(in_enc['input_ids'])      if i not in bi]
+        encodings['attention_mask'] = [ie for i, ie in enumerate(in_enc['attention_mask']) if i not in bi]
+        encodings['labels']         = [te for i, te in enumerate(tgt_enc['input_ids'])     if i not in bi]
+        return AMRDataset(encodings, bi)
+
+
+# Torch DataSet used for feeding data to the training routine
+class AMRDataset(Dataset):
+    def __init__(self, encodings, bad_indexes):
+        self.encodings      = encodings
+        self.bad_indexes    = bad_indexes
+
+    def __len__(self):
+        return len(self.encodings['input_ids'])
+
+    def __getitem__(self, idx):
+        return {k:v[idx] for k, v in self.encodings.items()}
