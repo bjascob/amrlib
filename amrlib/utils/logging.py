@@ -1,3 +1,4 @@
+import os
 import logging
 from   logging import DEBUG, INFO, WARN, ERROR
 
@@ -13,6 +14,7 @@ def setup_logging(logfname=None, level=None):
         level  = logging.INFO
     format = '[%(levelname)s %(filename)s ln=%(lineno)s] %(message)s'
     if logfname is not None:
+        os.makedirs(os.path.dirname(logfname), exist_ok=True)
         logging.basicConfig(level=level, filename=logfname, filemode='w', format=format)
     else:
         logging.basicConfig(level=level, format=format)
