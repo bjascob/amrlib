@@ -24,12 +24,12 @@ class Inference(STOGInferenceBase):
         # Load the model from file
         if model_dir is not None:
             model     = T5ForConditionalGeneration.from_pretrained(model_dir).to(self.device)
-            tok_name  = kwargs.get('tok_name_or_path', 't5-base')
-            tokenizer = T5Tokenizer.from_pretrained(tok_name)
             # model_parse_t5-v0_1_0 used the key "translation_amr_to_text" (copy error from generate_t5 code)
             config = model.config.task_specific_params.get('parse_amr')
             if config is None:
                 config = model.config.task_specific_params.get('translation_amr_to_text')
+            tok_name  = kwargs.get('tok_name_or_path', config['model_name_or_path'])
+            tokenizer = T5Tokenizer.from_pretrained(tok_name)
         # Use the passed in values
         elif model is not None and tokenizer is not None and config is not None:
             pass
