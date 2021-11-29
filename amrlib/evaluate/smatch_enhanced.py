@@ -3,7 +3,7 @@ import logging
 from   collections import defaultdict, OrderedDict
 from   multiprocessing import Pool
 import smatch
-from   amr import AMR
+import amr
 from   .smatch_reentracy_srl import compute_reentracy_srl
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,23 @@ logger = logging.getLogger(__name__)
 ###############################################################################
 #### Public functions for computing smatch
 ###############################################################################
+
+# smatch and amr print errors to sys.stderr.  Rediect them to a file
+smatch_log_f = None
+def redirect_smatch_errors(fname):
+    global smatch_log_f
+    smatch_log_f = open(fname, 'w', buffering=1)    # line buffering
+    amr.ERROR_LOG    = smatch_log_f
+    amr.DEBUG_LOG    = smatch_log_f
+    smatch.ERROR_LOG = smatch_log_f
+    smatch.DEBUG_LOG = smatch_log_f
+    import atexit
+    atexit.register(close_smatch_log)
+def close_smatch_log():
+    global smatch_log_f
+    if smatch_log_f is not None:
+        smatch_log_f.close()
+
 
 # Score a list of entry pairs
 # The entries should be a list of single line strings.
@@ -128,7 +145,7 @@ def compute_subscores(pred, gold):
     # Loop through all entries
     for amr_pred, amr_gold in zip(pred, gold):
         # Create the predicted data
-        amr_pred = AMR.parse_AMR_line(amr_pred.replace("\n",""))
+        amr_pred = amr.AMR.parse_AMR_line(amr_pred.replace("\n",""))
         if amr_pred is None:
             logger.error('Empty amr_pred entry')
             continue
@@ -136,7 +153,7 @@ def compute_subscores(pred, gold):
         triples_pred = [t for t in amr_pred.get_triples()[1]]
         triples_pred.extend([t for t in amr_pred.get_triples()[2]])
         # Create the gold data
-        amr_gold = AMR.parse_AMR_line(amr_gold.replace("\n",""))
+        amr_gold = amr.AMR.parse_AMR_line(amr_gold.replace("\n",""))
         if amr_gold is None:
             logger.error('Empty amr_gold entry')
             continue
