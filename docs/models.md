@@ -2,7 +2,7 @@
 The following is a description of the various models and extra interface parameters they use.
 
 ## Parse SPRING
-**83 SMATCH score** with LDC2020T02.
+**83.5 SMATCH score** with LDC2020T02.
 
 This code derived from the [SPRING model](https://github.com/SapienzaNLP/spring).
 It convert sentences to graph-encoded sequences which are then deserialized into

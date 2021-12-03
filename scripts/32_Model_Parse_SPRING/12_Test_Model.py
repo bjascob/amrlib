@@ -17,7 +17,7 @@ if __name__ == '__main__':
     silence_penman()
     device     = torch.device('cuda:0')
     model_dir   = 'amrlib/data/model_parse_spring'
-    model_fn    = 'checkpoint_epoch_11_smatch_8457.pt'
+    model_fn    = 'model.pt'
     test_fns    = 'amrlib/data/amr_annotation_3.0/data/amrs/split/test/*.txt'
     gold_path   = os.path.join(model_dir, 'test-gold.txt')
     pred_path   = os.path.join(model_dir, 'test-pred.txt')
