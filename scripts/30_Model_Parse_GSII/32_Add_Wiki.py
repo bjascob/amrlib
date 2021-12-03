@@ -2,7 +2,7 @@
 import setup_run_dir    # this import tricks script to run from 2 levels up
 import os
 from   amrlib.utils.logging import silence_penman, setup_logging, INFO, WARN
-from   amrlib.graph_processing.wiki_adder import WikiAdder
+from   amrlib.graph_processing.wiki_adder_spotlight import WikiAdderSpotlight
 
 
 if __name__ == '__main__':
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     infn     = 'amrlib/data/model_parse_gsii/epoch200.pt.test_generated'
     outfn    = infn + '.wiki'
 
-    wiki = WikiAdder(url=url, cache_fn=cache_fn)
+    wiki = WikiAdderSpotlight(url=url, cache_fn=cache_fn)
     print('Wikifing', infn)
     wiki.wikify_file(infn, outfn)
     print('Data written to', outfn)

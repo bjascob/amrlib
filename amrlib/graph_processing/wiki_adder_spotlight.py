@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # is a good idea so that when re-run, the url doesn't need to be queried
 # url online  url="http://api.dbpedia-spotlight.org/en/annotate"
 # url local   url="http://localhost:2222/rest/annotate"
-class WikiAdder:
+class WikiAdderSpotlight:
     def __init__(self, url=None, cache_fn=None):
         self.confidence = 0.5   # Spotlight query confidence requirement
         self.url        = url

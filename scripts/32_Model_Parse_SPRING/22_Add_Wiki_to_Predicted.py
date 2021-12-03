@@ -2,7 +2,7 @@
 import setup_run_dir    # this import tricks script to run from 2 levels up
 import os
 from   amrlib.utils.logging import silence_penman, setup_logging, INFO, WARN
-from   amrlib.graph_processing.wiki_adder import WikiAdder
+from   amrlib.graph_processing.wiki_adder_spotlight import WikiAdderSpotlight
 
 
 # For setup see https://amrlib.readthedocs.io/en/latest/wiki/
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     infn      = os.path.join(data_dir, 'test-pred.txt')
     outfn     = infn + '.wiki'
 
-    wiki = WikiAdder(url=url, cache_fn=cache_fn)
+    wiki = WikiAdderSpotlight(url=url, cache_fn=cache_fn)
     print('Wikifing', infn)
     wiki.wikify_file(infn, outfn)
     print('Data written to', outfn)
