@@ -71,4 +71,5 @@ class AMRT5Trainer(HFTrainer):
             logger.exception('compute_smatch failed')
             precision, recall, f_score = 0, 0, 0
         print('SMATCH -> P: %.3f,  R: %.3f,  F: %.3f' % (precision, recall, f_score))
+        self.log({'smatch_f_score':f_score})
         return {'smatch_f_score':f_score}
