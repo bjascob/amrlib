@@ -103,7 +103,7 @@ class PenmanDeSerializer(object):
         self.triples       = []
         try:
             self.deserialize(gstring)       # sets self.pgraph and self.gstring
-        except:        
+        except:
             self.gstring = None
             self.pgraph  = None
 
@@ -160,7 +160,7 @@ class PenmanDeSerializer(object):
             elif len(triple) == 1 and ttype == TType.role:
                 triple.append(token)
             # Look for the target
-            elif len(triple) == 2 and ttype == TType.attrib:
+            elif len(triple) == 2 and (ttype == TType.attrib or token in ('interrogative', 'imperative', 'expressive')):
                 triple.append(token)
             elif len(triple) == 2 and ttype == TType.concept:
                 variable, concept, is_new_node = self.get_var_concept(token)
@@ -261,8 +261,8 @@ class PenmanDeSerializer(object):
             return TType.paren
         elif token.startswith(':'):
             return TType.role
-        elif token in set(['-', '+', 'interrogative', 'imperative', 'expressive']):
-            return TType.attrib
+        elif token in set(['-', '+']):  # 'interrogative', 'imperative', 'expressive']): could be nodes
+            return TType.attrib         # instead of including here, test in logic above
         elif token.startswith('"') or token.endswith('"') or token[0].isdigit(): # fault tolerant def
             return TType.attrib
         elif self.is_num(token):
