@@ -41,6 +41,9 @@ class ModelParseT5v2(unittest.TestCase):
     def testStoG(self):
         graphs = self.stog.parse_sents(['This is a test of the system.'])
         self.assertEqual(len(graphs), 1)
+        # Test that "imperative" can be recognized as a node, not just an attribute
+        graphs = self.stog.parse_sents(['Making certain distinctions is imperative in looking back on the past'])
+        self.assertNotEqual(graphs[0], None)
 
     def testSpaCyDoc(self):
         doc = self.nlp('This is a test of the SpaCy extension.  The test has multiple sentence')
