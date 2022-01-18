@@ -1,5 +1,6 @@
 import re
 import logging
+from   unidecode import unidecode
 from   enum import Enum
 from   collections import Counter
 from   tqdm import tqdm
@@ -103,9 +104,10 @@ class PenmanDeSerializer(object):
         self.triples       = []
         try:
             self.deserialize(gstring)       # sets self.pgraph and self.gstring
-        except:
+        except Exception as e:
             self.gstring = None
             self.pgraph  = None
+            logger.error('Deserializer exception: %' % e)
 
     def get_pen_graph(self):
         return self.pgraph
@@ -135,14 +137,12 @@ class PenmanDeSerializer(object):
                 node_depth += 1
             # Find the source for the triple
             elif len(triple) == 0 and ttype == TType.concept:
-                # This path should only happen for a new graph. Make a somewhat arbitrary choice to
-                # either stop parsing or to clear out the existing triples to prevent disconnected graphs.
+                # This path should only happen for a new graph. For graphs with existing self.triples, the next
+                # token should always be a role. See below for len(triple)==0 where both the variable and role
+                # are appended to the triple.
                 if len(self.triples) > 0:
-                    logger.error('gid=%s Initial node constructed when triples not empty.' % (self.gid))
-                    if len(self.triples) > len(tokens)/4:    # if > half done (on average ~2 tokens per triple)
-                        break
-                    else:
-                        self.triples = []
+                    logger.error('gid=%s Initial node constructed when triples not empty, ignoring token.' % (self.gid))
+                    continue
                 variable, concept, is_new_node = self.get_var_concept(token)
                 triple.append(variable)
                 if is_new_node:
@@ -152,16 +152,18 @@ class PenmanDeSerializer(object):
                     logger.warning('gid=%s Missing starting paren for node %s/%s' % (self.gid, variable, concept))
                 if not is_new_node and tokens[tnum-1] == '(':
                     logger.warning('gid=%s Start paren present but %s is not a new concept' % (self.gid, concept))
+            # Look for a role (aka edge) that attaches to the previous variable in the node stack
             elif len(triple) == 0 and ttype == TType.role:
                 variable = node_stack[-1]
                 triple.append(variable)
                 triple.append(token)
-            # Look for the role (aka edge)
+            # Look for the role (aka edge) that attaches to the triple[0] (aka source)
             elif len(triple) == 1 and ttype == TType.role:
                 triple.append(token)
-            # Look for the target
+            # Look for the attrib target
             elif len(triple) == 2 and (ttype == TType.attrib or token in ('interrogative', 'imperative', 'expressive')):
                 triple.append(token)
+            # Look for a node (concept) target
             elif len(triple) == 2 and ttype == TType.concept:
                 variable, concept, is_new_node = self.get_var_concept(token)
                 if is_new_node:
@@ -211,9 +213,10 @@ class PenmanDeSerializer(object):
         try:
             self.gstring = penman.encode(pgraph, indent=6, model=NoOpModel())
             self.pgraph  = penman.decode(self.gstring, model=NoOpModel())
-        except:
+        except Exception as e:
             self.gstring = None
             self.pgraph  = None
+            logger.error('Penman encode/decode exception: %s' % e)
 
     # From the concept return the variable and concept without a uid
     # Note that the first instance from the serializer you get "people" but after that it starts
@@ -225,6 +228,7 @@ class PenmanDeSerializer(object):
         else:
             first = concept_wuid[0].lower() if concept_wuid[0].isalpha() else 'x'
             first = 'ii' if first == 'i' else first     # use ii to avoid issues with "i"
+            first = unidecode(first)
             index = self.enumerator[first]
             self.enumerator[first] += 1
             variable = first if index==0 else '%s%d' % (first, index+1)

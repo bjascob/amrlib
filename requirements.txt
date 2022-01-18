@@ -20,6 +20,6 @@ graphviz            # this requires the Graphviz non-python library to be instal
 nltk
 
 # Other
-unidecode           # LDC2020T02 pre-processing and adding wiki tags
+unidecode           # model_parse_t5, LDC2020T02 pre-processing and adding wiki tags 
 requests            # Adding wiki tags
 word2number         # used in alignments code
