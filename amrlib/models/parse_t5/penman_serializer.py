@@ -107,7 +107,7 @@ class PenmanDeSerializer(object):
         except Exception as e:
             self.gstring = None
             self.pgraph  = None
-            logger.error('Deserializer exception: %' % e)
+            logger.error('Deserializer exception: %s' % e)
 
     def get_pen_graph(self):
         return self.pgraph
