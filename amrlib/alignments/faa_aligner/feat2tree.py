@@ -52,6 +52,9 @@ class FeatGraph(object):
         self.pi_edge = pi_edge
         # yanggao20130912: change alignset to be a set of tuples, for reentrancy case!
         self.alignset = set()
+        # Attribs could possibly have a tilde inside them so strip off the quoted portion
+        if val.startswith('"'):
+            val = val.split('"')[-1]
         alignsplit = val.split('~')
         if len(alignsplit) > 1:
             self.alignset |= set( int(i) for i in alignsplit[1].split('e.')[1].split(',') )
