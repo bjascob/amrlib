@@ -56,9 +56,13 @@ class FeatGraph(object):
         if val.startswith('"'):
             val = val.split('"')[-1]
         alignsplit = val.split('~')
-        if len(alignsplit) > 1:
-            self.alignset |= set( int(i) for i in alignsplit[1].split('e.')[1].split(',') )
-            self.val = alignsplit[0]
+        try:    # It's possible there is no 'e.' to split on so catch indexing error
+            if len(alignsplit) > 1:
+                alignset = set( int(i) for i in alignsplit[1].split('e.')[1].split(',') )
+                self.alignset |= alignset
+                self.val = alignsplit[0]
+        except IndexError:
+            pass
 
     # NOTE: yanggao20130814 added alignset printout
     def pp(self, printed_nodes = set([])):
