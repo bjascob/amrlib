@@ -1,0 +1,39 @@
+{   "gen_args" :
+    {
+        "model_name_or_path"            : "t5-large",
+        "corpus_dir"                    : "amrlib/data/tdata_xfm/",
+        "train_fn"                      : "train.txt.nowiki",
+        "eval_fn"                       : "dev.txt.nowiki",
+        "custom_save_checkpoint"        : true,
+        "save_tokenizer"                : false,
+        "save_at_end"                   : false,
+        "first_eval_epoch"              : 2,
+        "eval_batch_size"               : 32,
+        "eval_num_beams"                : 1,
+        "max_in_len"                    : 512,
+        "max_out_len"                   : 512,
+        "max_train_sent_len"            : 100,
+        "max_train_graph_len"           : 512
+    },
+    "hf_args" :
+    {
+        "output_dir"                    : "amrlib/data/model_parse_xfm",
+        "save_strategy"                 : "epoch",
+        "evaluation_strategy"           : "epoch",
+        "optim"                         : "adafactor",
+        "fp16"                          : false,
+        "group_by_length"               : true,
+        "do_train"                      : true,
+        "do_eval"                       : true,
+        "save_total_limit"              : 1,
+        "logging_steps"                 : 300,
+        "num_train_epochs"              : 24,
+        "per_device_train_batch_size"   : 4,
+        "gradient_accumulation_steps"   : 8,
+        "weight_decay"                  : 0.004,
+        "learning_rate"                 : 5e-5,
+        "max_grad_norm"                 : 1.0,
+        "warmup_steps"                  : 5172,
+        "seed"                          : 42
+    }
+}
