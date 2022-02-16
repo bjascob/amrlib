@@ -59,30 +59,3 @@ Default is False.
 
 
 See amrlib/models/generate_t5wtense/inference.py for implementation details.
-
-
-## Generate T5
-**43 BLEU** for LDC2020T02 graphs.  Model is deprecated in favor of the above model "with tense".
-
-This model is based on the pretrained [HuggingFace](https://github.com/huggingface/transformers)
-T5 transformer to convert AMR Graphs to natural language sentences.
-
-Note that that model limit is 512 tokens (not string characters) and roughly 2.5% of the LDC2020T02
-graphs need get clipped.  Clipped graphs are removed during testing and not included in the scores.
-If clipped graphs are included scores drop ~1 BLEU point.
-
-Additional inference parameters:
-
-* device     : is automatically selected but you can pass `cpu` or `cuda:0` if needed.
-
-* batch_size : set the batch size to use for model generation
-
-* num_beams  : set the number of beams used during beam_search (1 == greedy search)
-
-* num_ret_seq : the number of sentences returned (must be <= num_beams)
-Additional returned sentences will show up in order of score (high to low) on the returned list.
-Note that a single list is returned, not a list of list. You can use `get_ans_group` to extract
-groupings if needed.
-
-
-See amrlib/models/generate_t5/inference.py for implementation details.
