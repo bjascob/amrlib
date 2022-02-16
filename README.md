@@ -28,37 +28,15 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
 
 
 ## AMR Models
-The system includes different neural-network models for parsing and for generation.
+The system includes different neural-network models for parsing and for generation. **!! Note:** Models must be downloaded and installed separately.
+See [amrlib-models](https://github.com/bjascob/amrlib-models) for all download links.
 
-* Parse (StoG) model parse_spring gives an **83.5 SMATCH score** with LDC2020T02.  This code derived from the
-[SPRING model](https://github.com/SapienzaNLP/spring). The basic process is similar to the parse_t5 model except that
-the pretrained transformer used is the bart-large model which is larger than the t5-base model used in parse_t5.
-
-* Parse (StoG) model parse_t5 gives an **82 SMATCH score** with LDC2020T02.  This model uses the
-pretrained HuggingFace T5 transformer model to convert sentences to graph-encoded sequences which
-are then deserialized into an AMR graph.
-
-* Parse (StoG) model parse_gsii gives **77 SMATCH score** with LDC2020T02.  This model comes from
-[jcyk/AMR-gs](https://github.com/jcyk/AMR-gs), the details of which can be found in this
-[paper](https://arxiv.org/abs/2004.05572).  The version of the model used here eliminates
-much of the data abstraction (aka anonymization) used in the original code
+* Parse (StoG) model_parse_xfm_bart_large gives an **83.7 SMATCH score** with LDC2020T02.
 
 * Generation (GtoS) generate_t5wtense gives a **54 BLEU** with tense tags or **44 BLEU** with un-tagged LDC2020T02.
-Similar to parse_t5, the model takes advantage of the pretrained [HuggingFace](https://github.com/huggingface/transformers)
-T5 transformer.  Details on using this type of model for generation can be found in this
-[paper](https://arxiv.org/abs/2007.08426). The model is fine-tuned to translate AMR graphs to English
-sentences.
-
-* Generation (GtoS) generate_t5 gives a **43 BLEU**.  This model is deprecated in favor of the above model "with tense".
 
 * CoReference resolution at [amr_coref](https://github.com/bjascob/amr_coref) achieves a **0.548 CoNLL-2012 average** score.
 
-All models are trained and tested with AMR-3 (LDC2020T02). AMR-3 is a larger and more difficult test set than
-what AMR-2 used. Because of this, test scores tend to be a few points lower on AMR-3 than AMR-2, for equivalent models.
-
-For more information on the models see their descriptions in **[ReadTheDocs/Models](https://amrlib.readthedocs.io/en/latest/models)**.
-
-**!! Note:** The models must be downloaded and installed separately.  See the [Installation Instructions](https://amrlib.readthedocs.io/en/latest/install).
 
 ## AMR View
 The GUI allows for simple viewing, conversion and plotting of AMR Graphs.

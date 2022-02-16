@@ -20,7 +20,7 @@ If no `model_dir` is not supplied the default of `amrlib/data/model_stog` is use
 `kwargs` can be used to pass parameters such as `device`, `batch_size`, `beam_size`, etc to the
 inference routine.
 
-See specific [model descriptions]((https://amrlib.readthedocs.io/en/latest/models/) for additional
+See specific [model descriptions](https://amrlib.readthedocs.io/en/latest/models/) for additional
 parameters and their use.
 
 The function returns a `STOGInferenceBase` type object which is a simple abstract base class for the underlying model.
@@ -67,7 +67,7 @@ sents, clips = generate(graphs, disable_progress=False)
 ```
 This method takes a list of AMR graph strings and returns a list of sentence strings and a list of booleans.
 The boolean list `clips` tells if any of the returned sentences were clipped as a result of
-the tokenized graph being too long for the model. 
+the tokenized graph being too long for the model.
 
 `disable_progress` can be used to turn off the default `tqdm` progress bar.
 

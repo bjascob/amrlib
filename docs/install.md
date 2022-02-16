@@ -38,25 +38,7 @@ what versions were tested when the library was last released.
 
 ## Install the models
 
-Download the pretrained parse models from:
-
-* [model_parse_spring-v0_1_0.tar.gz](https://github.com/bjascob/amrlib-models/releases/download/model_parse_spring-v0_1_0/model_parse_spring-v0_1_0.tar.gz)
-(or see [GitHub/amrlib-models](https://github.com/bjascob/amrlib-models))
-
-* [model_parse_t5-v0_2_0.tar.gz](https://github.com/bjascob/amrlib-models/releases/download/model_parse_t5-v0_2_0/model_parse_t5-v0_2_0.tar.gz)
-(or see [GitHub/amrlib-models](https://github.com/bjascob/amrlib-models))
-
-* [model_parse_gsii-v0_1_0.tar.gz](https://u.pcloud.link/publink/show?code=XZD2z0XZOqRtS2mNMHhMG4UhXOCNO4yzeaLk)
-(in pcloud download link select "Direct Download)
-
-
-Download the pretrained generate model from:
-
-* [model_generate_t5wtense-v0_1_0.tar.gz](https://github.com/bjascob/amrlib-models/releases/download/model_generate_t5wtense-v0_1_0/model_generate_t5wtense-v0_1_0.tar.gz)
-(or see [GitHub/amrlib-models](https://github.com/bjascob/amrlib-models))
-
-* [model_generate_t5-v0_1_0.tar.gz](https://u.pcloud.link/publink/show?code=XZF2z0XZwTDm0pVFIAYjdAbsqUJ83SYoQSdV)
-(in pcloud download link select "Direct Download")
+Download links for all the models can be found at [amrlib-models](https://github.com/bjascob/amrlib-models).
 
 These files need to be extracted and reside in the install directory under `amrlib/data` and should be named
 `model_stog` (for the parse model) and `model_gtos` (for the generate model).  These will be the default models

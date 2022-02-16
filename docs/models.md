@@ -1,12 +1,10 @@
 # Models
 The following is a description of the various models and extra interface parameters they use.
 
-## Parse SPRING
-**83.5 SMATCH score** with LDC2020T02.
 
-This code derived from the [SPRING model](https://github.com/SapienzaNLP/spring).
-It convert sentences to graph-encoded sequences which are then deserialized into
-an AMR graph.
+## Parse Models
+The Inference class for all parse models have similiar methods and parameters.
+See the [model api]((https://amrlib.readthedocs.io/en/latest/models/) for usage.
 
 Additional inference parameters:
 
@@ -16,45 +14,7 @@ Additional inference parameters:
 
 * num_beams  : set the number of beams used during beam_search (1 == greedy search)
 
-See amrlib/models/parse_spring/inference.py for implementation details.
 
-## Parse T5
-**82 SMATCH score** with LDC2020T02.
-
-This model is based on the pretrained [HuggingFace](https://github.com/huggingface/transformers)
-T5 transformer to convert sentences to graph-encoded sequences which are then deserialized into
-an AMR graph.
-
-Additional inference parameters:
-
-* device     : is automatically selected but you can pass `cpu` or `cuda:0` if needed.
-
-* batch_size : set the batch size to use for model generation
-
-* num_beams  : set the number of beams used during beam_search (1 == greedy search)
-
-See amrlib/models/parse_t5/inference.py for implementation details.
-
-
-## Parse GSII
-**77 SMATCH score** with LDC2020T02.
-
-This model comes from [jcyk/AMR-gs](https://github.com/jcyk/AMR-gs), the details of which can be
-found in this [paper](https://arxiv.org/abs/2004.05572).  The version of the model used here eliminates
-much of the data abstraction (aka anonymization) used in the original code.
-
-Additional inference parameters:
-
-* device     : is automatically selected but you can pass `cpu` or `cuda:0` if needed.
-
-* batch_size : set the batch size to use for model generation
-
-* beam_size  : set the number of beams used during beam_search (1 == greedy search)
-
-* alpha      : score = x.score/((1+len(x.seq))**alpha (default = 0.6)
-
-
-See amrlib/models/parse_gsii/inference.py for implementation details.
 
 
 ## Generate T5wtense
