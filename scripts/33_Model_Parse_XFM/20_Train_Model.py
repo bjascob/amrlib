@@ -13,7 +13,7 @@ if __name__ == '__main__':
     redirect_smatch_errors('logs/train_smatch_errors.log')
     config_fn = 'configs/model_parse_xfm_bart_base.json'        # Choose the appropriate config file here
 
-    os.environ['CUDA_VISIBLE_DEVICES']   = '1'
+    #os.environ['CUDA_VISIBLE_DEVICES']   = '0'     # select the GPUs to use
     os.environ['TOKENIZERS_PARALLELISM'] = 'false'
     with open(config_fn) as f:
         config = json.load(f)

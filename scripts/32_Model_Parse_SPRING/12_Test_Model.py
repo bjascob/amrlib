@@ -21,7 +21,7 @@ if __name__ == '__main__':
     test_fns    = 'amrlib/data/amr_annotation_3.0/data/amrs/split/test/*.txt'
     gold_path   = os.path.join(model_dir, 'test-gold.txt')
     pred_path   = os.path.join(model_dir, 'test-pred.txt')
-    batch_size  = 8     # number of sentences (train uses number of tokens)
+    batch_size  = 32    # number of sentences (train uses number of tokens)
     num_beams   = 5     # 5 is used for formal testing
     max_entries = None  # max test data to generate (use None for everything)
 

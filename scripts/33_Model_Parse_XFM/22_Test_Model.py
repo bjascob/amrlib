@@ -1,9 +1,10 @@
 #!/usr/bin/python3
+import setup_run_dir    # Set the working directory and python sys.path to 2 levels above
 import os
 from   amrlib.utils.logging import silence_penman, setup_logging, WARN, ERROR
 from   amrlib.evaluate.smatch_enhanced import get_entries, compute_smatch
 from   amrlib.models.parse_xfm.inference import Inference
-from   armlib.models.parse_xfm.penman_serializer import load_and_serialize
+from   amrlib.models.parse_xfm.penman_serializer import load_and_serialize
 
 
 if __name__ == '__main__':
@@ -11,13 +12,13 @@ if __name__ == '__main__':
     setup_logging(logfname='logs/test_model_parse_xfm.log', level=WARN)
     silence_penman()
     device     = 'cuda:0'
-    corpus_dir = 'data/tdata_xfm/'
+    corpus_dir = 'amrlib/data/tdata_xfm/'
     ref_in_fn  = 'test.txt.nowiki'     # 1898 amr entries
-    model_dir  = 'amrlib/data/model_xfm_parse_bart_base_002/checkpoint-27728/'
+    model_dir  = 'amrlib/data/model_parse_xfm_bart_large-v0_1_0'
     gold_fpath = os.path.join(model_dir, 'test-gold.txt')
     pred_fpath = os.path.join(model_dir, 'test-pred.txt')
-    num_beams   = 4     # use 4 for formal testing
-    batch_size  = 32
+    num_beams   = 4     # use 4 for formal testing (batch_size=16 for 24GB GPU)
+    batch_size  = 16
     max_entries = None  # max test data to generate (use None for everything)
 
     fpath = os.path.join(corpus_dir, ref_in_fn)

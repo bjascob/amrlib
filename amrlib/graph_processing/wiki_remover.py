@@ -13,7 +13,7 @@ def wiki_remove_file(indir, infn, outdir, outfn):
     graphs = []
     inpath = os.path.join(indir, infn)
     entries = load_amr_entries(inpath)
-    for entry in tqdm(entries):
+    for entry in tqdm(entries, ncols=100):
         graph = _process_entry(entry)
         graphs.append(graph)
     outpath = os.path.join(outdir, outfn)
@@ -29,7 +29,7 @@ def wiki_remove_graph(entry):
 # Take in a single AMR string and return a penman graph
 def _process_entry(entry):
     pen = penman.decode(entry)
-    # Remove :wiki from the graphs since we want to ignore these 
+    # Remove :wiki from the graphs since we want to ignore these
     triples = [t for t in pen.attributes() if t.role == ':wiki']
     for t in triples:
         try:
