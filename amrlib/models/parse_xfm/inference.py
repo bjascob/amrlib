@@ -53,7 +53,6 @@ class Inference(STOGInferenceBase):
         data  = [(s, i) for i, s in enumerate(sents)]
         data  = sorted(data, key=lambda x:len(x[0]), reverse=True)
         # Loop though batches
-        clips = []
         graphs_generated = [None]*len(sents)*self.num_ret_seq
         self.model.eval()
         pbar = tqdm(total=len(sents), ncols=100, position=0, leave=True, disable=disable_progress)
@@ -63,12 +62,12 @@ class Inference(STOGInferenceBase):
             # Form encodings and tokenize
             input_encodings = self.tokenizer(input_text, padding=True, max_length=self.max_sent_len,
                                              truncation=True)
-            # Flag any input encodings that don't end in a pad token since these are probably clipped
-            # although technically a sentence that is exactly the correct size (including bos/eos tokens)
-            # will trigger this warning. The other option is to set the flag 'return_overflowing_tokens=True'
-            # For fast tokenizers this returns multiple lists of max_length which are difficult to deal with.
-            for i, iids in enumerate(input_encodings['input_ids']):
-                clips.append(iids[-1] != self.tokenizer.pad_token_id)
+            # Flag any input encodings are exactly the max_sent_length. The tokenizer puts an eos at the
+            # end of even clipped sentence so I can't just check for that. Because all sentences in a
+            # batch padded to the same length, check for a pad_token id.
+            for bidx, iids in enumerate(input_encodings['input_ids']):
+                 if len(iids) == self.max_sent_len and iids[-1] != self.tokenizer.pad_token_id:
+                    logger.warning('Sentence number %d was clipped for length' % sent_indxes[bidx])
             # Convert to tensors
             input_ids      = torch.LongTensor(input_encodings['input_ids']).to(self.device)
             attention_mask = torch.LongTensor(input_encodings['attention_mask']).to(self.device)
@@ -85,13 +84,11 @@ class Inference(STOGInferenceBase):
         pbar.close()
         # For debugging and sanity check
         if self.ret_raw_gen:
-            return graphs_generated, clips
+            return graphs_generated
         assert not any(g is None for g in graphs_generated)
         # Get the top result that properly deserializes. graphs_generated is len(sents)*num_ret_seq
         graphs_final = [None]*len(sents)
         for snum in range(len(sents)):
-            if clips[snum]:
-                logger.error('Sentence number %d was clipped for length' % snum)
             raw_graphs = graphs_generated[self._group_slice(snum)]
             for bnum, g in enumerate(raw_graphs):
                 gstring = PenmanDeSerializer(g).get_graph_string()

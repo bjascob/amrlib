@@ -3,13 +3,18 @@ import errno
 import json
 import logging
 import importlib
-from   ..utils.md5sum import md5sum     
+from   ..utils.md5sum import md5sum
 
 logger = logging.getLogger(__name__)
 
 
 # Dymaically import the module / class and return the class definition
-def dynamic_load(module_name, class_name, package='amrlib.models'): 
+def dynamic_load(module_name, class_name, package='amrlib.models'):
+    # the module "parse_t5" has been replaced with "parse_xfm" which is code compatible
+    # for the inference class. For the 2 older model_parse_t5-v0_2_0 and -v0_1_0
+    # translate to the new module.
+    if module_name == '.parse_t5.inference':
+        module_name = '.parse_xfm.inference'    
     module = importlib.import_module(module_name, package=package)
     my_class = getattr(module, class_name)
     return my_class
