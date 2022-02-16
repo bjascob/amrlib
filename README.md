@@ -29,7 +29,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
 
 ## AMR Models
 The system includes different neural-network models for parsing and for generation. **!! Note:** Models must be downloaded and installed separately.
-See [amrlib-models](https://github.com/bjascob/amrlib-models) for all download links.
+See [amrlib-models](https://github.com/bjascob/amrlib-models) for all parse and generate model download links.
 
 * Parse (StoG) model_parse_xfm_bart_large gives an **83.7 SMATCH score** with LDC2020T02.
 

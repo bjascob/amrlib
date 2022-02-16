@@ -4,7 +4,7 @@ The following is a description of the various models and extra interface paramet
 
 ## Parse Models
 The Inference class for all parse models have similiar methods and parameters.
-See the [model api]((https://amrlib.readthedocs.io/en/latest/models/) for usage.
+See the [model api](https://amrlib.readthedocs.io/en/latest/models/) for usage.
 
 Additional inference parameters:
 
