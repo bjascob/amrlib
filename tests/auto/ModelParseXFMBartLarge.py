@@ -18,10 +18,10 @@ from   amrlib.defaults import data_dir
 # reloaded with amrlib.load_stog_model(model_dir).
 # When the spacy extensions are called the they check to see if a global stog_model is not None, and
 # only call the loader if it's not already loaded.
-SPRING_LOADED = None      # one-shot to assure amrlib.stog_model is reloaded with this specific model
-SPACY_NLP     = None
-class ModelParseSPRING(unittest.TestCase):
-    model_dir = os.path.join(data_dir, 'model_parse_spring')
+T5V2_LOADED = None      # one-shot to assure amrlib.stog_model is reloaded with this specific model
+SPACY_NLP   = None
+class ModelParseT5v2(unittest.TestCase):
+    model_dir = os.path.join(data_dir, 'model_parse_xfm_bart_large-v0_1_0')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         amrlib.setup_spacy_extension()
@@ -31,16 +31,19 @@ class ModelParseSPRING(unittest.TestCase):
             SPACY_NLP = spacy.load('en_core_web_sm')
         self.nlp  = SPACY_NLP
         # Load model in amrlib (amrlib will cache this itself)
-        global SPRING_LOADED
-        if SPRING_LOADED is None:
+        global T5V2_LOADED
+        if T5V2_LOADED is None:
             print('Loading', self.model_dir)
             amrlib.load_stog_model(model_dir=self.model_dir)
-            SPRING_LOADED = True
+            T5V2_LOADED = True
         self.stog = amrlib.stog_model
 
     def testStoG(self):
         graphs = self.stog.parse_sents(['This is a test of the system.'])
         self.assertEqual(len(graphs), 1)
+        # Test that "imperative" can be recognized as a node, not just an attribute
+        graphs = self.stog.parse_sents(['Making certain distinctions is imperative in looking back on the past'])
+        self.assertNotEqual(graphs[0], None)
 
     def testSpaCyDoc(self):
         doc = self.nlp('This is a test of the SpaCy extension.  The test has multiple sentence')
