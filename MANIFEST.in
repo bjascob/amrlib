@@ -6,6 +6,8 @@
 # setup bdist_wheel     creates dist/xx.whl         specify data in setup.py/package_data=
 
 include amrlib/amr_view/*
+include amrlib/models/parse_spring/resources/*
 include amrlib/alignments/faa_aligner/model_aligner_faa.tar.gz
 include amrlib/alignments/faa_aligner/resources/*.txt
 include amrlib/alignments/isi_hand_alignments/*.txt
+include amrlib/models/parse_spring/resources/*

@@ -33,6 +33,7 @@ setuptools.setup(
     # doesn't look in there without it.
     include_package_data=True,
     package_data={'amrlib':['amr_view/*',
+                            'amrlib/models/parse_spring/resources/*',
                             'alignments/faa_aligner/model_aligner_faa.tar.gz',
                             'alignments/faa_aligner/resources/*.txt',
                             'alignments/isi_hand_alignments/*.txt']},
