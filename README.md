@@ -18,7 +18,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
   SpaCy `Docs` and `Spans` to AMR graphs.
 * Sentence to Graph alignment routines
   - FAA_Aligner (Fast_Align Algorithm), based on the ISI aligner code detailed in this
-    [paper](https://www.isi.edu/natural-language/mt/amr_eng_align.pdf).
+    [paper](https://www.isi.edu/~damghani/papers/amr_eng_align.pdf).
   - RBW_Aligner (Rule Based Word) for simple, single token to single node alignment
 * An evaluation metric API including including...
   - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
