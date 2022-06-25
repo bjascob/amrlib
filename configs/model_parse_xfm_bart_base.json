@@ -17,7 +17,8 @@
     },
     "model_args":
     {
-        "no_repeat_ngram_size"          : 0
+        "no_repeat_ngram_size"          : 0,
+        "forced_bos_token_id"           : null
     },
     "hf_args" :
     {
