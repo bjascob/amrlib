@@ -48,7 +48,7 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 The library does not contain code for AMR co-reference resolution but there is a related project
 at [amr_coref](https://github.com/bjascob/amr_coref).
 
-The following papers have GitHub projects/code that are better scoring than the above..
+The following papers have GitHub projects/code that have similar or better scoring than the above..
 * [VGAE as Cheap Supervision for AMR Coreference Resolution](https://github.com/IreneZihuiLi/VG-AMRCoref)
 * [End-to-end AMR Coreference Resolution](https://github.com/Sean-Blank/AMRcoref)
 
