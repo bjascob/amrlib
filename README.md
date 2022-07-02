@@ -24,7 +24,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
   - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
   - BLEU for sentence generation
   - Alignment scoring metrics detailing precision/recall
-* There is also a related co-referencing project/model at [amr_coref](https://github.com/bjascob/amr_coref).
+
 
 
 ## AMR Models
@@ -35,8 +35,6 @@ See [amrlib-models](https://github.com/bjascob/amrlib-models) for all parse and 
 
 * Generation (GtoS) generate_t5wtense gives a **54 BLEU** with tense tags or **44 BLEU** with un-tagged LDC2020T02.
 
-* CoReference resolution at [amr_coref](https://github.com/bjascob/amr_coref) achieves a **0.548 CoNLL-2012 average** score.
-
 
 ## AMR View
 The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
@@ -44,6 +42,17 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 ![AMRView](https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png)
 <!--- docs/images/AMRView01.png --->
 <!--- https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png --->
+
+
+## AMR CoReferencing Resolution
+The library does not contain code for AMR co-reference resolution but there is a related project
+at [amr_coref](https://github.com/bjascob/amr_coref).
+
+The following papers have GitHub projects/code that are better scoring than the above..
+* [VGAE as Cheap Supervision for AMR Coreference Resolution](https://github.com/IreneZihuiLi/VG-AMRCoref)
+* [End-to-end AMR Coreference Resolution](https://github.com/Sean-Blank/AMRcoref)
+
+
 
 
 ## Requirements and Installation
