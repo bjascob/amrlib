@@ -44,7 +44,7 @@ The GUI allows for simple viewing, conversion and plotting of AMR Graphs.
 <!--- https://github.com/bjascob/amrlib/raw/master/docs/images/AMRView01.png --->
 
 
-## AMR CoReferencing Resolution
+## AMR CoReference Resolution
 The library does not contain code for AMR co-reference resolution but there is a related project
 at [amr_coref](https://github.com/bjascob/amr_coref).
 
