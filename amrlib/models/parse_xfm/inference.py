@@ -28,7 +28,10 @@ class Inference(STOGInferenceBase):
             # model_parse_t5-v0_1_0 used the key "translation_amr_to_text" which was a copy error
             if config is None:
                 config = model.config.task_specific_params.get('translation_amr_to_text')
-            tok_name  = kwargs.get('tok_name_or_path', config['model_name_or_path'])
+            # if kwargs passes in tok_name_or_path use that otherwise check the config for
+            # tok_name_or_path, if present use that otherwise fallback to model_name_or_path
+            tok_name  = config.get('tok_name_or_path', config['model_name_or_path'])
+            tok_name  = kwargs.get('tok_name_or_path', tok_name)
             tokenizer = AutoTokenizer.from_pretrained(tok_name)
         # Use the passed in values
         elif model is not None and tokenizer is not None and config is not None:
