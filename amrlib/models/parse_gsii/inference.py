@@ -112,7 +112,7 @@ class Inference(STOGInferenceBase):
         # Load the test data and the model
         test_data_fn = os.path.join(indir, infn)
         output_fn    = os.path.join(outdir, outfn)
-        print('Loading test data from ', test_data_fn)
+        logger.info(f'Loading test data from {test_data_fn}')
         test_data = DataLoader(self.vocabs, test_data_fn, self.batch_size, for_train=False)
         # Load the reference amr file that contains all the metadata
         entries = load_amr_entries(test_data_fn)    # Note - already loaded above, but simplest for now.
@@ -175,7 +175,7 @@ class Inference(STOGInferenceBase):
     # Load the model, post-proc and vocabs.
     def _load_model(self):
         model_fpath = os.path.join(self.model_dir, self.model_fn)
-        print('Loading model', model_fpath)
+        logger.info(f'Loading model {model_fpath}')
         model_dict = torch.load(model_fpath, map_location='cpu')    # always load initially to RAM
         model_args = Config(model_dict['args'])
         vocabs = get_vocabs(os.path.join(self.model_dir, model_args.vocab_dir))
