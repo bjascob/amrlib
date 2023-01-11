@@ -6,6 +6,7 @@ import logging
 import penman
 import torch
 from   tqdm import tqdm
+from   transformers import logging as hf_logging
 from   .modules.parser import Parser
 from   .data_loader import DataLoader
 from   .vocabs import get_vocabs
@@ -33,6 +34,7 @@ class Inference(STOGInferenceBase):
         self.beam_size       = kwargs.get('beam_size',       8)
         self.alpha           = kwargs.get('alpha',         0.6)
         self.max_time_step   = kwargs.get('max_time_step', 100)
+        self.quiet           = kwargs.get('quiet', False)
         if model_fn:
             self._load_model()  # sets self.model, graph_builder, vocabs
 
@@ -112,7 +114,8 @@ class Inference(STOGInferenceBase):
         # Load the test data and the model
         test_data_fn = os.path.join(indir, infn)
         output_fn    = os.path.join(outdir, outfn)
-        print('Loading test data from ', test_data_fn)
+        if not self.quiet:
+            print('Loading test data from ', test_data_fn)
         test_data = DataLoader(self.vocabs, test_data_fn, self.batch_size, for_train=False)
         # Load the reference amr file that contains all the metadata
         entries = load_amr_entries(test_data_fn)    # Note - already loaded above, but simplest for now.
@@ -175,7 +178,11 @@ class Inference(STOGInferenceBase):
     # Load the model, post-proc and vocabs.
     def _load_model(self):
         model_fpath = os.path.join(self.model_dir, self.model_fn)
-        print('Loading model', model_fpath)
+        if not self.quiet:
+            print('Loading model', model_fpath)
+        else:
+            # Turn off transformer warnings. Note that this will persist after the call
+            hf_logging.set_verbosity_error()
         model_dict = torch.load(model_fpath, map_location='cpu')    # always load initially to RAM
         model_args = Config(model_dict['args'])
         vocabs = get_vocabs(os.path.join(self.model_dir, model_args.vocab_dir))
