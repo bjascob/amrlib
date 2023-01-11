@@ -16,7 +16,7 @@ if __name__ == '__main__':
     os.makedirs(outdir, exist_ok=True)
 
     # Load the spacy model with the desired model
-    load_spacy('en')
+    load_spacy('en_core_web_sm')
 
     # run the pipeline
     for fn in ('test.txt', 'dev.txt', 'train.txt'):

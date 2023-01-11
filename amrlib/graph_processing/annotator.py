@@ -17,17 +17,31 @@ keep_tags=set(['id','snt'])
 
 
 # Annotate a file with multiple AMR entries and save it to the specified location
+# Multiprocessing speeds this up under Linux but doesn't work on Windows because Windows doesn't fork
+# and apparently crashes on a Mac.  From the docs.. Changed in version 3.8: On macOS, the spawn start
+# method is now the default. The fork start method should be considered unsafe as it can lead to crashes
+# of the subprocess."
+# gloabal to override the multiprocessing method. Used mostly for testing. Might work on a Mac
+start_method = None   # None (do not change) or spawn, fork, forkserver
 def annotate_file(indir, infn, outdir, outfn):
     load_spacy()
     graphs = []
     inpath = os.path.join(indir, infn)
     entries = load_amr_entries(inpath)
-    pool = multiprocessing.Pool()
-    #for pen in tqdm(map(_process_entry, entries), total=len(entries)):
-    for pen in tqdm(pool.imap(_process_entry, entries), total=len(entries)):
-        graphs.append(pen)
-    pool.close()
-    pool.join()
+    global start_method
+    if start_method is not None:
+        multiprocessing.set_start_method(start_method)  # can not be used more than once in the program.
+        start_method = None
+    # Unix platforms
+    if multiprocessing.get_start_method() == 'fork':
+        with multiprocessing.Pool() as pool:
+            for pen in tqdm(pool.imap(_process_entry, entries), total=len(entries)):
+                graphs.append(pen)
+    # Windows and Mac
+    else:
+        for pen in tqdm(map(_process_entry, entries), total=len(entries)):
+            graphs.append(pen)
+
     infn = infn[:-3] if infn.endswith('.gz') else infn  # strip .gz if needed
     outpath = os.path.join(outdir, outfn)
     print('Saving file to ', outpath)
