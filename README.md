@@ -22,7 +22,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
   - RBW_Aligner (Rule Based Word) for simple, single token to single node alignment
 * An evaluation metric API including including...
   - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
-     <br> see note at the bottom about smatch scoring
+     <br> *see note at the bottom about smatch scoring*
   - BLEU for sentence generation
   - Alignment scoring metrics detailing precision/recall
 
