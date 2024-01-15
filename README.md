@@ -21,7 +21,7 @@ amrlib is a python module designed to make processing for [Abstract Meaning Repr
     [paper](https://www.isi.edu/~damghani/papers/amr_eng_align.pdf).
   - RBW_Aligner (Rule Based Word) for simple, single token to single node alignment
 * An evaluation metric API including including...
-  - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing
+  - Smatch (multiprocessed with enhanced/detailed scores) for graph parsing (see note about smatch scoring at the botton)
   - BLEU for sentence generation
   - Alignment scoring metrics detailing precision/recall
 
@@ -99,6 +99,11 @@ For a detailed description see the [Spacy API](https://amrlib.readthedocs.io/en/
 For an example of how to use the library to do paraphrasing, see the
 [Paraphrasing](https://amrlib.readthedocs.io/en/latest/paraphrase/) section in the docs.
 
+## SMATCH Scoring
+amrlib uses the [smatch](https://github.com/snowblink14/smatch) library for scoring.
+This is the library that is most commonly used for scoring AMR parsers and reporting results in literature.
+There are some cases where the code may give inconsistant or erroneous results.
+You may wish to look at [smatchpp](https://github.com/flipz357/smatchpp) for an improved scoring algorithm.
 
 ## Issues
 If you find a bug, please report it on the [GitHub issues list](https://github.com/bjascob/amrlib/issues).
