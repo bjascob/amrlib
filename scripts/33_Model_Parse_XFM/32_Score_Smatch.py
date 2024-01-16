@@ -21,4 +21,4 @@ if 0:
     print('SMATCH -> P: %.3f,  R: %.3f,  F: %.3f' % (precision, recall, f_score))
 # Compute enhanced scoring
 else:
-    compute_scores(GOLD, PRED)
+    compute_scores(PRED, GOLD)
