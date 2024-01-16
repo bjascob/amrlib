@@ -75,8 +75,9 @@ class Inference(STOGInferenceBase):
             input_ids      = torch.LongTensor(input_encodings['input_ids']).to(self.device)
             attention_mask = torch.LongTensor(input_encodings['attention_mask']).to(self.device)
             # Generate the batch ids and convert to back to tokens
+            early_stopping = True if self.num_beams > 1 else False  # eliminate warning message
             outs = self.model.generate(input_ids=input_ids, attention_mask=attention_mask,
-                                       max_length=self.max_graph_len, early_stopping=True,
+                                       max_length=self.max_graph_len, early_stopping=early_stopping,
                                        num_beams=self.num_beams, num_return_sequences=self.num_ret_seq)
             outs = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in outs]
             # De-sort the output token data. There are self.num_ret_seq returned for each sentence
