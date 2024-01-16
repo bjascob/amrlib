@@ -33,6 +33,7 @@ The system includes different neural-network models for parsing and for generati
 See [amrlib-models](https://github.com/bjascob/amrlib-models) for all parse and generate model download links.
 
 * Parse (StoG) model_parse_xfm_bart_large gives an **83.7 SMATCH score** with LDC2020T02.
+  <br> For a technical description of the parse model see its [wiki-page](https://github.com/bjascob/amrlib/wiki/The-parse_xfm-model)
 
 * Generation (GtoS) generate_t5wtense gives a **54 BLEU** with tense tags or **44 BLEU** with un-tagged LDC2020T02.
 
