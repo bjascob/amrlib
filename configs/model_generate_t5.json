@@ -15,6 +15,7 @@
         "do_eval"                       : false,
         "overwrite_output_dir"          : false,
         "prediction_loss_only"          : true,
+        "remove_unused_columns"         : false,
         "num_train_epochs"              : 8,
         "save_steps"                    : 1000,
         "save_total_limit"              : 2,
