@@ -10,11 +10,16 @@ logger = logging.getLogger(__name__)
 
 # Dymaically import the module / class and return the class definition
 def dynamic_load(module_name, class_name, package='amrlib.models'):
-    # the module "parse_t5" has been replaced with "parse_xfm" which is code compatible
+    # The module "parse_t5" has been replaced with "parse_xfm" which is code compatible
     # for the inference class. For the 2 older model_parse_t5-v0_2_0 and -v0_1_0
     # translate to the new module.
     if module_name == '.parse_t5.inference':
-        module_name = '.parse_xfm.inference'    
+        module_name = '.parse_xfm.inference'
+    # The module "generate_t5" and "generate_t5wtense" have been replaced with "generate_xfm"
+    # model_generate_t5wtense-v0_1_0 has the old module specified in it's amrlib_metadata.json and
+    # model_generate_t5-v0_1_0 is hard-coded to use the generate_t5 module below.
+    if (module_name == '.generate_t5.inference') or (module_name == '.generate_t5wtense.inference'):
+        module_name = '.generate_xfm.inference'
     module = importlib.import_module(module_name, package=package)
     my_class = getattr(module, class_name)
     return my_class
