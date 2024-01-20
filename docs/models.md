@@ -45,10 +45,11 @@ Parameters for `parse_sents()`:
 
 ## Generate Models
 
-The module for AMR graph to English sentence generation is named `generate_xfm` (generting transformer).
+The module for AMR graph to English sentence generation is named `generate_xfm` (generating transformer).
 As with the parse models, the generate model makes use of pretrained models such as bart and t5.
-The training code is used to fine-tune them for the graph to sentence task. Practically, these two operations are the inverse of one another and training the transformer simply
-involves swapping the setences from outputs to inputs in the training data.
+The training code is used to fine-tune them for the graph to sentence task. Practically, generating and parsing
+are the inverse of one another and training a generate transformer simply involves swapping training data sentences
+from the input to the output, relative to the parse model.
 
 The one specific feature of the generation task is to allow for the addition of part-of-speech (POS) tags
 to the concepts in the AMR graph.  AMR does not normally include any tense information so without this,
@@ -77,7 +78,7 @@ Parameters for `load_gtos_model()`
 
 * batch_size : set the batch size to use for model generation. (default is 32)
 
-* num_beams  : set the number of beams used during beam_search 1 => greedy search (default is 4).
+* num_beams  : set the number of beams used during beam_search. 1 is a greedy search (default is 4).
 
 * num_ret_seq : the number of sentences returned (must be <= num_beams) (default is 1).
 Additional returned sentences will show up in order of score (high to low) on the returned list.
