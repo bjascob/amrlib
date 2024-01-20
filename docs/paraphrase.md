@@ -29,4 +29,4 @@ When you try this, you can see that the choice of the top variable impacts sente
 Some sentences will no longer be well formed but others will have re-ordered wordings that paraphrase
 the original sentence.
 
-A more complete example that loops through all possible top variables in a graph is available in the scripts directory as [30_Paraphrasing_Example.py](https://github.com/bjascob/amrlib/blob/master/scripts/41_Model_Generate_T5wtense/30_Paraphrasing_Example.py).
+A more complete example that loops through all possible top variables in a graph is available in the scripts directory as [30_Paraphrasing_Example.py](https://github.com/bjascob/amrlib/blob/master/scripts/40_Model_Generate_XFM/30_Paraphrasing_Example.py).
