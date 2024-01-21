@@ -33,4 +33,4 @@ BLEU for sentence generation, Alignment scoring metrics detailing precision/reca
 
 ## AMR Models
 
-For details on available models see [models]((https://amrlib.readthedocs.io/en/latest/models/).
+For details on available models see [models](https://amrlib.readthedocs.io/en/latest/models/).
