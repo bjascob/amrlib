@@ -6,7 +6,7 @@ import logging
 import unittest
 import spacy        # requried or I get an error. From lazy loading? (spacy used to annotate graphs)
 import amrlib
-from   amrlib.models.generate_t5wtense.model_input_helper import ModelInputHelper
+from   amrlib.models.generate_xfm.model_input_helper import ModelInputHelper
 
 
 graph01 = '''
@@ -75,7 +75,7 @@ class ModelGenerateT5wtense(unittest.TestCase):
         self.assertTrue(mih1.annotation_performed)
         mih2 = ModelInputHelper(graph02)                # string has annotations
         self.assertFalse(mih2.annotation_performed)
-        mih3 = ModelInputHelper(graph02, force_annotate=True)
+        mih3 = ModelInputHelper(graph02, reannotate=True)
         self.assertTrue(mih3.annotation_performed)
         self.assertEqual(mih1.get_tagged_oneline(), mih2.get_tagged_oneline())
         self.assertEqual(mih1.get_tagged_oneline(), mih3.get_tagged_oneline())
