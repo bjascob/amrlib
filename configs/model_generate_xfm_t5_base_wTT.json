@@ -1,7 +1,7 @@
 {   "gen_args" :
     {
         "model_name_or_path"            : "t5-base",
-        "corpus_dir"                    : "data/tdata_generate_xfm",
+        "corpus_dir"                    : "amrlib/data/tdata_generate_xfm",
         "train_fn"                      : "train.txt.features.nowiki.tdata",
         "eval_fn"                       : "dev.txt.features.nowiki",
         "eval_use_tense"                : true,
@@ -13,7 +13,7 @@
         "max_in_len"                    : 512,
         "max_out_len"                   : 512,
         "max_train_graph_len"           : 512,
-        "max_train_sent_len"            : 90
+        "max_train_sent_len"            : 256
     },
     "tokenizer_args" :
     {
@@ -21,10 +21,9 @@
     },
     "hf_args" :
     {
-        "output_dir"                    : "data/model_generate_xfm",
+        "output_dir"                    : "amrlib/data/model_generate_xfm",
         "save_strategy"                 : "epoch",
         "evaluation_strategy"           : "epoch",
-        "bf16"                          : false,
         "group_by_length"               : true,
         "do_train"                      : true,
         "do_eval"                       : true,
@@ -36,7 +35,6 @@
         "weight_decay"                  : 0.004,
         "learning_rate"                 : 1e-4,
         "max_grad_norm"                 : 1.0,
-        "warmup_steps"                  : 0,
         "seed"                          : 0
     }
 }
