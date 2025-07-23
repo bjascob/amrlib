@@ -3,6 +3,15 @@ import json
 import logging
 import torch
 from   tqdm import tqdm
+
+try:
+    from transformers.generation.utils import GenerateBeamEncoderDecoderOutput
+    HAS_GENERATE_BEAM_OUTPUT = True
+except ImportError:
+    GenerateBeamEncoderDecoderOutput = None
+    HAS_GENERATE_BEAM_OUTPUT = False
+
+
 import penman
 from   penman.models.amr import model as amr_model
 from   ..inference_bases import STOGInferenceBase
@@ -61,6 +70,11 @@ class Inference(STOGInferenceBase):
             with torch.no_grad():
                 model_out = self.model.generate(**x, max_length=512, num_beams=self.num_beams)
             # re-encode the model output
+            if HAS_GENERATE_BEAM_OUTPUT and isinstance(model_out, GenerateBeamEncoderDecoderOutput):
+                model_out = model_out.sequences
+            elif hasattr(model_out, 'sequences'):
+                model_out = model_out.sequences
+
             assert len(model_out) == len(batch)
             for tokk, sent in zip(model_out, batch):
                 graph, status, _ = self.tokenizer.decode_amr(tokk.tolist(), restore_name_ops=self.restore_name_ops)
