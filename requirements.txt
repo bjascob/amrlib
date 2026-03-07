@@ -5,8 +5,10 @@ torch>=1.6
 numpy
 spacy>=2.0          # also requires model download `python -m spacy download en_core_web_sm`
 tqdm
-transformers>=4.16   # transformers>=4.16.0 required for training parse_xfm models. Inference should work with >=3.0
+transformers>=4.16  # transformers>=4.16.0 required for training parse_xfm models. Inference should work with >=3.0
 smatch
+unidecode           # penman_serializer, model_parse_t5, LDC2020T02 pre-processing and adding wiki tags
+requests            # model download, Adding wiki tags
 
 # Model specific
 cached_property     # parse_spring model only
@@ -20,6 +22,4 @@ graphviz            # this requires the Graphviz non-python library to be instal
 nltk
 
 # Other
-unidecode           # model_parse_t5, LDC2020T02 pre-processing and adding wiki tags 
-requests            # Adding wiki tags
 word2number         # used in alignments code

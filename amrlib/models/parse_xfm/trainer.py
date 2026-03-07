@@ -29,7 +29,8 @@ class Trainer(object):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
         self.model     = AutoModelForSeq2SeqLM.from_pretrained(self.gen_args['model_name_or_path'], **self.model_args)
         self.model.config.task_specific_params = {'parse_amr':self.gen_args}
-        assert self.model.config.no_repeat_ngram_size == 0  # required for good results
+        if hasattr(self.model.config, 'no_repeat_ngram_size'):
+            assert self.model.config.no_repeat_ngram_size == 0  # required for good results
         # `use_cache=True` is incompatible with gradient checkpointing
         if self.training_args.gradient_checkpointing:
             self.model.config.use_cache=False
